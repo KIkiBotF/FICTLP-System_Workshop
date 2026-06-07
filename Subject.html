@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Subject</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #fdf5f3;
+      --sidebar-bg: #fff;
+      --sidebar-w: 88px;
+      --teal-header: #7dbfb2;
+      --teal-light: #e8f5f3;
+      --blue-header: #a8c8e8;
+      --blue-light: #eaf3fb;
+      --green-header: #a8d4a0;
+      --green-light: #edf7eb;
+      --text-dark: #1a1a2e;
+      --text-mid: #4a4a6a;
+      --text-light: #7a7a9a;
+      --card-radius: 14px;
+      --shadow: 0 2px 16px rgba(0,0,0,0.07);
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--sidebar-bg);
+      border-right: 1px solid #ece8e5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 0 24px;
+      gap: 6px;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 10;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      width: 68px;
+      padding: 10px 6px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.18s;
+      text-decoration: none;
+      color: var(--text-light);
+    }
+    .nav-item:hover { background: #f3eeec; }
+    .nav-item.active { background: #fce9e4; color: #c0503a; }
+    .nav-item .icon {
+      width: 26px; height: 26px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-item .icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.7; }
+    .nav-item .label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── Main ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 42px 48px 56px;
+      max-width: 860px;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      color: var(--text-dark);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--text-light);
+      font-weight: 500;
+      margin-bottom: 32px;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: #fff;
+      border-radius: var(--card-radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 22px;
+      overflow: hidden;
+      transition: transform 0.18s, box-shadow 0.18s;
+      cursor: pointer;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 28px rgba(0,0,0,0.10);
+    }
+
+    .card-header {
+      padding: 16px 28px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .card-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--text-dark);
+      font-weight: 700;
+    }
+    .card-header .lecturer {
+      font-size: 12px;
+      color: var(--text-mid);
+      font-style: italic;
+      font-weight: 400;
+      margin-left: 2px;
+    }
+
+    .card.teal .card-header  { background: var(--teal-header); }
+    .card.blue .card-header  { background: var(--blue-header); }
+    .card.green .card-header { background: var(--green-header); }
+
+    .card-body {
+      padding: 20px 28px 24px;
+      background: #fff;
+    }
+
+    .topics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px 32px;
+    }
+    .topics.single-col {
+      grid-template-columns: 1fr;
+    }
+
+    .topic-item {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 14.5px;
+      color: var(--text-mid);
+      padding: 5px 0;
+      font-weight: 500;
+    }
+    .topic-item::before {
+      content: '';
+      display: inline-block;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .card.teal .topic-item::before  { background: var(--teal-header); }
+    .card.blue .topic-item::before  { background: var(--blue-header); }
+    .card.green .topic-item::before { background: var(--green-header); }
+
+    /* Animations */
+    .card { animation: fadeUp 0.45s both; }
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.15s; }
+    .card:nth-child(3) { animation-delay: 0.25s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <a class="nav-item" href="#">
+      <span class="icon">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </span>
+      <span class="label">Log out</span>
+    </a>
+    <a class="nav-item" href="#">
+      <span class="icon">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      </span>
+      <span class="label">Home</span>
+    </a>
+    <a class="nav-item" href="#">
+      <span class="icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </span>
+      <span class="label">Performance</span>
+    </a>
+    <a class="nav-item active" href="#">
+      <span class="icon">
+        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="8" height="10" rx="1"/><rect x="14" y="3" width="8" height="10" rx="1"/><rect x="2" y="16" width="8" height="5" rx="1"/><rect x="14" y="16" width="8" height="5" rx="1"/></svg>
+      </span>
+      <span class="label">Subject</span>
+    </a>
+    <a class="nav-item" href="#">
+      <span class="icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+      </span>
+      <span class="label">Achievement</span>
+    </a>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main">
+    <h1 class="page-title">Subject</h1>
+    <p class="page-subtitle">Choose subject:</p>
+
+    <!-- C++ Card -->
+    <div class="card teal">
+      <div class="card-header">
+        <h2>C++ Programming</h2>
+        <span class="lecturer">(Fullname Lecturer)</span>
+      </div>
+      <div class="card-body">
+        <div class="topics">
+          <div class="topic-item">Basic Syntax &amp; I/O</div>
+          <div class="topic-item">Functions &amp; Scope</div>
+          <div class="topic-item">Control Structures</div>
+          <div class="topic-item">Arrays &amp; Strings</div>
+          <div class="topic-item">Loops &amp; Iteration</div>
+          <div class="topic-item">Pointers &amp; References</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Database Card -->
+    <div class="card blue">
+      <div class="card-header">
+        <h2>Database</h2>
+        <span class="lecturer">(Fullname Lecturer)</span>
+      </div>
+      <div class="card-body">
+        <div class="topics single-col">
+          <div class="topic-item">SQL (Structured Query Language)</div>
+          <div class="topic-item">Database Design</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COA Card -->
+    <div class="card green">
+      <div class="card-header">
+        <h2>Computer Organization and Architecture</h2>
+        <span class="lecturer">(Fullname Lecturer)</span>
+      </div>
+      <div class="card-body">
+        <div class="topics single-col">
+          <div class="topic-item">Assembly language</div>
+          <div class="topic-item">The CPU</div>
+          <div class="topic-item">Computer</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>
