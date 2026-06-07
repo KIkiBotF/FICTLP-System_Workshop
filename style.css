@@ -1,0 +1,112 @@
+/* 1. Global Reset & Box Sizing */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif; /* Clean sans-serif font */
+}
+
+/* 2. Center Everything on the Page */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #ffffff; 
+}
+
+/* 3. Main Wrapper */
+.wrapper {
+    width: 100%;
+    max-width: 500px; /* Constrain the width of the form */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* 4. Headings */
+.title-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.title-container h1 {
+    font-size: 32px;
+    color: #000;
+    margin-bottom: 5px;
+}
+
+.title-container h3 {
+    font-size: 18px;
+    color: #333;
+    font-weight: normal;
+}
+
+/* 5. The Light Blue Form Container */
+.logInForm-container {
+    background-color: #d8f0fa; /* Light blue matches the image */
+    width: 100%;
+    padding: 50px 60px;
+    border-radius: 50px; /* Highly rounded corners */
+}
+
+/* 6. Form Inputs & Labels */
+.input-group {
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+.label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+}
+
+label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #111;
+}
+
+.forgot-password {
+    font-size: 12px;
+    color: #888;
+    text-decoration: none;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    font-size: 16px;
+    outline: none;
+}
+
+/* 7. Buttons */
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+button {
+    padding: 12px 35px;
+    border: 2px solid #222; /* Dark outer border */
+    background-color: #581cff; /* Vivid purple/blue */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    min-width: 120px;
+}
+.forgot-password:hover {
+    color: #330099; /* Slightly darker on hover */
+}
+
+button:hover {
+    background-color: #4614cc; /* Slightly darker on hover */
+}
