@@ -1,0 +1,119 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    /* Centers the entire interface on the screen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f4f4; 
+}
+
+/* The main container bounding box */
+.wrapper {
+    background-color: #ffffff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 800px;
+    min-height: 600px;
+    border: 1px solid #ccc; /* Matches the wireframe outline */
+}
+
+/* --- Sidebar / Logout Styling --- */
+.sideBar {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+}
+
+.sideBar nav a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Scales down your massive SVG icon */
+.sideBar nav a svg {
+    width: 40px; 
+    height: auto;
+    margin-bottom: 5px;
+}
+
+/* Inserts the "Log out" text without you needing to add it to your HTML */
+.sideBar nav a::after {
+    content: "Log out";
+}
+
+/* --- Main Dashboard Content --- */
+.head-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+/* The large grey rectangle for the System Name */
+.head-container header {
+    background-color: #d9d9d9;
+    width: 80%;
+    padding: 60px 20px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* FICTLP text with the blue underline */
+.head-container h1 {
+    font-size: 32px;
+    color: #000;
+    text-decoration: underline;
+    text-decoration-color: #007bff; /* Bright blue underline */
+    text-decoration-thickness: 3px;
+    text-underline-offset: 8px;
+}
+
+.head-container h3 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #000;
+}
+
+.head-container h4 {
+    font-size: 20px;
+    font-weight: normal;
+    color: #000;
+    margin-bottom: 40px;
+}
+
+/* --- Bottom Subject Button --- */
+.button-container {
+    margin-top: 10px;
+}
+
+.button-container button {
+    background-color: #5a55ff; /* Purple-blue match */
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 12px 60px;
+    border: 2px solid #000;
+    cursor: pointer;
+    transition: transform 0.1s ease-in-out;
+}
+
+.button-container button:active {
+    transform: scale(0.98); 
+}                                                                                                                                                                                                              

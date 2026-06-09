@@ -1,0 +1,150 @@
+/* --- Global Reset --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f0f0f0; /* Outer background to show the default size box */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* --- Dashboard Layout --- */
+.dashboard-wrapper {
+    display: flex;
+    width: 100%;
+    max-width: 1000px; /* Default desktop size limit */
+    height: 700px;
+    background-color: #fdf5f5; /* Light pink/off-white from your wireframe */
+    border: 1px solid #ccc;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* --- Sidebar Styling --- */
+.sidebar {
+    width: 120px;
+    background-color: #ffffff;
+    border-right: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: #000;
+    font-size: 12px;
+    padding: 20px 0;
+    border-bottom: 1px solid transparent;
+}
+
+.nav-item i {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+/* Specific Sidebar Button States */
+.highlight-blue {
+    border: 2px solid #007bff; /* Blue border for Log Out */
+    margin: 0 10px;
+}
+
+.active {
+    background-color: #e0e0e0; /* Grey background for current page */
+    border-left: 4px solid #000;
+}
+
+.add-new {
+    margin-top: auto; /* Pushes the Add button to the bottom */
+    margin-bottom: 20px;
+}
+
+.add-new i {
+    color: #007bff;
+    font-size: 30px;
+}
+
+/* --- Main Content Styling --- */
+.main-content {
+    flex-grow: 1; /* Takes up the rest of the space */
+    padding: 40px 60px;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-title {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 40px;
+    color: #000;
+}
+
+/* --- Subject Card Component --- */
+.subject-card {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    overflow: hidden; /* Ensures the header background stays within rounded corners */
+}
+
+.card-header {
+    background-color: #a8ddec; /* Light blue header */
+    padding: 15px 25px;
+}
+
+.card-header h2 {
+    font-size: 24px;
+    color: #000;
+}
+
+.card-body {
+    padding: 20px 25px;
+    display: flex;
+    justify-content: space-between; /* Pushes list to left, buttons to right */
+    align-items: flex-end;
+}
+
+.topic-list {
+    list-style-type: disc;
+    padding-left: 25px;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* --- Action Buttons (Edit/Remove) --- */
+.card-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    font-size: 12px;
+    color: #333;
+}
+
+.action-btn i {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.remove-btn i {
+    color: #ff4d4d; /* Red circle for remove */
+}
+
+.edit-btn i {
+    color: #555;
+}
