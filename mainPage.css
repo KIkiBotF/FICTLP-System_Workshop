@@ -1,38 +1,35 @@
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; 
     font-family: Arial, sans-serif;
 }
 
 body {
-    /* Centers the entire interface on the screen */
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-color: #f4f4f4; 
+    background-color: #ffffff; /* Changed to white to match the wrapper */
+    margin: 0;
 }
 
-/* The main container bounding box */
 .wrapper {
     background-color: #ffffff;
     position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; 
     justify-content: center;
-    width: 100%;
-    max-width: 800px;
-    min-height: 600px;
-    border: 1px solid #ccc; /* Matches the wireframe outline */
+    width: 100%; /* Takes up the full width of the screen */
+    min-height: 100vh; /* Takes up the full height of the screen */
+    /* Removed max-width and border */
 }
 
-/* --- Sidebar / Logout Styling --- */
 .sideBar {
     position: absolute;
-    top: 30px;
-    left: 30px;
+    top: 40px;
+    left: 40px;
 }
 
 .sideBar nav a {
@@ -42,78 +39,70 @@ body {
     text-decoration: none;
     color: #000;
     font-weight: bold;
-    font-size: 14px;
+    font-size: 16px;
 }
 
-/* Scales down your massive SVG icon */
 .sideBar nav a svg {
-    width: 40px; 
-    height: auto;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
 }
 
-/* Inserts the "Log out" text without you needing to add it to your HTML */
-.sideBar nav a::after {
-    content: "Log out";
-}
-
-/* --- Main Dashboard Content --- */
 .head-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 100%;
+    padding: 0 120px; 
 }
 
-/* The large grey rectangle for the System Name */
+/* Taller grey box with more space below it */
 .head-container header {
     background-color: #d9d9d9;
-    width: 80%;
-    padding: 60px 20px;
+    width: 100%; 
+    padding: 70px 20px;
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 50px; 
 }
 
-/* FICTLP text with the blue underline */
+/* Huge, bold text without any underlines */
 .head-container h1 {
-    font-size: 32px;
+    font-size: 64px; 
+    font-weight: bold;
     color: #000;
-    text-decoration: underline;
-    text-decoration-color: #007bff; /* Bright blue underline */
-    text-decoration-thickness: 3px;
-    text-underline-offset: 8px;
 }
 
 .head-container h3 {
-    font-size: 36px;
+    font-size: 48px; 
     font-weight: bold;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     color: #000;
 }
 
 .head-container h4 {
-    font-size: 20px;
+    font-size: 28px; 
     font-weight: normal;
     color: #000;
-    margin-bottom: 40px;
+    margin-bottom: 60px; /* Large gap before the button */
 }
 
-/* --- Bottom Subject Button --- */
 .button-container {
     margin-top: 10px;
 }
 
-.button-container button {
-    background-color: #5a55ff; /* Purple-blue match */
+/* Pill-shaped button matching the specific blue color */
+.dashboard-btn {
+    display: inline-block;
+    background-color: #5c67ff; 
     color: white;
-    font-size: 24px;
+    text-decoration: none;
+    font-size: 32px;
     font-weight: bold;
-    padding: 12px 60px;
+    padding: 15px 80px;
     border: 2px solid #000;
+    border-radius: 50px; /* This creates the completely rounded pill shape */
     cursor: pointer;
     transition: transform 0.1s ease-in-out;
 }
 
-.button-container button:active {
+.dashboard-btn:active {
     transform: scale(0.98); 
-}                                                                                                                                                                                                              
+}
