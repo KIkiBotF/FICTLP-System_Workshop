@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Session - Student LMS</title>
+    <link rel="stylesheet" href="quizStudent.css">
+</head>
+<body>
+    <header class="quiz-header">
+        <a href="chapter-view.html" class="back-arrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+        </a>
+        <h1>QUIZ : C++ Programming</h1>
+    </header>
+
+    <div class="quiz-container">
+        <!-- Navigation Panel Left -->
+        <aside class="question-nav">
+            <div class="nav-row active">
+                <span class="q-label">Question 1</span>
+                <span class="status-dot completed">✓</span>
+            </div>
+            <div class="nav-row current">
+                <span class="q-label">Question 2</span>
+                <span class="status-dot empty"></span>
+            </div>
+            <div class="nav-row">
+                <span class="q-label">Question 3</span>
+                <span class="status-dot empty"></span>
+            </div>
+            <div class="nav-row">
+                <span class="q-label">Question 4</span>
+                <span class="status-dot empty"></span>
+            </div>
+            <div class="nav-row">
+                <span class="q-label">Question 5</span>
+                <span class="status-dot empty"></span>
+            </div>
+            <div class="nav-row">
+                <span class="q-label">Question 6</span>
+                <span class="status-dot empty"></span>
+            </div>
+            <div class="nav-row">
+                <span class="q-label">Question 7</span>
+                <span class="status-dot empty"></span>
+            </div>
+            <div class="nav-row">
+                <span class="q-label">Question 8</span>
+                <span class="status-dot empty"></span>
+            </div>
+            <div class="nav-row">
+                <span class="q-label">Question 9</span>
+                <span class="status-dot empty"></span>
+            </div>
+            <div class="nav-row">
+                <span class="q-label">Question 10</span>
+                <span class="status-dot empty"></span>
+            </div>
+        </aside>
+
+        <!-- Main Question Content Right -->
+        <main class="question-box">
+            <h2>Question 2: What is the correct syntax to output "Hello World" in C++?</h2>
+            
+            <div class="question-image-box">
+                <svg class="img-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                <span>Code snippet diagram reference</span>
+            </div>
+
+            <div class="options-grid">
+                <label class="option-card">
+                    <input type="radio" name="q2" value="a">
+                    <span class="radio-custom"></span>
+                    <span class="option-text">a. System.out.println("Hello World");</span>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q2" value="b">
+                    <span class="radio-custom"></span>
+                    <span class="option-text">b. Console.WriteLine("Hello World");</span>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="q2" value="c">
+                    <span class="radio-custom"></span>
+                    <span class="option-text">c. print("Hello World")</span>
+                </label>
+                <label class="option-card selected">
+                    <input type="radio" name="q2" value="d" checked>
+                    <span class="radio-custom"></span>
+                    <span class="option-text">d. cout &lt;&lt; "Hello World";</span>
+                </label>
+            </div>
+
+            <div class="action-footer">
+                <button type="button" class="btn-clear">Clear</button>
+                <a href="performance.html" class="btn-next">Next</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
