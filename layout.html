@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base Layout</title>
+    <style>
+        /* Reset margins and padding so the layout touches the edges of the screen */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            height: 100vh; /* Fills the entire height of the viewport */
+            width: 100vw;  /* Fills the entire width of the viewport */
+            overflow: hidden; /* Prevents scrollbars on the main body */
+        }
+
+        .sidebar {
+            width: 120px; /* You can adjust this width to fit your needs */
+            background-color: #ffffff; /* Solid white */
+        }
+
+        .main-content {
+            flex: 1; /* Automatically takes up all remaining space */
+            background-color: #f9eaed; /* The light pink color from your image */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar"></div>
+
+    <div class="main-content"></div>
+
+</body>
+</html>
