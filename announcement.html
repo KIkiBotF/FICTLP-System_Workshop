@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en)
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Summary</title>
+    <title>Global Announcement</title>
     <style>
         /* Reset and Base Layout */
         * {
@@ -22,7 +22,7 @@
             padding: 20px;
         }
 
-        /* Outer Frame Container matching original mockup bounds */
+        /* Outer Frame Container matching wireframe bounds */
         .window-frame {
             width: 100%;
             max-width: 900px;
@@ -43,6 +43,7 @@
             flex-direction: column;
             padding-top: 20px;
             align-items: center;
+            flex-shrink: 0;
         }
 
         .nav-item {
@@ -62,12 +63,12 @@
             text-align: center;
         }
 
-        /* Active State (Summary Tab) */
+        /* Announcement Tab Active Highlight State */
         .nav-item.active {
             background-color: #d9d9d9;
         }
 
-        /* Custom Pure CSS Icons to match wireframe exactly */
+        /* Custom Wireframe CSS Icons */
         .icon {
             margin-bottom: 6px;
             display: inline-block;
@@ -119,7 +120,7 @@
             gap: 2px;
         }
         .icon-summary span {
-            border: 2px solid #0056b3;
+            border: 2px solid #000;
             background-color: #007bff;
             border-radius: 2px;
         }
@@ -128,112 +129,97 @@
         .icon-announcement {
             width: 24px;
             height: 24px;
-            border: 2px solid #000;
+            border: 2px solid #0056b3;
             border-radius: 50%;
         }
         .icon-announcement::before, .icon-announcement::after {
             content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            border: 1px solid #000; border-radius: 50%;
+            border: 1px solid #0056b3; border-radius: 50%;
         }
         .icon-announcement::before { transform: scaleX(0.4); }
         .icon-announcement::after { transform: scaleY(0.4); border-radius: 0; border-left: none; border-right: none; }
 
 
-        /* --- MAIN DASHBOARD CONTENT --- */
+        /* --- MAIN CONTENT AREA --- */
         .main-content {
             flex: 1;
-            background-color: #fbf2f2; /* Soft pale pink/off-white content background */
+            background-color: #fbf2f2; /* Pale pink context tint */
             padding: 40px;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            overflow: hidden;
         }
 
         .main-content h1 {
             font-size: 42px;
             font-weight: bold;
             color: #000000;
-            margin-bottom: 45px;
-            text-align: center;
+            margin-bottom: 25px;
+            text-align: left;
         }
 
-        /* Metrics Cards Grid */
-        .cards-grid {
+        /* --- ANNOUNCEMENT COMPONENT --- */
+        .announcement-box {
+            background-color: #7f7f7f; /* Slate grey container block */
             width: 100%;
-            max-width: 680px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-        }
-
-        /* Bottom single card center assignment */
-        .card-wrapper-subjects {
-            grid-column: 1 / span 2;
-            justify-self: center;
-            width: 50%;
-        }
-
-        /* Generic Metrics Card Layout */
-        .card {
-            border-radius: 28px;
-            padding: 22px;
-            height: 160px;
-            color: #ffffff;
-            position: relative;
+            max-width: 620px;
+            height: 220px;
+            border-radius: 24px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            text-decoration: none; /* Keeps text inside link cards clean */
-            cursor: pointer;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            position: relative;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
         }
 
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 500;
-            opacity: 0.95;
-        }
-
-        .card-value {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        /* Individual Card Color Assignments */
-        .card-students {
-            background-color: #e5a679; /* Muted Orange */
-        }
-
-        .card-lecturers {
-            background-color: #72c5e7; /* Light Blue */
-        }
-
-        .card-subjects {
-            background-color: #439a46; /* Deep Green */
+        /* Stylized Textarea replacing static text for interactive input */
+        .announcement-input {
             width: 100%;
+            height: 110px;
+            background: transparent;
+            border: none;
+            outline: none;
+            resize: none;
+            color: #000000;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: 600;
+            line-height: 1.4;
         }
 
-        /* Wireframe Action Indicators inside cards */
-        .card-icon-top, .card-icon-bottom {
-            position: absolute;
-            font-size: 22px;
-            opacity: 0.9;
+        /* Send Actions Wrapper Row */
+        .action-row {
+            display: flex;
+            justify-content: flex-end;
         }
 
-        .card-icon-top {
-            top: 18px;
-            right: 22px;
+        /* Send Pill Button Configuration */
+        .btn-send {
+            background-color: #a7c5c5; /* Soft light blue/grey pill background */
+            color: #000000;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: bold;
+            border: none;
+            border-radius: 14px;
+            padding: 5px 16px 5px 12px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.15s ease;
         }
 
-        .card-icon-bottom {
-            bottom: 18px;
-            right: 22px;
+        .btn-send:hover {
+            background-color: #92b3b3;
+        }
+
+        /* Paper Airplane Icon vector emulation */
+        .icon-send-arrow {
+            font-size: 11px;
+            transform: rotate(-15deg);
+            display: inline-block;
         }
     </style>
 </head>
@@ -242,57 +228,57 @@
     <div class="window-frame">
         
         <aside class="sidebar">
-            <button class="nav-item">
+            <a href="index.html" class="nav-item">
                 <div class="icon icon-logout"></div>
                 Log out
-            </button>
-            <button class="nav-item" style="margin-top: 15px;">
+            </a>
+            <a href="home.html" class="nav-item" style="margin-top: 15px;">
                 <div class="icon icon-home"></div>
                 Home
-            </button>
-            <button class="nav-item active" style="margin-top: 15px;">
+            </a>
+            <a href="summary.html" class="nav-item" style="margin-top: 15px;">
                 <div class="icon icon-summary">
                     <span></span><span></span><span></span><span></span>
                 </div>
                 Summary
-            </button>
-            <button class="nav-item" style="margin-top: 15px;">
+            </a>
+            <a href="announcement.html" class="nav-item active" style="margin-top: 15px;">
                 <div class="icon icon-announcement"></div>
                 Annoucement
-            </button>
+            </a>
         </aside>
 
         <main class="main-content">
-            <h1>Dashboard Summary</h1>
+            <h1>Global Announcement</h1>
 
-            <div class="cards-grid">
+            <div class="announcement-box">
+                <textarea 
+                    class="announcement-input" 
+                    id="announcementText" 
+                    placeholder="Type your message here...">&ldquo;Welcome to our website&rdquo;</textarea>
                 
-                <a href="manageStudents.html" class="card card-students">
-                    <span class="card-icon-top">📝</span>
-                    <div class="card-title">Total Students</div>
-                    <div class="card-value">54</div>
-                    <span class="card-icon-bottom">👤</span>
-                </a>
-
-                <a href="manageLecturers.html" class="card card-lecturers">
-                    <span class="card-icon-top">📝</span>
-                    <div class="card-title">Total Lecturers</div>
-                    <div class="card-value">12</div>
-                    <span class="card-icon-bottom">📖</span>
-                </a>
-
-                <a href="manageSubjects.html" class="card card-subjects">
-                    <span class="card-icon-top">📝</span>
-                    <div class="card-title">Total Subjects</div>
-                    <div class="card-value">6</div>
-                    <span class="card-icon-bottom">📋</span>
-                </a>
-            </div>
-
+                <div class="action-row">
+                    <button class="btn-send" onclick="broadcastAnnouncement()">
+                        <span class="icon-send-arrow">➔</span> Send to All
+                    </button>
+                </div>
             </div>
         </main>
 
     </div>
 
+    <script>
+        function broadcastAnnouncement() {
+            const message = document.getElementById('announcementText').value.trim();
+            
+            if (message === "" || message === '“Welcome to our website”') {
+                alert("Please type a valid announcement message before broadcasting.");
+                return;
+            }
+            
+            // Simulates an immediate production broadcast transmission 
+            alert(`Success! The announcement has been sent to all users:\n\n${message}`);
+        }
+    </script>
 </body>
 </html>
