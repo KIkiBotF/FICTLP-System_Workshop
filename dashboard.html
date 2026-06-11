@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en)
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -167,7 +167,7 @@
         }
 
         /* Bottom single card center assignment */
-        .cards-grid :nth-child(3) {
+        .card-wrapper-subjects {
             grid-column: 1 / span 2;
             justify-self: center;
             width: 50%;
@@ -184,6 +184,14 @@
             flex-direction: column;
             justify-content: space-between;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            text-decoration: none; /* Keeps text inside link cards clean */
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
 
         .card-title {
@@ -208,6 +216,7 @@
 
         .card-subjects {
             background-color: #439a46; /* Deep Green */
+            width: 100%;
         }
 
         /* Wireframe Action Indicators inside cards */
@@ -232,7 +241,6 @@
 
     <div class="window-frame">
         
-        <!-- Left Sidebar Navigation -->
         <aside class="sidebar">
             <button class="nav-item">
                 <div class="icon icon-logout"></div>
@@ -250,25 +258,22 @@
             </button>
             <button class="nav-item" style="margin-top: 15px;">
                 <div class="icon icon-announcement"></div>
-                Annoucement <!-- Preserved wireframe layout text exact typo -->
+                Annoucement
             </button>
         </aside>
 
-        <!-- Main Dashboard View Area -->
         <main class="main-content">
             <h1>Dashboard Summary</h1>
 
             <div class="cards-grid">
                 
-                <!-- Total Students Card -->
-                <div class="card card-students">
+                <a href="manageStudents.html" class="card card-students">
                     <span class="card-icon-top">📝</span>
                     <div class="card-title">Total Students</div>
                     <div class="card-value">54</div>
                     <span class="card-icon-bottom">👤</span>
-                </div>
+                </a>
 
-                <!-- Total Lecturers Card -->
                 <div class="card card-lecturers">
                     <span class="card-icon-top">📝</span>
                     <div class="card-title">Total Lecturers</div>
@@ -276,12 +281,13 @@
                     <span class="card-icon-bottom">📖</span>
                 </div>
 
-                <!-- Total Subjects Card -->
-                <div class="card card-subjects">
-                    <span class="card-icon-top">📝</span>
-                    <div class="card-title">Total Subjects</div>
-                    <div class="card-value">6</div>
-                    <span class="card-icon-bottom">📋</span>
+                <div class="card-wrapper-subjects">
+                    <div class="card card-subjects">
+                        <span class="card-icon-top">📝</span>
+                        <div class="card-title">Total Subjects</div>
+                        <div class="card-value">6</div>
+                        <span class="card-icon-bottom">📋</span>
+                    </div>
                 </div>
 
             </div>
