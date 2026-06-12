@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoreKnowledge - Manage Lecturers(Admin)</title>
     <style>
-        /* Reset and Base Layout */
+        /* Reset and Full Screen Layout Base */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,21 +14,18 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f5f5f5;
+            background-color: #ffffff;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
         }
 
-        /* Outer Frame Container matching wireframe bounds */
+        /* App container takes up 100% of the screen space */
         .window-frame {
             width: 100%;
-            max-width: 900px;
-            aspect-ratio: 4 / 3;
+            height: 100%;
             background-color: #ffffff;
-            border: 1px solid #7f7f7f;
             display: flex;
             overflow: hidden;
         }
@@ -36,7 +33,8 @@
         /* --- SIDEBAR NAVIGATION --- */
         .sidebar {
             width: 15%;
-            min-width: 110px;
+            min-width: 120px;
+            max-width: 160px;
             background-color: #ffffff;
             border-right: 1px solid #dcdcdc;
             display: flex;
@@ -44,6 +42,7 @@
             padding-top: 20px;
             align-items: center;
             flex-shrink: 0;
+            height: 100%;
         }
 
         .nav-item {
@@ -67,13 +66,14 @@
             background-color: #d9d9d9;
         }
 
-        /* Custom Wireframe CSS Icons */
+        /* Custom Pure CSS Icons */
         .icon {
             margin-bottom: 6px;
             display: inline-block;
             position: relative;
         }
 
+        /* Log Out Icon */
         .icon-logout {
             width: 24px;
             height: 24px;
@@ -91,6 +91,7 @@
             font-size: 15px; font-weight: bold;
         }
 
+        /* Home Icon */
         .icon-home {
             width: 24px;
             height: 22px;
@@ -108,6 +109,7 @@
             transform: rotate(45deg);
         }
 
+        /* Summary Icon */
         .icon-summary {
             width: 22px;
             height: 22px;
@@ -121,6 +123,7 @@
             border-radius: 2px;
         }
 
+        /* Announcement Icon */
         .icon-announcement {
             width: 24px;
             height: 24px;
@@ -135,28 +138,39 @@
         .icon-announcement::after { transform: scaleY(0.4); border-radius: 0; border-left: none; border-right: none; }
 
 
-        /* --- MAIN CONTENT AREA --- */
+        /* --- MAIN DASHBOARD CONTENT AREA --- */
         .main-content {
             flex: 1;
-            background-color: #fbf2f2;
-            padding: 30px 20px 30px 40px;
+            background-color: #fdf8f5; /* Theme workspace background tint */
+            padding: 40px 60px;
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
             overflow: hidden;
+            height: 100%;
         }
 
         .main-content h1 {
             font-size: 42px;
+            font-family: Georgia, serif;
             font-weight: bold;
-            color: #000000;
-            margin-bottom: 25px;
-            text-align: center;
+            color: #1a253c;
+            margin-bottom: 4px;
         }
 
+        .main-content .subtitle {
+            font-size: 14px;
+            color: #d88267;
+            margin-bottom: 30px;
+        }
+
+        /* --- TABLE LAYOUT MODULE --- */
         .table-container {
+            width: 100%;
+            max-width: 900px;
             flex: 1;
             overflow-y: auto;
-            padding-right: 15px;
+            padding-right: 8px;
             display: flex;
             flex-direction: column;
         }
@@ -165,111 +179,174 @@
             width: 6px;
         }
         .table-container::-webkit-scrollbar-thumb {
-            background-color: #7f7f7f;
+            background-color: #dcdcdc;
             border-radius: 3px;
+        }
+
+        /* Card Frame Container Design */
+        .table-card-wrapper {
+            background-color: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06), 
+                        0 4px 12px rgba(0, 0, 0, 0.03);
         }
 
         .lecturer-table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 12px;
-        }
-
-        .lecturer-table th {
-            font-size: 18px;
-            font-weight: bold;
-            color: #000000;
-            padding: 0 12px 6px 12px;
+            border-collapse: collapse;
             text-align: left;
         }
 
+        /* System Theme Sage Header Styling */
+        .lecturer-table thead tr {
+            background-color: #cbe3cc;
+        }
+
+        .lecturer-table th {
+            font-family: Georgia, serif;
+            font-size: 16px;
+            font-weight: bold;
+            color: #1a253c;
+            padding: 16px 20px;
+        }
+
+        /* Explicit Column Dimensions */
         .lecturer-table th.col-id { width: 18%; }
-        .lecturer-table th.col-name { width: 47%; }
-        .lecturer-table th.col-status { width: 15%; }
-        .lecturer-table th.col-actions { width: 20%; }
+        .lecturer-table th.col-name { width: 48%; }
+        .lecturer-table th.col-status { width: 14%; }
+        .lecturer-table th.col-actions { width: 20%; text-align: right; }
 
         .lecturer-table td {
-            background-color: #e3dede;
-            color: #000000;
+            padding: 16px 20px;
+            color: #555555;
             font-size: 14px;
-            font-weight: 600;
-            padding: 14px 12px;
+            font-weight: 500;
+            border-bottom: 1px solid #f0f0f0;
             vertical-align: middle;
         }
 
-        .lecturer-table tr td:first-child {
-            border-top-left-radius: 4px;
-            border-bottom-left-radius: 4px;
-        }
-        .lecturer-table tr td:last-child {
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 4px;
+        .lecturer-table tbody tr:last-child td {
+            border-bottom: none;
         }
 
-        /* Input Styling for Edit Mode */
-        .edit-input {
-            width: 100%;
-            padding: 4px 8px;
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 600;
-            border: 1px solid #7f7f7f;
-            border-radius: 4px;
-            background-color: #ffffff;
-        }
-        
-        .edit-select {
-            width: 100%;
-            padding: 4px 4px;
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: 600;
-            border: 1px solid #7f7f7f;
-            border-radius: 4px;
-            background-color: #ffffff;
+        .lecturer-id {
+            font-weight: bold;
+            color: #1a253c;
         }
 
-        /* Action Buttons */
+        /* Clean Functional Status Badges */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .status-badge.active-status {
+            background-color: #e2f0d9;
+            color: #385723;
+        }
+        .status-badge.inactive-status {
+            background-color: #fff2cc;
+            color: #7f6000;
+        }
+
+        /* Elegant Hover Interactivity */
+        .lecturer-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        .lecturer-table tbody tr:hover {
+            background-color: #fafafa;
+        }
+
+        /* Form Controls Styling */
+        .edit-input, .edit-select {
+            width: 100%;
+            padding: 6px 10px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid #dcdcdc;
+            border-radius: 6px;
+            background-color: #ffffff;
+            color: #1a253c;
+        }
+        .edit-input:focus, .edit-select:focus {
+            outline: none;
+            border-color: #9cbca4;
+        }
+
+        /* --- CONTROL INTERFACE ACTIONS --- */
         .action-group {
             display: flex;
             gap: 8px;
+            justify-content: flex-end;
         }
 
         .btn-action {
             font-family: inherit;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
-            color: #000000;
             border: none;
-            border-radius: 12px;
-            padding: 4px 14px;
+            border-radius: 20px;
+            padding: 6px 16px;
             cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
         }
 
         .btn-edit {
-            background-color: #9e9e9e;
+            background-color: #f7f7f7;
+            color: #1a253c;
         }
         
         .btn-save {
-            background-color: #a3cfa3;
+            background-color: #cbe3cc;
+            color: #234e25;
         }
 
         .btn-suspend {
-            background-color: #e58181;
+            background-color: #eed6c5;
+            color: #613318;
         }
 
         .btn-action:hover {
             opacity: 0.85;
         }
+        .btn-action:active {
+            transform: scale(0.97);
+        }
 
-        /* Empty State Style */
+        /* Empty State Notice View Window */
         .empty-message {
             text-align: center;
-            font-size: 22px;
+            font-family: Georgia, serif;
+            font-size: 20px;
             font-weight: bold;
-            color: #7f7f7f;
-            margin: auto 0;
-            padding: 40px 20px;
+            color: #d88267;
+            padding: 60px 20px;
+            background-color: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+            width: 100%;
+        }
+
+        /* Responsive Layout Breakpoints */
+        @media (max-width: 768px) {
+            body { overflow-y: auto; }
+            .window-frame { flex-direction: column; height: auto; min-height: 100vh; }
+            .sidebar {
+                width: 100%; max-width: 100%; height: auto; flex-direction: row;
+                justify-content: space-around; padding-top: 0; border-right: none;
+                border-bottom: 1px solid #dcdcdc; position: sticky; top: 0; z-index: 100;
+            }
+            .nav-item { padding: 12px 5px; flex: 1; }
+            .main-content { padding: 30px 20px; height: auto; }
+            .main-content h1 { font-size: 32px; }
+            .lecturer-table th, .lecturer-table td { padding: 12px 10px; font-size: 13px; }
+            .btn-action { padding: 5px 10px; font-size: 11px; }
         }
     </style>
 </head>
@@ -277,22 +354,22 @@
 
     <div class="window-frame">
         
-         <aside class="sidebar">
+        <aside class="sidebar">
             <a href="logIn.html" class="nav-item" onclick="handleLogout(event)">
                 <div class="icon icon-logout"></div>
                 Log out
             </a>
-            <a href="mainPage.html" class="nav-item" style="margin-top: 15px;">
+            <a href="mainPage.html" class="nav-item">
                 <div class="icon icon-home"></div>
                 Home
             </a>
-            <a href="dashboard.html" class="nav-item active" style="margin-top: 15px;">
+            <a href="dashboard.html" class="nav-item active">
                 <div class="icon icon-summary">
                     <span></span><span></span><span></span><span></span>
                 </div>
                 Summary
             </a>
-             <a href="announcement.html" class="nav-item" style="margin-top: 15px;">
+             <a href="announcement.html" class="nav-item">
                 <div class="icon icon-announcement"></div>
                 Announcement
             </a>
@@ -300,100 +377,70 @@
 
         <main class="main-content">
             <h1>Manage Lecturers</h1>
+            <div class="subtitle">Review academic instructor rosters, authorization levels, and profile statuses:</div>
 
             <div class="table-container" id="tableContainer">
-                <table class="lecturer-table" id="lecturerTable">
-                    <thead>
-                        <tr>
-                            <th class="col-id">ID</th>
-                            <th class="col-name">Name</th>
-                            <th class="col-status">Status</th>
-                            <th class="col-actions">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="lecturer-id">....</td>
-                            <td class="lecturer-name">Ts. Arif Shah bin Mahmud</td>
-                            <td class="lecturer-status">Inactive</td>
-                            <td>
-                                <div class="action-group">
-                                    <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
-                                    <button class="btn-action btn-suspend" onclick="suspendLecturer(this)">Suspend</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="lecturer-id">....</td>
-                            <td class="lecturer-name">Dr. Muhammad Hisham bin Yahya</td>
-                            <td class="lecturer-status">Active</td>
-                            <td>
-                                <div class="action-group">
-                                    <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
-                                    <button class="btn-action btn-suspend" onclick="suspendLecturer(this)">Suspend</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="lecturer-id">....</td>
-                            <td class="lecturer-name">Amar bin Rasyid</td>
-                            <td class="lecturer-status">Active</td>
-                            <td>
-                                <div class="action-group">
-                                    <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
-                                    <button class="btn-action btn-suspend" onclick="suspendLecturer(this)">Suspend</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="lecturer-id">....</td>
-                            <td class="lecturer-name">...</td>
-                            <td class="lecturer-status">Inactive</td>
-                            <td>
-                                <div class="action-group">
-                                    <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
-                                    <button class="btn-action btn-suspend" onclick="suspendLecturer(this)">Suspend</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="lecturer-id">....</td>
-                            <td class="lecturer-name">.......................</td>
-                            <td class="lecturer-status">Active</td>
-                            <td>
-                                <div class="action-group">
-                                    <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
-                                    <button class="btn-action btn-suspend" onclick="suspendLecturer(this)">Suspend</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="lecturer-id">....</td>
-                            <td class="lecturer-name">.......................</td>
-                            <td class="lecturer-status">Active</td>
-                            <td>
-                                <div class="action-group">
-                                    <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
-                                    <button class="btn-action btn-suspend" onclick="suspendLecturer(this)">Suspend</button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-card-wrapper">
+                    <table class="lecturer-table" id="lecturerTable">
+                        <thead>
+                            <tr>
+                                <th class="col-id">Lecturer ID</th>
+                                <th class="col-name">Name</th>
+                                <th class="col-status">Status</th>
+                                <th class="col-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="lecturer-id">L01239</td>
+                                <td class="lecturer-name">Ts. Arif Shah bin Mahmud</td>
+                                <td class="lecturer-status"><span class="status-badge inactive-status">Inactive</span></td>
+                                <td>
+                                    <div class="action-group">
+                                        <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
+                                        <button class="btn-action btn-suspend" onclick="suspendLecturer(this)">Suspend</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lecturer-id">L01244</td>
+                                <td class="lecturer-name">Dr. Muhammad Hisham bin Yahya</td>
+                                <td class="lecturer-status"><span class="status-badge active-status">Active</span></td>
+                                <td>
+                                    <div class="action-group">
+                                        <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
+                                        <button class="btn-action btn-suspend" onclick="suspendLecturer(this)">Suspend</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="lecturer-id">L01257</td>
+                                <td class="lecturer-name">Amar bin Rasyid</td>
+                                <td class="lecturer-status"><span class="status-badge active-status">Active</span></td>
+                                <td>
+                                    <div class="action-group">
+                                        <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
+                                        <button class="btn-action btn-suspend" onclick="suspendLecturer(this)">Suspend</button>
+                                    </div>
+                                </td>
+                            </tr>
+                    
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
 
     </div>
 
     <script>
-
         function handleLogout(event) {
-            event.preventDefault(); // Prevents instant empty link jumps
+            event.preventDefault(); 
             if (confirm("Are you sure you want to logout?")) {
                 window.location.href = "logIn.html";
             }
         }
-
+        
         function toggleEdit(button) {
             const row = button.closest('tr');
             const idCell = row.querySelector('.lecturer-id');
@@ -405,10 +452,13 @@
                 button.classList.remove('btn-edit');
                 button.classList.add('btn-save');
 
-                idCell.innerHTML = `<input type="text" class="edit-input" value="${idCell.textContent.trim()}">`;
-                nameCell.innerHTML = `<input type="text" class="edit-input" value="${nameCell.textContent.trim()}">`;
-                
+                const currentId = idCell.textContent.trim();
+                const currentName = nameCell.textContent.trim();
                 const currentStatus = statusCell.textContent.trim();
+
+                idCell.innerHTML = `<input type="text" class="edit-input" value="${currentId}">`;
+                nameCell.innerHTML = `<input type="text" class="edit-input" value="${currentName}">`;
+                
                 statusCell.innerHTML = `
                     <select class="edit-select">
                         <option value="Active" ${currentStatus === 'Active' ? 'selected' : ''}>Active</option>
@@ -426,7 +476,9 @@
 
                 idCell.textContent = newId;
                 nameCell.textContent = newName;
-                statusCell.textContent = newStatus;
+                
+                const badgeClass = newStatus.toLowerCase() === 'active' ? 'active-status' : 'inactive-status';
+                statusCell.innerHTML = `<span class="status-badge ${badgeClass}">${newStatus}</span>`;
             }
         }
 
@@ -440,7 +492,7 @@
                 const remainingRows = table.querySelectorAll('tbody tr');
                 if (remainingRows.length === 0) {
                     const container = document.getElementById('tableContainer');
-                    container.innerHTML = '<div class="empty-message">No lecturers available</div>';
+                    container.innerHTML = '<div class="empty-message">No active lecturer credentials found on the system server.</div>';
                 }
             }
         }

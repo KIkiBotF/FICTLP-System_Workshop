@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoreKnowledge - Manage Subjects(Admin)</title>
     <style>
-        /* Reset and Base Layout */
+        /* Reset and Full Screen Layout Base */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,21 +14,18 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f5f5f5;
+            background-color: #ffffff;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
         }
 
-        /* Outer Frame Container matching wireframe bounds */
+        /* App container takes up 100% of the screen space */
         .window-frame {
             width: 100%;
-            max-width: 900px;
-            aspect-ratio: 4 / 3;
+            height: 100%;
             background-color: #ffffff;
-            border: 1px solid #7f7f7f;
             display: flex;
             overflow: hidden;
         }
@@ -36,7 +33,8 @@
         /* --- SIDEBAR NAVIGATION --- */
         .sidebar {
             width: 15%;
-            min-width: 110px;
+            min-width: 120px;
+            max-width: 160px;
             background-color: #ffffff;
             border-right: 1px solid #dcdcdc;
             display: flex;
@@ -44,6 +42,7 @@
             padding-top: 20px;
             align-items: center;
             flex-shrink: 0;
+            height: 100%;
         }
 
         .nav-item {
@@ -63,17 +62,19 @@
             text-align: center;
         }
 
+        /* Active State Management for Subject Context */
         .nav-item.active {
             background-color: #d9d9d9;
         }
 
-        /* Custom Wireframe CSS Icons */
+        /* Custom Pure CSS Icons */
         .icon {
             margin-bottom: 6px;
             display: inline-block;
             position: relative;
         }
 
+        /* Log Out Icon */
         .icon-logout {
             width: 24px;
             height: 24px;
@@ -91,6 +92,7 @@
             font-size: 15px; font-weight: bold;
         }
 
+        /* Home Icon */
         .icon-home {
             width: 24px;
             height: 22px;
@@ -108,6 +110,7 @@
             transform: rotate(45deg);
         }
 
+        /* Summary Icon (Grid) */
         .icon-summary {
             width: 22px;
             height: 22px;
@@ -121,6 +124,7 @@
             border-radius: 2px;
         }
 
+        /* Announcement Icon (Globe) */
         .icon-announcement {
             width: 24px;
             height: 24px;
@@ -135,28 +139,39 @@
         .icon-announcement::after { transform: scaleY(0.4); border-radius: 0; border-left: none; border-right: none; }
 
 
-        /* --- MAIN CONTENT AREA --- */
+        /* --- MAIN DASHBOARD CONTENT AREA --- */
         .main-content {
             flex: 1;
-            background-color: #fbf2f2;
-            padding: 30px 20px 30px 40px;
+            background-color: #fdf8f5; /* Matching Dashboard off-white background tint */
+            padding: 40px 60px;
             display: flex;
             flex-direction: column;
+            align-items: flex-start;
             overflow: hidden;
+            height: 100%;
         }
 
         .main-content h1 {
             font-size: 42px;
+            font-family: Georgia, serif;
             font-weight: bold;
-            color: #000000;
-            margin-bottom: 25px;
-            text-align: center;
+            color: #1a253c;
+            margin-bottom: 4px;
         }
 
+        .main-content .subtitle {
+            font-size: 14px;
+            color: #d88267;
+            margin-bottom: 30px;
+        }
+
+        /* --- TABLE LAYOUT MODULE --- */
         .table-container {
+            width: 100%;
+            max-width: 900px;
             flex: 1;
             overflow-y: auto;
-            padding-right: 15px;
+            padding-right: 8px;
             display: flex;
             flex-direction: column;
         }
@@ -165,101 +180,156 @@
             width: 6px;
         }
         .table-container::-webkit-scrollbar-thumb {
-            background-color: #7f7f7f;
+            background-color: #dcdcdc;
             border-radius: 3px;
+        }
+
+        /* Card Frame Table wrapper style */
+        .table-card-wrapper {
+            background-color: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06), 
+                        0 4px 12px rgba(0, 0, 0, 0.03);
         }
 
         .subject-table {
             width: 100%;
-            border-collapse: separate;
-            border-spacing: 0 12px;
-        }
-
-        .subject-table th {
-            font-size: 18px;
-            font-weight: bold;
-            color: #000000;
-            padding: 0 12px 6px 12px;
+            border-collapse: collapse;
             text-align: left;
         }
 
-        /* Specific Mockup Column Alignments */
+        /* Course Catalog Palette Styled Header Row */
+        .subject-table thead tr {
+            background-color: #cbe3cc; /* Matches dashboard course catalog green */
+        }
+
+        .subject-table th {
+            font-family: Georgia, serif;
+            font-size: 16px;
+            font-weight: bold;
+            color: #1a253c;
+            padding: 16px 20px;
+        }
+
+        /* Column Proportion Layout Rules */
         .subject-table th.col-id { width: 18%; }
-        .subject-table th.col-name { width: 42%; }
-        .subject-table th.col-enroll { width: 20%; }
-        .subject-table th.col-actions { width: 20%; }
+        .subject-table th.col-name { width: 44%; }
+        .subject-table th.col-enroll { width: 18%; }
+        .subject-table th.col-actions { width: 20%; text-align: right; }
 
         .subject-table td {
-            background-color: #e3dede;
-            color: #000000;
+            padding: 16px 20px;
+            color: #555555;
             font-size: 14px;
-            font-weight: 600;
-            padding: 14px 12px;
+            font-weight: 500;
+            border-bottom: 1px solid #f0f0f0;
             vertical-align: middle;
         }
 
-        .subject-table tr td:first-child {
-            border-top-left-radius: 4px;
-            border-bottom-left-radius: 4px;
-        }
-        .subject-table tr td:last-child {
-            border-top-right-radius: 4px;
-            border-bottom-right-radius: 4px;
+        .subject-table tbody tr:last-child td {
+            border-bottom: none;
         }
 
-        /* Form Inputs for Edit Mode */
+        .subject-id {
+            font-weight: bold;
+            color: #1a253c;
+        }
+
+        /* Interactive row transition element */
+        .subject-table tbody tr {
+            transition: background-color 0.2s ease;
+        }
+        .subject-table tbody tr:hover {
+            background-color: #fafafa;
+        }
+
+        /* Form Inputs inside editable fields */
         .edit-input {
             width: 100%;
-            padding: 4px 8px;
+            padding: 6px 10px;
             font-family: inherit;
             font-size: 14px;
-            font-weight: 600;
-            border: 1px solid #7f7f7f;
-            border-radius: 4px;
+            font-weight: 500;
+            border: 1px solid #dcdcdc;
+            border-radius: 6px;
             background-color: #ffffff;
+            color: #1a253c;
+        }
+        .edit-input:focus {
+            outline: none;
+            border-color: #9cbca4;
         }
 
-        /* Action Buttons styling */
+        /* --- CONTROL INTERFACE ACTIONS --- */
         .action-group {
             display: flex;
             gap: 8px;
+            justify-content: flex-end;
         }
 
         .btn-action {
             font-family: inherit;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
-            color: #000000;
             border: none;
-            border-radius: 12px;
-            padding: 4px 14px;
+            border-radius: 20px;
+            padding: 6px 16px;
             cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
         }
 
         .btn-edit {
-            background-color: #9e9e9e;
+            background-color: #f7f7f7;
+            color: #1a253c;
         }
         
         .btn-save {
-            background-color: #a3cfa3;
+            background-color: #cbe3cc;
+            color: #234e25;
         }
 
         .btn-remove {
-            background-color: #e58181;
+            background-color: #eed6c5;
+            color: #613318;
         }
 
         .btn-action:hover {
             opacity: 0.85;
         }
+        .btn-action:active {
+            transform: scale(0.97);
+        }
 
-        /* Empty State Warning Container */
+        /* Empty state notice view window */
         .empty-message {
             text-align: center;
-            font-size: 22px;
+            font-family: Georgia, serif;
+            font-size: 20px;
             font-weight: bold;
-            color: #7f7f7f;
-            margin: auto 0;
-            padding: 40px 20px;
+            color: #d88267;
+            padding: 60px 20px;
+            background-color: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+            width: 100%;
+        }
+
+        /* Responsive Layout Rules */
+        @media (max-width: 768px) {
+            body { overflow-y: auto; }
+            .window-frame { flex-direction: column; height: auto; min-height: 100vh; }
+            .sidebar {
+                width: 100%; max-width: 100%; height: auto; flex-direction: row;
+                justify-content: space-around; padding-top: 0; border-right: none;
+                border-bottom: 1px solid #dcdcdc; position: sticky; top: 0; z-index: 100;
+            }
+            .nav-item { padding: 12px 5px; flex: 1; }
+            .main-content { padding: 30px 20px; height: auto; }
+            .main-content h1 { font-size: 32px; }
+            .subject-table th, .subject-table td { padding: 12px 10px; font-size: 13px; }
+            .btn-action { padding: 5px 10px; font-size: 11px; }
         }
     </style>
 </head>
@@ -267,118 +337,88 @@
 
     <div class="window-frame">
         
-     <aside class="sidebar">
+        <aside class="sidebar">
             <a href="logIn.html" class="nav-item" onclick="handleLogout(event)">
                 <div class="icon icon-logout"></div>
                 Log out
             </a>
-            <a href="mainPage.html" class="nav-item" style="margin-top: 15px;">
+            <a href="mainPage.html" class="nav-item">
                 <div class="icon icon-home"></div>
                 Home
             </a>
-            <a href="dashboard.html" class="nav-item active" style="margin-top: 15px;">
+            <a href="dashboard.html" class="nav-item active">
                 <div class="icon icon-summary">
                     <span></span><span></span><span></span><span></span>
                 </div>
                 Summary
             </a>
-             <a href="announcement.html" class="nav-item" style="margin-top: 15px;">
+             <a href="announcement.html" class="nav-item">
                 <div class="icon icon-announcement"></div>
                 Announcement
             </a>
         </aside>
 
         <main class="main-content">
-            <h1>Manage Subjects</h1>
+            <h1>Manage Courses</h1>
+            <div class="subtitle">Modify course configuration rules and metrics:</div>
 
             <div class="table-container" id="tableContainer">
-                <table class="subject-table" id="subjectTable">
-                    <thead>
-                        <tr>
-                            <th class="col-id">ID</th>
-                            <th class="col-name">Name</th>
-                            <th class="col-enroll">Current Enroll</th>
-                            <th class="col-actions">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="subject-id">DITP2913</td>
-                            <td class="subject-name">Database</td>
-                            <td class="subject-enroll">21</td>
-                            <td>
-                                <div class="action-group">
-                                    <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
-                                    <button class="btn-action btn-remove" onclick="removeSubject(this)">Remove</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="subject-id">DITP1113</td>
-                            <td class="subject-name">Programming I</td>
-                            <td class="subject-enroll">31</td>
-                            <td>
-                                <div class="action-group">
-                                    <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
-                                    <button class="btn-action btn-remove" onclick="removeSubject(this)">Remove</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="subject-id">...</td>
-                            <td class="subject-name">Computer Architecture and Organization</td>
-                            <td class="subject-enroll">23</td>
-                            <td>
-                                <div class="action-group">
-                                    <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
-                                    <button class="btn-action btn-remove" onclick="removeSubject(this)">Remove</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="subject-id">....</td>
-                            <td class="subject-name">...</td>
-                            <td class="subject-enroll">...</td>
-                            <td>
-                                <div class="action-group">
-                                    <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
-                                    <button class="btn-action btn-remove" onclick="removeSubject(this)">Remove</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="subject-id">....</td>
-                            <td class="subject-name">.......................</td>
-                            <td class="subject-enroll">...</td>
-                            <td>
-                                <div class="action-group">
-                                    <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
-                                    <button class="btn-action btn-remove" onclick="removeSubject(this)">Remove</button>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="subject-id">...</td>
-                            <td class="subject-name">.......................</td>
-                            <td class="subject-enroll">..</td>
-                            <td>
-                                <div class="action-group">
-                                    <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
-                                    <button class="btn-action btn-remove" onclick="removeSubject(this)">Remove</button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div class="table-card-wrapper">
+                    <table class="subject-table" id="subjectTable">
+                        <thead>
+                            <tr>
+                                <th class="col-id">ID</th>
+                                <th class="col-name">Course Name</th>
+                                <th class="col-enroll">Enrolled</th>
+                                <th class="col-actions">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="subject-id">DITP2913</td>
+                                <td class="subject-name">Database</td>
+                                <td class="subject-enroll">3</td>
+                                <td>
+                                    <div class="action-group">
+                                        <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
+                                        <button class="btn-action btn-remove" onclick="removeSubject(this)">Remove</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="subject-id">DITP1113</td>
+                                <td class="subject-name">C++ Programming</td>
+                                <td class="subject-enroll">2</td>
+                                <td>
+                                    <div class="action-group">
+                                        <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
+                                        <button class="btn-action btn-remove" onclick="removeSubject(this)">Remove</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="subject-id">DITP3123</td>
+                                <td class="subject-name">Computer Organization and Architecture</td>
+                                <td class="subject-enroll">2</td>
+                                <td>
+                                    <div class="action-group">
+                                        <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
+                                        <button class="btn-action btn-remove" onclick="removeSubject(this)">Remove</button>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
 
     </div>
 
     <script>
-
         function handleLogout(event) {
-            event.preventDefault(); // Prevents instant empty link jumps
+            event.preventDefault(); 
             if (confirm("Are you sure you want to logout?")) {
                 window.location.href = "logIn.html";
             }
@@ -391,7 +431,6 @@
             const enrollCell = row.querySelector('.subject-enroll');
 
             if (button.classList.contains('btn-edit')) {
-                // Change into Saving/Editable configuration
                 button.textContent = 'Save';
                 button.classList.remove('btn-edit');
                 button.classList.add('btn-save');
@@ -400,7 +439,6 @@
                 nameCell.innerHTML = `<input type="text" class="edit-input" value="${nameCell.textContent.trim()}">`;
                 enrollCell.innerHTML = `<input type="text" class="edit-input" value="${enrollCell.textContent.trim()}">`;
             } else {
-                // Return to Read-Only Mode
                 button.textContent = 'Edit';
                 button.classList.remove('btn-save');
                 button.classList.add('btn-edit');
@@ -425,7 +463,7 @@
                 const remainingRows = table.querySelectorAll('tbody tr');
                 if (remainingRows.length === 0) {
                     const container = document.getElementById('tableContainer');
-                    container.innerHTML = '<div class="empty-message">No subjects available</div>';
+                    container.innerHTML = '<div class="empty-message">No courses are currently configured in the catalog.</div>';
                 }
             }
         }

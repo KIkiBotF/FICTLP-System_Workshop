@@ -17,7 +17,7 @@
             background-color: #ffffff;
             width: 100vw;
             height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
             display: flex;
         }
 
@@ -183,17 +183,17 @@
             flex-direction: column;
             width: 100%;
             
-            /* --- CARD SHADOW EFFECT --- */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 
-                        0 4px 10px rgba(0, 0, 0, 0.04);
+            /* --- TIMELISS DEPTH SHADOW EFFECT --- */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06), 
+                        0 4px 12px rgba(0, 0, 0, 0.03);
             transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
 
         /* Smooth Lift Effect on Hover */
         .subject-style-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12), 
-                        0 6px 15px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1), 
+                        0 6px 16px rgba(0, 0, 0, 0.04);
         }
 
         /* Headers */
@@ -209,12 +209,6 @@
             font-size: 22px;
             font-family: Georgia, serif;
             font-weight: bold;
-        }
-
-        .card-header .meta-tag {
-            font-size: 13px;
-            font-style: italic;
-            opacity: 0.7;
         }
 
         /* Colors matched to mockup */
@@ -259,6 +253,101 @@
             background-color: #f7f7f7;
             padding: 6px 20px;
             border-radius: 20px;
+            min-width: 65px;
+            text-align: center;
+        }
+
+        /* -------------------------------------------
+           MOBILE & TABLET RESPONSIVE COMPATIBILITY
+        ------------------------------------------- */
+        @media (max-width: 768px) {
+            body {
+                overflow-y: auto;
+            }
+
+            .window-frame {
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+            }
+
+            /* Shift structural layout elements into a clean mobile layout banner grid */
+            .sidebar {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                flex-direction: row;
+                justify-content: space-around;
+                padding-top: 0;
+                border-right: none;
+                border-bottom: 1px solid #dcdcdc;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+
+            .nav-item {
+                width: auto;
+                padding: 12px 10px;
+                flex: 1;
+            }
+
+            .main-content {
+                padding: 30px 20px;
+                align-items: center;
+                height: auto;
+            }
+
+            .main-content h1 {
+                font-size: 32px;
+                text-align: center;
+            }
+
+            .main-content .subtitle {
+                margin-bottom: 25px;
+                text-align: center;
+            }
+
+            .cards-stack {
+                gap: 20px;
+            }
+
+            .card-header {
+                padding: 14px 20px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+
+            .card-header h2 {
+                font-size: 18px;
+            }
+
+            .card-body {
+                padding: 20px;
+                flex-direction: column-reverse;
+                gap: 15px;
+                align-items: center;
+                text-align: center;
+            }
+
+            .details-list {
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .details-list li {
+                justify-content: center;
+                font-size: 14px;
+            }
+
+            .metric-badge {
+                font-size: 28px;
+                width: 100%;
+                max-width: 120px;
+                text-align: center;
+            }
         }
     </style>
 </head>
@@ -271,17 +360,17 @@
                 <div class="icon icon-logout"></div>
                 Log out
             </a>
-            <a href="mainPage.html" class="nav-item" style="margin-top: 15px;">
+            <a href="mainPage.html" class="nav-item" style="margin-top: 0;">
                 <div class="icon icon-home"></div>
                 Home
             </a>
-            <button class="nav-item active" style="margin-top: 15px;">
+            <button class="nav-item active" style="margin-top: 0;">
                 <div class="icon icon-summary">
                     <span></span><span></span><span></span><span></span>
                 </div>
                 Summary
             </button>
-             <a href="announcement.html" class="nav-item" style="margin-top: 15px;">
+             <a href="announcement.html" class="nav-item" style="margin-top: 0;">
                 <div class="icon icon-announcement"></div>
                 Announcement
             </a>
@@ -300,7 +389,6 @@
                     <div class="card-body">
                         <ul class="details-list">
                             <li>Manage Students</li>
-                            
                         </ul>
                         <div class="metric-badge" id="student-count"></div>
                     </div>
@@ -309,12 +397,10 @@
                 <a href="manageLecturers.html" class="subject-style-card">
                     <div class="card-header header-lecturers">
                         <h2>Lecturer Directory</h2>
-                        
                     </div>
                     <div class="card-body">
                         <ul class="details-list">
                             <li>Manage Lecturers</li>
-                           
                         </ul>
                         <div class="metric-badge" id="lecturer-count"></div>
                     </div>
@@ -323,12 +409,10 @@
                 <a href="manageSubjects.html" class="subject-style-card">
                     <div class="card-header header-subjects">
                         <h2>Course Catalog</h2>
-                        
                     </div>
                     <div class="card-body">
                         <ul class="details-list">
                             <li>Manage Courses</li>
-                            
                         </ul>
                         <div class="metric-badge" id="subject-count"></div>
                     </div>
