@@ -1,3 +1,12 @@
+/* ── Global Styles ── */
+:root {
+    --sidebar-w: 110px;
+    --sidebar-bg: #ffffff; /* Background sidebar dikemaskan dengan warna putih padu */
+    --text-light: #757575;
+    --text-active: #5c6bcb;
+    --bg-active: #e8eaf6;
+}
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -6,46 +15,32 @@
 }
 
 body {
-    background-color: #ffbdba;
+    background-color: #f9dad8;
     color: #333333;
     display: flex;
 }
 
-
+/* ── Sidebar (Dikemaskan & Diasingkan Pertindihan) ── */
 .sidebar {
-    width: 110px;
-    background-color: #ffffff;
-    border-right: 1px solid #eaeaea;
+    width: var(--sidebar-w);
+    background: var(--sidebar-bg);
+    border-right: 1px solid #ece8e5;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 30px 10px;
+    padding: 28px 0 24px;
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 0; 
+    left: 0; 
     bottom: 0;
-    z-index: 100;
-}
-
-.logout-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    color: #444;
-    font-size: 11px;
-    font-weight: 600;
-    margin-bottom: 40px;
-}
-
-.logout-link:hover {
-    color: #e53935;
+    z-index: 10;
 }
 
 .nav-menu {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    align-items: center;
+    gap: 20px;
     width: 100%;
 }
 
@@ -53,14 +48,15 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 80px;
+    padding: 12px 6px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
     text-decoration: none;
-    color: #757575;
-    font-size: 11px;
-    font-weight: 500;
-    padding: 10px 5px;
-    border-radius: 8px;
-    transition: all 0.2s;
-    text-align: center;
+    color: var(--text-light);
 }
 
 .nav-item:hover {
@@ -69,24 +65,44 @@ body {
 }
 
 .nav-item.active {
-    color: #5c6bcb;
-    background-color: #e8eaf6;
+    color: var(--text-active);
+    background-color: var(--bg-active);
     font-weight: 600;
 }
 
-.nav-icon {
+.nav-item .icon {
     width: 24px;
     height: 24px;
-    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.nav-item .icon img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
+.nav-item .label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.nav-item.active .label {
+    font-weight: 600;
+}
+
+/* ── Main Content ── */
 .main-content {
-    margin-left: 110px;
+    margin-left: var(--sidebar-w);
     padding: 40px;
-    width: calc(100% - 110px);
+    width: calc(100% - var(--sidebar-w));
     min-height: 100vh;
 }
-
 
 .content-header {
     margin-bottom: 40px;
@@ -104,6 +120,7 @@ body {
     color: #333;
 }
 
+/* ── Grid & Certificates ── */
 .certificates-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

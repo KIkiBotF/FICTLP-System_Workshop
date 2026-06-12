@@ -9,7 +9,7 @@
 }
 
 body {
-    background-color: #e5dbdb; /* Warna latar belakang kelabu lembut luaran */
+    background-color: #fdf5f3; /* Warna latar belakang kelabu lembut luaran */
     min-height: 100vh;
     display: flex;
     flex-direction: column;

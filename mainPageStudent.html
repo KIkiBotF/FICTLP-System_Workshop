@@ -1,38 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
-    <link rel="stylesheet" href="mainPageStudent.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="mainPageStudent.css" />
 </head>
 <body>
-      <!-- sidebar.html -->
-<aside class="sidebar">
-    <div class="nav-item" data-page="dashboard" onclick="navigateTo('dashboard.html')">
-        <img src="Aset/logOutBtn.svg" alt="Logout" width="25" height="25">
-        <span>Log Out</span>
+
+  <div class="logout-wrapper">
+    <a href="logIn.html" class="logout-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+        <polyline points="16 17 21 12 16 7"/>
+        <line x1="21" y1="12" x2="9" y2="12"/>
+      </svg>
+      <span>Log out</span>
+    </a>
+  </div>
+
+  <main class="dashboard-container">
+    
+    <div class="system-banner">
+      <h1>System name</h1>
     </div>
 
-    <div class="nav-item" data-page="home" onclick="navigateTo('dashboard.html')">
-        <img src="Aset/homeBtn.svg" alt="Home" width="32" height="32">
-        <span>Home</span>
+    <div class="welcome-section">
+      <h2>Welcome Back!</h2>
+      <p class="username-display">username....</p>
     </div>
 
-    <div class="nav-item" data-page="performance" onclick="navigateTo('performance.html')">
-        <img src="Aset/performanceBtn.svg" alt="Performance" width="30" height="30">
-        <span>Performance</span>
+    <div class="action-section">
+      <a href="SubjectStudent.html" class="btn-subject">Subject</a>
     </div>
 
-    <div class="nav-item" data-page="subject" onclick="navigateTo('subjects.html')">
-        <img src="Aset/manageSubjectBtn.svg" alt="Subject" width="35" height="35">
-        <span>Subject</span>
-    </div>
+  </main>
 
-    <div class="nav-item" data-page="achievement" onclick="navigateTo('achievements.html')">
-        <img src="Aset/archievementBtn.svg" alt="Achievement" width="35" height="35">
-        <span>Achievement</span>
-    </div>
-</aside>
 </body>
 </html>

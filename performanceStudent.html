@@ -4,36 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Performance Metrics - Student LMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;600;700;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="performanceStudent.css">
 </head>
 <body>
-      <!-- sidebar.html -->
-<aside class="sidebar">
-    <div class="nav-item" data-page="dashboard" onclick="navigateTo('dashboard.html')">
-        <img src="Aset/logOutBtn.svg" alt="Logout" width="25" height="25">
-        <span>Log Out</span>
-    </div>
 
-    <div class="nav-item" data-page="home" onclick="navigateTo('dashboard.html')">
-        <img src="Aset/homeBtn.svg" alt="Home" width="32" height="32">
-        <span>Home</span>
-    </div>
+    <aside class="sidebar">
+        <nav class="nav-container">
+            <div class="nav-item" data-page="logout" onclick="window.location.href='logout.html'">
+                <div class="icon">
+                    <img src="Aset/logOutBtn.svg" alt="Logout">
+                </div>
+                <span class="label">Log Out</span>
+            </div>
 
-    <div class="nav-item" data-page="performance" onclick="navigateTo('performance.html')">
-        <img src="Aset/performanceBtn.svg" alt="Performance" width="30" height="30">
-        <span>Performance</span>
-    </div>
+            <div class="nav-item" data-page="home" onclick="window.location.href='mainPageStudent.html'">
+                <div class="icon">
+                    <img src="Aset/homeBtn.svg" alt="Home">
+                </div>
+                <span class="label">Home</span>
+            </div>
 
-    <div class="nav-item" data-page="subject" onclick="navigateTo('subjects.html')">
-        <img src="Aset/manageSubjectBtn.svg" alt="Subject" width="35" height="35">
-        <span>Subject</span>
-    </div>
+            <div class="nav-item active" data-page="performance" onclick="window.location.href='performanceStudent.html'">
+                <div class="icon">
+                    <img src="Aset/performanceBtn.svg" alt="Performance">
+                </div>
+                <span class="label">Performance</span>
+            </div>
 
-    <div class="nav-item" data-page="achievement" onclick="navigateTo('achievements.html')">
-        <img src="Aset/archievementBtn.svg" alt="Achievement" width="35" height="35">
-        <span>Achievement</span>
-    </div>
-</aside>
+            <div class="nav-item" data-page="subject" onclick="window.location.href='SubjectStudent.html'">
+                <div class="icon">
+                    <img src="Aset/manageSubjectBtn.svg" alt="Subject">
+                </div>
+                <span class="label">Subject</span>
+            </div>
+
+            <div class="nav-item" data-page="achievement" onclick="window.location.href='AchievementStudent.html'">
+                <div class="icon">
+                    <img src="Aset/archievementBtn.svg" alt="Achievement">
+                </div>
+                <span class="label">Achievement</span>
+            </div>
+        </nav>
+    </aside>
+
     <main class="main-content">
         <header class="content-header">
             <h1>Performance</h1>
@@ -82,12 +96,10 @@
                     <span class="percentage-value" id="text-topic4">0%</span>
                 </div>
             </div>
-            
         </div>
     </main>
 
     <script>
-        // Pemetaan nama topik daripada database kuiz ke ID Element HTML
         const topicMapping = {
             "Basics & Data Types": "topic1",
             "Control Structures": "topic2",
@@ -97,32 +109,20 @@
 
         function updatePerformanceView() {
             const selectedSubject = document.getElementById('subject-select').value;
-            
-            // Ambil data dari localStorage
             const performanceData = JSON.parse(localStorage.getItem('quizPerformanceData'));
 
-            // JIKA pelajar pilih C++ dan data kuiz wujud di localstorage
             if (selectedSubject === 'cpp' && performanceData) {
-                
                 for (const [topicName, scoreInfo] of Object.entries(performanceData)) {
                     const elementKey = topicMapping[topicName];
                     
                     if (elementKey) {
-                        // Kira peratusan markah bagi topik tersebut
                         let percentage = Math.round((scoreInfo.correct / scoreInfo.total) * 100);
-                        
-                        // Kemas kini nama tajuk beserta jumlah betul (cth: 4/5)
                         document.getElementById(`title-${elementKey}`).innerText = `Topic: ${topicName} (${scoreInfo.correct}/${scoreInfo.total})`;
-                        
-                        // Kemas kini kepanjangan progress bar fill secara dinamik
                         document.getElementById(`fill-${elementKey}`).style.width = `${percentage}%`;
-                        
-                        // Kemas kini teks peratusan di hujung kanan row
                         document.getElementById(`text-${elementKey}`).innerText = `${percentage}%`;
                     }
                 }
             } else {
-                // JIKA pilih subjek lain ATAU data kuiz belum wujud, set paparan kepada nilai default (0%)
                 resetToDefaultValues();
             }
         }
@@ -142,7 +142,6 @@
             });
         }
 
-        // Jalankan fungsi ini secara automatik sejurus sahaja pelayar selesai memuatkan halaman
         window.onload = function() {
             updatePerformanceView();
         };

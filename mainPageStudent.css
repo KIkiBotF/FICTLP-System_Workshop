@@ -1,108 +1,118 @@
+/* RESET BASIC STYLING */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box; 
-    font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background-color: #ffffff; /* Changed to white to match the wrapper */
-    margin: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #ecf5fd;
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-.wrapper {
-    background-color: #ffffff;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center; 
-    justify-content: center;
-    width: 100%; /* Takes up the full width of the screen */
-    min-height: 100vh; /* Takes up the full height of the screen */
-    /* Removed max-width and border */
+/* LOG OUT BUTTON STYLE */
+.logout-wrapper {
+  position: absolute;
+  top: 25px;
+  left: 25px;
 }
 
-.sideBar {
-    position: absolute;
-    top: 40px;
-    left: 40px;
+.logout-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: #000000;
+  gap: 4px;
+  transition: opacity 0.2s ease;
 }
 
-.sideBar nav a {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-decoration: none;
-    color: #000;
-    font-weight: bold;
-    font-size: 16px;
+.logout-btn:hover {
+  opacity: 0.7;
 }
 
-.sideBar nav a svg {
-    margin-bottom: 8px;
+.logout-btn svg {
+  width: 32px;
+  height: 32px;
 }
 
-.head-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
-    padding: 0 120px; 
+.logout-btn span {
+  font-size: 14px;
+  font-weight: 700;
+  /* Garis bawah biru cair macam dalam lukisan kau */
+  border-bottom: 2px solid #3b82f6; 
+  padding-bottom: 1px;
 }
 
-/* Taller grey box with more space below it */
-.head-container header {
-    background-color: #d9d9d9;
-    width: 100%; 
-    padding: 70px 20px;
-    text-align: center;
-    margin-bottom: 50px; 
+/* DASHBOARD LAYOUT */
+.dashboard-container {
+  width: 100%;
+  max-width: 750px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-/* Huge, bold text without any underlines */
-.head-container h1 {
-    font-size: 64px; 
-    font-weight: bold;
-    color: #000;
+/* SYSTEM NAME BANNER */
+.system-banner {
+  background-color: #e0e0e0; /* Warna kelabu cair mockup */
+  width: 100%;
+  padding: 45px 20px;
+  margin-bottom: 35px;
 }
 
-.head-container h3 {
-    font-size: 48px; 
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #000;
+.system-banner h1 {
+  font-size: 42px;
+  font-weight: 900;
+  color: #000000;
+  letter-spacing: -0.5px;
 }
 
-.head-container h4 {
-    font-size: 28px; 
-    font-weight: normal;
-    color: #000;
-    margin-bottom: 60px; /* Large gap before the button */
+/* WELCOME TEXT SECTION */
+.welcome-section {
+  margin-bottom: 35px;
 }
 
-.button-container {
-    margin-top: 10px;
+.welcome-section h2 {
+  font-size: 36px;
+  font-weight: 900;
+  color: #000000;
+  margin-bottom: 8px;
 }
 
-/* Pill-shaped button matching the specific blue color */
-.student-btn {
-    display: inline-block;
-    background-color: #5c67ff; 
-    color: white;
-    text-decoration: none;
-    font-size: 32px;
-    font-weight: bold;
-    padding: 15px 80px;
-    border: 2px solid #000;
-    border-radius: 50px; /* This creates the completely rounded pill shape */
-    cursor: pointer;
-    transition: transform 0.1s ease-in-out;
+.welcome-section .username-display {
+  font-size: 18px;
+  color: #333333;
+  font-weight: 400;
 }
 
-.student-btn:active {
-    transform: scale(0.98); 
+/* SUBJECT BUTTON STYLE */
+.btn-subject {
+  display: inline-block;
+  background-color: #5b6bf9; /* Warna ungu-biru mockup kau */
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 700;
+  padding: 14px 75px;
+  border: 2px solid #000000; /* Border hitam padat */
+  border-radius: 50px; /* Buat bucu melengkung penuh (pill shape) */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s ease, transform 0.1s ease;
 }
+
+.btn-subject:hover {
+  background-color: #4354ed;
+}
+
+.btn-subject:active {
+  transform: scale(0.98); /* Efek sikit bila ditekan */
+}
+
