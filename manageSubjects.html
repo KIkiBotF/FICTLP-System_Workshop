@@ -30,7 +30,7 @@
             overflow: hidden;
         }
 
-        /* --- SIDEBAR NAVIGATION --- */
+        /* --- SIDEBAR NAVIGATION CORE --- */
         .sidebar {
             width: 15%;
             min-width: 120px;
@@ -45,109 +45,75 @@
             height: 100%;
         }
 
-        .nav-item {
+        .sidebar nav {
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
+        }
+
+        .nav-item {
+            width: 100%;
+            height: 85px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            padding: 15px 5px;
+            padding: 10px 5px;
             cursor: pointer;
             text-decoration: none;
             color: #000000;
             background: none;
             border: none;
-            font-size: 11px;
-            font-weight: bold;
             text-align: center;
+            transition: background-color 0.15s ease;
         }
 
-        /* Active State Management for Subject Context */
         .nav-item.active {
             background-color: #d9d9d9;
         }
 
-        /* Custom Pure CSS Icons */
+        .nav-item:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+
         .icon {
+            width: 24px;
+            height: 24px;
             margin-bottom: 6px;
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
+            flex-shrink: 0;
         }
 
-        /* Log Out Icon */
-        .icon-logout {
-            width: 24px;
-            height: 24px;
-        }
-        .icon-logout::before {
-            content: '';
-            position: absolute;
-            top: 2px; left: 2px; width: 14px; height: 20px;
-            border: 2px solid #000; border-right: none; border-radius: 2px 0 0 2px;
-        }
-        .icon-logout::after {
-            content: '➔';
-            position: absolute;
-            top: 50%; right: 0; transform: translateY(-50%);
-            font-size: 15px; font-weight: bold;
+        .icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
-        /* Home Icon */
-        .icon-home {
-            width: 24px;
-            height: 22px;
-            border: 2px solid #000;
-            border-top: none;
-            margin-top: 6px;
+        .nav-item .label {
+            font-size: 11px;
+            font-weight: bold;
+            line-height: 1.2;
+            display: block;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        .icon-home::before {
-            content: '';
-            position: absolute;
-            top: -8px; left: -2px;
-            width: 16px; height: 16px;
-            border-top: 2px solid #000;
-            border-left: 2px solid #000;
-            transform: rotate(45deg);
-        }
-
-        /* Summary Icon (Grid) */
-        .icon-summary {
-            width: 22px;
-            height: 22px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2px;
-        }
-        .icon-summary span {
-            border: 2px solid #0056b3;
-            background-color: #007bff;
-            border-radius: 2px;
-        }
-
-        /* Announcement Icon (Globe) */
-        .icon-announcement {
-            width: 24px;
-            height: 24px;
-            border: 2px solid #000;
-            border-radius: 50%;
-        }
-        .icon-announcement::before, .icon-announcement::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            border: 1px solid #000; border-radius: 50%;
-        }
-        .icon-announcement::before { transform: scaleX(0.4); }
-        .icon-announcement::after { transform: scaleY(0.4); border-radius: 0; border-left: none; border-right: none; }
-
 
         /* --- MAIN DASHBOARD CONTENT AREA --- */
         .main-content {
             flex: 1;
-            background-color: #fdf8f5; /* Matching Dashboard off-white background tint */
+            background-color: #fdf8f5; /* Off-white background tint matching mockups */
             padding: 40px 60px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            overflow: hidden;
+            overflow-y: auto;
             height: 100%;
         }
 
@@ -162,75 +128,58 @@
         .main-content .subtitle {
             font-size: 14px;
             color: #d88267;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
-        /* --- TABLE LAYOUT MODULE --- */
+        /* --- EXACT MOCKUP TABLE DESIGN --- */
         .table-container {
             width: 100%;
-            max-width: 900px;
-            flex: 1;
-            overflow-y: auto;
-            padding-right: 8px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .table-container::-webkit-scrollbar {
-            width: 6px;
-        }
-        .table-container::-webkit-scrollbar-thumb {
-            background-color: #dcdcdc;
-            border-radius: 3px;
-        }
-
-        /* Card Frame Table wrapper style */
-        .table-card-wrapper {
+            max-width: 960px;
             background-color: #ffffff;
-            border-radius: 14px;
+            border-radius: 18px; /* Elegant curved card container edges */
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04), 
+                        0 4px 12px rgba(0, 0, 0, 0.02);
             overflow: hidden;
+        }
+
+        .table-card-wrapper {
             width: 100%;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06), 
-                        0 4px 12px rgba(0, 0, 0, 0.03);
+            overflow-x: auto;
         }
 
         .subject-table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
+            font-size: 15px;
         }
 
-        /* Course Catalog Palette Styled Header Row */
-        .subject-table thead tr {
-            background-color: #cbe3cc; /* Matches dashboard course catalog green */
-        }
-
+        /* Sage Green Theme Header Row */
         .subject-table th {
-            font-family: Georgia, serif;
-            font-size: 16px;
-            font-weight: bold;
+            background-color: #cbe3cc; 
             color: #1a253c;
-            padding: 16px 20px;
+            font-family: inherit;
+            font-weight: bold;
+            font-size: 16px;
+            padding: 16px 30px;
+            border-bottom: none;
         }
-
-        /* Column Proportion Layout Rules */
-        .subject-table th.col-id { width: 18%; }
-        .subject-table th.col-name { width: 44%; }
-        .subject-table th.col-enroll { width: 18%; }
-        .subject-table th.col-actions { width: 20%; text-align: right; }
 
         .subject-table td {
-            padding: 16px 20px;
-            color: #555555;
-            font-size: 14px;
-            font-weight: 500;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 20px 30px;
+            color: #333333;
+            border-bottom: 1px solid #f3f3f3;
             vertical-align: middle;
         }
 
         .subject-table tbody tr:last-child td {
             border-bottom: none;
         }
+
+        .col-id { width: 18%; }
+        .col-name { width: 44%; }
+        .col-enroll { width: 18%; }
+        .col-actions { width: 20%; }
 
         .subject-id {
             font-weight: bold;
@@ -239,97 +188,103 @@
 
         /* Interactive row transition element */
         .subject-table tbody tr {
-            transition: background-color 0.2s ease;
+            transition: background-color 0.15s ease;
         }
         .subject-table tbody tr:hover {
             background-color: #fafafa;
         }
 
-        /* Form Inputs inside editable fields */
-        .edit-input {
-            width: 100%;
-            padding: 6px 10px;
+        /* --- CONTROL INTERFACE ACTIONS --- */
+        .action-group {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 20px;
+        }
+
+        .btn-action {
             font-family: inherit;
             font-size: 14px;
-            font-weight: 500;
-            border: 1px solid #dcdcdc;
-            border-radius: 6px;
-            background-color: #ffffff;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.15s ease;
+            outline: none;
+        }
+
+        .btn-action:hover {
+            opacity: 0.8;
+        }
+
+        /* Minimal Plain-Text Edit style */
+        .btn-edit {
+            background: none;
             color: #1a253c;
+            padding: 6px 12px;
+        }
+        
+        /* Active Save state switch design */
+        .btn-save {
+            background-color: #e2f0e3;
+            color: #4a7c59;
+            padding: 6px 16px;
+            border-radius: 20px;
+        }
+
+        /* Soft Terracotta Pill Background style */
+        .btn-remove {
+            background-color: #eed6c5;
+            color: #6e3716;
+            padding: 6px 20px;
+            border-radius: 20px;
+        }
+
+        /* Inline Form Inputs style inside fields */
+        .edit-input {
+            width: 90%;
+            padding: 6px 10px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 14px;
+            color: #1a253c;
+            background-color: #ffffff;
         }
         .edit-input:focus {
             outline: none;
             border-color: #9cbca4;
         }
 
-        /* --- CONTROL INTERFACE ACTIONS --- */
-        .action-group {
-            display: flex;
-            gap: 8px;
-            justify-content: flex-end;
-        }
-
-        .btn-action {
-            font-family: inherit;
-            font-size: 12px;
-            font-weight: bold;
-            border: none;
-            border-radius: 20px;
-            padding: 6px 16px;
-            cursor: pointer;
-            transition: opacity 0.2s, transform 0.1s;
-        }
-
-        .btn-edit {
-            background-color: #f7f7f7;
-            color: #1a253c;
-        }
-        
-        .btn-save {
-            background-color: #cbe3cc;
-            color: #234e25;
-        }
-
-        .btn-remove {
-            background-color: #eed6c5;
-            color: #613318;
-        }
-
-        .btn-action:hover {
-            opacity: 0.85;
-        }
-        .btn-action:active {
-            transform: scale(0.97);
-        }
-
-        /* Empty state notice view window */
+        /* Empty state notice workspace view window */
         .empty-message {
+            padding: 40px;
             text-align: center;
+            color: #6c757d;
+            font-style: italic;
             font-family: Georgia, serif;
             font-size: 20px;
-            font-weight: bold;
-            color: #d88267;
-            padding: 60px 20px;
             background-color: #ffffff;
-            border-radius: 14px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
-            width: 100%;
         }
 
-        /* Responsive Layout Rules */
+        /* --- RESPONSIVE WORKSPACE HANDLING --- */
         @media (max-width: 768px) {
             body { overflow-y: auto; }
             .window-frame { flex-direction: column; height: auto; min-height: 100vh; }
+            
             .sidebar {
                 width: 100%; max-width: 100%; height: auto; flex-direction: row;
                 justify-content: space-around; padding-top: 0; border-right: none;
                 border-bottom: 1px solid #dcdcdc; position: sticky; top: 0; z-index: 100;
             }
-            .nav-item { padding: 12px 5px; flex: 1; }
-            .main-content { padding: 30px 20px; height: auto; }
-            .main-content h1 { font-size: 32px; }
-            .subject-table th, .subject-table td { padding: 12px 10px; font-size: 13px; }
-            .btn-action { padding: 5px 10px; font-size: 11px; }
+            .sidebar nav { flex-direction: row; width: 100%; justify-content: space-around; }
+            .nav-item { width: auto; height: 70px; padding: 5px 10px; flex: 1; }
+            
+            .main-content { padding: 30px 20px; }
+            .main-content h1 { font-size: 32px; text-align: center; width: 100%; }
+            .main-content .subtitle { text-align: center; width: 100%; margin-bottom: 25px; }
+            
+            .subject-table th, .subject-table td { padding: 12px 15px; font-size: 14px; }
+            .action-group { gap: 10px; }
         }
     </style>
 </head>
@@ -338,24 +293,35 @@
     <div class="window-frame">
         
         <aside class="sidebar">
-            <a href="logIn.html" class="nav-item" onclick="handleLogout(event)">
-                <div class="icon icon-logout"></div>
-                Log out
-            </a>
-            <a href="mainPage.html" class="nav-item">
-                <div class="icon icon-home"></div>
-                Home
-            </a>
-            <a href="dashboard.html" class="nav-item active">
-                <div class="icon icon-summary">
-                    <span></span><span></span><span></span><span></span>
+            <nav>
+                <div class="nav-item" data-page="logout" onclick="handleLogout(event)">
+                    <div class="icon">
+                        <img src="Aset/logOutBtn.svg" alt="Logout">
+                    </div>
+                    <span class="label">Log Out</span>
                 </div>
-                Summary
-            </a>
-             <a href="announcement.html" class="nav-item">
-                <div class="icon icon-announcement"></div>
-                Announcement
-            </a>
+           
+                <div class="nav-item" data-page="home" onclick="window.location.href='mainPage.html'">
+                    <div class="icon">
+                        <img src="Aset/homeBtn.svg" alt="Home">
+                    </div>
+                    <span class="label">Home</span>
+                </div>
+
+                <div class="nav-item active" data-page="dashboard" onclick="window.location.href='dashboard.html'">
+                    <div class="icon">
+                        <img src="Aset/summaryBtn.svg" alt="Summary">
+                    </div>
+                    <span class="label">Dashboard</span>
+                </div>
+        
+                <div class="nav-item" data-page="announcement" onclick="window.location.href='announcement.html'">
+                    <div class="icon">
+                        <img src="Aset/annoucment.svg" alt="Announcement">
+                    </div>
+                    <span class="label">Announcement</span>
+                </div>
+            </nav>
         </aside>
 
         <main class="main-content">
@@ -370,7 +336,7 @@
                                 <th class="col-id">ID</th>
                                 <th class="col-name">Course Name</th>
                                 <th class="col-enroll">Enrolled</th>
-                                <th class="col-actions">Actions</th>
+                                <th class="col-actions" style="text-align: right; padding-right: 45px;">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -379,7 +345,7 @@
                                 <td class="subject-name">Database</td>
                                 <td class="subject-enroll">3</td>
                                 <td>
-                                    <div class="action-group">
+                                    <div class="action-group" style="padding-right: 15px;">
                                         <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
                                         <button class="btn-action btn-remove" onclick="removeSubject(this)">Remove</button>
                                     </div>
@@ -390,7 +356,7 @@
                                 <td class="subject-name">C++ Programming</td>
                                 <td class="subject-enroll">2</td>
                                 <td>
-                                    <div class="action-group">
+                                    <div class="action-group" style="padding-right: 15px;">
                                         <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
                                         <button class="btn-action btn-remove" onclick="removeSubject(this)">Remove</button>
                                     </div>
@@ -401,13 +367,12 @@
                                 <td class="subject-name">Computer Organization and Architecture</td>
                                 <td class="subject-enroll">2</td>
                                 <td>
-                                    <div class="action-group">
+                                    <div class="action-group" style="padding-right: 15px;">
                                         <button class="btn-action btn-edit" onclick="toggleEdit(this)">Edit</button>
                                         <button class="btn-action btn-remove" onclick="removeSubject(this)">Remove</button>
                                     </div>
                                 </td>
                             </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -435,17 +400,21 @@
                 button.classList.remove('btn-edit');
                 button.classList.add('btn-save');
 
-                idCell.innerHTML = `<input type="text" class="edit-input" value="${idCell.textContent.trim()}">`;
-                nameCell.innerHTML = `<input type="text" class="edit-input" value="${nameCell.textContent.trim()}">`;
-                enrollCell.innerHTML = `<input type="text" class="edit-input" value="${enrollCell.textContent.trim()}">`;
+                const currentId = idCell.textContent.trim();
+                const currentName = nameCell.textContent.trim();
+                const currentEnroll = enrollCell.textContent.trim();
+
+                idCell.innerHTML = `<input type="text" class="edit-input" value="${currentId}">`;
+                nameCell.innerHTML = `<input type="text" class="edit-input" value="${currentName}">`;
+                enrollCell.innerHTML = `<input type="text" class="edit-input" value="${currentEnroll}">`;
             } else {
                 button.textContent = 'Edit';
                 button.classList.remove('btn-save');
                 button.classList.add('btn-edit');
 
-                const newId = idCell.querySelector('input').value;
-                const newName = nameCell.querySelector('input').value;
-                const newEnroll = enrollCell.querySelector('input').value;
+                const newId = idCell.querySelector('input').value.trim();
+                const newName = nameCell.querySelector('input').value.trim();
+                const newEnroll = enrollCell.querySelector('input').value.trim();
 
                 idCell.textContent = newId;
                 nameCell.textContent = newName;

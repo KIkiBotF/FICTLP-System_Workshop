@@ -30,7 +30,7 @@
             overflow: hidden;
         }
 
-        /* --- SIDEBAR NAVIGATION --- */
+        /* --- SIDEBAR NAVIGATION CORE --- */
         .sidebar {
             width: 15%;
             min-width: 120px;
@@ -45,99 +45,85 @@
             height: 100%;
         }
 
-        .nav-item {
+        /* Clean modern list wrapper container */
+        .sidebar nav {
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
+        }
+
+        .nav-item {
+            width: 100%;
+            height: 85px; /* Fixed proportional structural height cell for symmetry */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            padding: 15px 5px;
+            padding: 10px 5px;
             cursor: pointer;
             text-decoration: none;
             color: #000000;
             background: none;
             border: none;
-            font-size: 11px;
-            font-weight: bold;
             text-align: center;
+            transition: background-color 0.15s ease;
         }
 
-        /* Active State (Summary Tab) */
+        /* Active State (Summary Tab Highlight) */
         .nav-item.active {
             background-color: #d9d9d9;
         }
 
-        /* Custom Pure CSS Icons */
+        .nav-item:hover:not(.active) {
+            background-color: #f5f5f5;
+        }
+
+        /* Universal bounding box size for icons */
         .icon {
+            width: 24px;
+            height: 24px;
             margin-bottom: 6px;
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
+            flex-shrink: 0;
         }
 
-        /* Log Out Icon */
-        .icon-logout {
-            width: 24px;
-            height: 24px;
-        }
-        .icon-logout::before {
-            content: '';
-            position: absolute;
-            top: 2px; left: 2px; width: 14px; height: 20px;
-            border: 2px solid #000; border-right: none; border-radius: 2px 0 0 2px;
-        }
-        .icon-logout::after {
-            content: '➔';
-            position: absolute;
-            top: 50%; right: 0; transform: translateY(-50%);
-            font-size: 15px; font-weight: bold;
+        /* Ensure images scale down cleanly within the uniform icon frame */
+        .icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
-        /* Home Icon */
-        .icon-home {
-            width: 24px;
-            height: 22px;
-            border: 2px solid #000;
-            border-top: none;
-            margin-top: 6px;
-        }
-        .icon-home::before {
-            content: '';
-            position: absolute;
-            top: -8px; left: -2px;
-            width: 16px; height: 16px;
-            border-top: 2px solid #000;
-            border-left: 2px solid #000;
-            transform: rotate(45deg);
-        }
-
-        /* Summary Icon (Grid) */
-        .icon-summary {
-            width: 22px;
-            height: 22px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2px;
-        }
-        .icon-summary span {
-            border: 2px solid #0056b3;
-            background-color: #007bff;
-            border-radius: 2px;
-        }
-
-        /* Announcement Icon (Globe) */
+        /* Announcement Custom CSS Icon (Globe Matrix Balanced) */
         .icon-announcement {
-            width: 24px;
-            height: 24px;
             border: 2px solid #000;
             border-radius: 50%;
         }
         .icon-announcement::before, .icon-announcement::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            border: 1px solid #000; border-radius: 50%;
+            content: ''; 
+            position: absolute; 
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 1px solid #000; 
+            border-radius: 50%;
         }
         .icon-announcement::before { transform: scaleX(0.4); }
         .icon-announcement::after { transform: scaleY(0.4); border-radius: 0; border-left: none; border-right: none; }
 
+        /* Navigation Labels Design Typography */
+        .nav-item .label {
+            font-size: 11px;
+            font-weight: bold;
+            line-height: 1.2;
+            display: block;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
 
         /* --- MAIN DASHBOARD CONTENT --- */
         .main-content {
@@ -183,7 +169,7 @@
             flex-direction: column;
             width: 100%;
             
-            /* --- TIMELISS DEPTH SHADOW EFFECT --- */
+            /* TIMELISS DEPTH SHADOW EFFECT */
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06), 
                         0 4px 12px rgba(0, 0, 0, 0.03);
             transition: transform 0.25s ease, box-shadow 0.25s ease;
@@ -257,9 +243,7 @@
             text-align: center;
         }
 
-        /* -------------------------------------------
-           MOBILE & TABLET RESPONSIVE COMPATIBILITY
-        ------------------------------------------- */
+        /* --- MOBILE & TABLET RESPONSIVE COMPATIBILITY --- */
         @media (max-width: 768px) {
             body {
                 overflow-y: auto;
@@ -286,9 +270,16 @@
                 z-index: 100;
             }
 
+            .sidebar nav {
+                flex-direction: row;
+                width: 100%;
+                justify-content: space-around;
+            }
+
             .nav-item {
                 width: auto;
-                padding: 12px 10px;
+                height: 70px;
+                padding: 5px 10px;
                 flex: 1;
             }
 
@@ -354,26 +345,37 @@
 <body>
 
     <div class="window-frame">
-        
+
         <aside class="sidebar">
-            <a href="logIn.html" class="nav-item" onclick="handleLogout(event)">
-                <div class="icon icon-logout"></div>
-                Log out
-            </a>
-            <a href="mainPage.html" class="nav-item" style="margin-top: 0;">
-                <div class="icon icon-home"></div>
-                Home
-            </a>
-            <button class="nav-item active" style="margin-top: 0;">
-                <div class="icon icon-summary">
-                    <span></span><span></span><span></span><span></span>
+            <nav>
+                <div class="nav-item" data-page="logout" onclick="logout()">
+                    <div class="icon">
+                        <img src="Aset/logOutBtn.svg" alt="Logout">
+                    </div>
+                    <span class="label">Log Out</span>
                 </div>
-                Summary
-            </button>
-             <a href="announcement.html" class="nav-item" style="margin-top: 0;">
-                <div class="icon icon-announcement"></div>
-                Announcement
-            </a>
+           
+                <div class="nav-item" data-page="home" onclick="window.location.href='mainPage.html'">
+                    <div class="icon">
+                        <img src="Aset/homeBtn.svg" alt="Home">
+                    </div>
+                    <span class="label">Home</span>
+                </div>
+
+                <div class="nav-item active" data-page="dashboard">
+                    <div class="icon">
+                        <img src="Aset/summaryBtn.svg" alt="Summary">
+                    </div>
+                    <span class="label">Dashboard</span>
+                </div>
+        
+                <div class="nav-item" data-page="announcement" onclick="window.location.href='announcement.html'">
+                    <div class="icon">
+                        <img src="Aset/annoucment.svg" alt="Announcement">
+                    </div>
+                    <span class="label">Announcement</span>
+                </div>
+            </nav>
         </aside>
 
         <main class="main-content">
@@ -424,8 +426,7 @@
     </div>
 
     <script>
-        function handleLogout(event) {
-            event.preventDefault(); 
+        function logout() {
             if (confirm("Are you sure you want to logout?")) {
                 window.location.href = "logIn.html";
             }
