@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoreKnowledge - Dashboard Summary(Admin)</title>
     <style>
-        /* Reset and Base Layout */
+        /* Reset and Full Screen Layout Base */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -14,21 +14,18 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f5f5f5;
+            background-color: #ffffff;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
         }
 
-        /* Outer Frame Container matching original mockup bounds */
+        /* App container takes up 100% of the screen space */
         .window-frame {
             width: 100%;
-            max-width: 900px;
-            aspect-ratio: 4 / 3;
+            height: 100%;
             background-color: #ffffff;
-            border: 1px solid #7f7f7f;
             display: flex;
             overflow: hidden;
         }
@@ -36,13 +33,16 @@
         /* --- SIDEBAR NAVIGATION --- */
         .sidebar {
             width: 15%;
-            min-width: 110px;
+            min-width: 120px;
+            max-width: 160px;
             background-color: #ffffff;
             border-right: 1px solid #dcdcdc;
             display: flex;
             flex-direction: column;
             padding-top: 20px;
             align-items: center;
+            flex-shrink: 0;
+            height: 100%;
         }
 
         .nav-item {
@@ -67,7 +67,7 @@
             background-color: #d9d9d9;
         }
 
-        /* Custom Pure CSS Icons to match wireframe exactly */
+        /* Custom Pure CSS Icons */
         .icon {
             margin-bottom: 6px;
             display: inline-block;
@@ -142,98 +142,117 @@
         /* --- MAIN DASHBOARD CONTENT --- */
         .main-content {
             flex: 1;
-            background-color: #fbf2f2; /* Soft pale pink/off-white content background */
-            padding: 40px;
+            background-color: #fdf8f5; /* Off-white background tint */
+            padding: 40px 60px;
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
+            overflow-y: auto;
+            height: 100%;
         }
 
         .main-content h1 {
             font-size: 42px;
+            font-family: Georgia, serif;
             font-weight: bold;
-            color: #000000;
-            margin-bottom: 45px;
-            text-align: center;
+            color: #1a253c;
+            margin-bottom: 4px;
         }
 
-        /* Metrics Cards Grid */
-        .cards-grid {
+        .main-content .subtitle {
+            font-size: 14px;
+            color: #d88267;
+            margin-bottom: 35px;
+        }
+
+        /* Subject-Style Stacked Card Setup */
+        .cards-stack {
             width: 100%;
-            max-width: 680px;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-        }
-
-        /* Bottom single card center assignment */
-        .card-wrapper-subjects {
-            grid-column: 1 / span 2;
-            justify-self: center;
-            width: 50%;
-        }
-
-        /* Generic Metrics Card Layout */
-        .card {
-            border-radius: 28px;
-            padding: 22px;
-            height: 160px;
-            color: #ffffff;
-            position: relative;
+            max-width: 900px; /* Allows smooth horizontal stretching across wide desktop viewports */
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            text-decoration: none; /* Keeps text inside link cards clean */
-            cursor: pointer;
-            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            gap: 25px;
         }
 
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 500;
-            opacity: 0.95;
-        }
-
-        .card-value {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        /* Individual Card Color Assignments */
-        .card-students {
-            background-color: #e5a679; /* Muted Orange */
-        }
-
-        .card-lecturers {
-            background-color: #72c5e7; /* Light Blue */
-        }
-
-        .card-subjects {
-            background-color: #439a46; /* Deep Green */
+        .subject-style-card {
+            background-color: #ffffff;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            overflow: hidden;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.2s ease;
             width: 100%;
         }
 
-        /* Wireframe Action Indicators inside cards */
-        .card-icon-top, .card-icon-bottom {
-            position: absolute;
+        .subject-style-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Headers */
+        .card-header {
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #1a253c;
+        }
+
+        .card-header h2 {
             font-size: 22px;
-            opacity: 0.9;
+            font-family: Georgia, serif;
+            font-weight: bold;
         }
 
-        .card-icon-top {
-            top: 18px;
-            right: 22px;
+        .card-header .meta-tag {
+            font-size: 13px;
+            font-style: italic;
+            opacity: 0.7;
         }
 
-        .card-icon-bottom {
-            bottom: 18px;
-            right: 22px;
+        /* Colors matched to mockup */
+        .header-students { background-color: #eed6c5; }
+        .header-lecturers { background-color: #c9e6f2; }
+        .header-subjects { background-color: #cbe3cc; }
+
+        /* Card Content Row */
+        .card-body {
+            padding: 24px;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .details-list {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .details-list li {
+            font-size: 15px;
+            color: #555555;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .details-list li::before {
+            content: "●";
+            color: #9cbca4;
+            font-size: 12px;
+        }
+
+        /* Counter numbers badge display */
+        .metric-badge {
+            font-size: 32px;
+            font-weight: bold;
+            color: #1a253c;
+            background-color: #f7f7f7;
+            padding: 6px 20px;
+            border-radius: 20px;
         }
     </style>
 </head>
@@ -241,7 +260,7 @@
 
     <div class="window-frame">
         
-         <aside class="sidebar">
+        <aside class="sidebar">
             <a href="logIn.html" class="nav-item" onclick="handleLogout(event)">
                 <div class="icon icon-logout"></div>
                 Log out
@@ -264,35 +283,64 @@
 
         <main class="main-content">
             <h1>Dashboard Summary</h1>
+            <div class="subtitle">System overview metrics:</div>
 
-            <div class="cards-grid">
+            <div class="cards-stack">
                 
-                <a href="manageStudents.html" class="card card-students">
-                    <span class="card-icon-top">📝</span>
-                    <div class="card-title">Total Students</div>
-                    <div class="card-value">54</div>
-                    <span class="card-icon-bottom">👤</span>
+                <a href="manageStudents.html" class="subject-style-card">
+                    <div class="card-header header-students">
+                        <h2>Students Directory</h2>
+                        <span class="meta-tag">(Active Database)</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="details-list">
+                            <li>Manage Enrolled Students</li>
+                            <li>Track Student Status</li>
+                        </ul>
+                        <div class="metric-badge" id="student-count">54</div>
+                    </div>
                 </a>
 
-                <a href="manageLecturers.html" class="card card-lecturers">
-                    <span class="card-icon-top">📝</span>
-                    <div class="card-title">Total Lecturers</div>
-                    <div class="card-value">12</div>
-                    <span class="card-icon-bottom">📖</span>
+                <a href="manageLecturers.html" class="subject-style-card">
+                    <div class="card-header header-lecturers">
+                        <h2>Lecturer Directory</h2>
+                        <span class="meta-tag">(Faculty Members)</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="details-list">
+                            <li>Monitor Active Instructors</li>
+                            <li>Configure Profiles</li>
+                        </ul>
+                        <div class="metric-badge" id="lecturer-count">12</div>
+                    </div>
                 </a>
 
-                <a href="manageSubjects.html" class="card card-subjects">
-                    <span class="card-icon-top">📝</span>
-                    <div class="card-title">Total Subjects</div>
-                    <div class="card-value">6</div>
-                    <span class="card-icon-bottom">📋</span>
+                <a href="manageSubjects.html" class="subject-style-card">
+                    <div class="card-header header-subjects">
+                        <h2>Course Catalog</h2>
+                        <span class="meta-tag">(Syllabus Matrix)</span>
+                    </div>
+                    <div class="card-body">
+                        <ul class="details-list">
+                            <li>Computer Organization</li>
+                            <li>Database Structures</li>
+                        </ul>
+                        <div class="metric-badge" id="subject-count">6</div>
+                    </div>
                 </a>
-            </div>
 
             </div>
         </main>
 
     </div>
 
+    <script>
+        function handleLogout(event) {
+            event.preventDefault(); 
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = "logIn.html";
+            }
+        }
+    </script>
 </body>
 </html>
