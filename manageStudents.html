@@ -277,25 +277,25 @@
 
     <div class="window-frame">
         
-        <aside class="sidebar">
-            <a href="index.html" class="nav-item">
+         <aside class="sidebar">
+            <a href="logIn.html" class="nav-item" onclick="handleLogout(event)">
                 <div class="icon icon-logout"></div>
                 Log out
             </a>
-            <button class="nav-item" style="margin-top: 15px;">
+            <a href="mainPage.html" class="nav-item" style="margin-top: 15px;">
                 <div class="icon icon-home"></div>
                 Home
-            </button>
-            <a href="summary.html" class="nav-item active" style="margin-top: 15px;">
+            </a>
+            <a href="dashboard.html" class="nav-item active" style="margin-top: 15px;">
                 <div class="icon icon-summary">
                     <span></span><span></span><span></span><span></span>
                 </div>
                 Summary
             </a>
-            <button class="nav-item" style="margin-top: 15px;">
+            <a href="announcement.html" class="nav-item" style="margin-top: 15px;">
                 <div class="icon icon-announcement"></div>
-                Annoucement
-            </button>
+                Announcement
+            </a>
         </aside>
 
         <main class="main-content">
@@ -353,6 +353,14 @@
     </div>
 
     <script>
+
+        function handleLogout(event) {
+            event.preventDefault(); // Prevents instant empty link jumps
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = "logIn.html";
+            }
+        }
+        
         function toggleEdit(button) {
             const row = button.closest('tr');
             const idCell = row.querySelector('.student-id');

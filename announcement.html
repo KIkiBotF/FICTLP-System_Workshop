@@ -227,16 +227,16 @@
 
     <div class="window-frame">
         
-        <aside class="sidebar">
-            <a href="index.html" class="nav-item">
+         <aside class="sidebar">
+            <a href="logIn.html" class="nav-item" onclick="handleLogout(event)">
                 <div class="icon icon-logout"></div>
                 Log out
             </a>
-            <a href="home.html" class="nav-item" style="margin-top: 15px;">
+            <a href="mainPage.html" class="nav-item" style="margin-top: 15px;">
                 <div class="icon icon-home"></div>
                 Home
             </a>
-            <a href="summary.html" class="nav-item" style="margin-top: 15px;">
+            <a href="dashboard.html" class="nav-item" style="margin-top: 15px;">
                 <div class="icon icon-summary">
                     <span></span><span></span><span></span><span></span>
                 </div>
@@ -268,6 +268,14 @@
     </div>
 
     <script>
+
+        function handleLogout(event) {
+            event.preventDefault(); // Prevents instant empty link jumps
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = "logIn.html";
+            }
+        }
+
         function broadcastAnnouncement() {
             const message = document.getElementById('announcementText').value.trim();
             

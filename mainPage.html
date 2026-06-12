@@ -176,10 +176,10 @@
 
         <div class="container">
             
-            <button class="logout-btn" aria-label="Log out">
+            <a href="logIn.html" class="logout-btn" aria-label="Log out" onclick="handleLogout(event)">
                 <div class="logout-icon"></div>
                 <span class="logout-text">Log out</span>
-            </button>
+            </a>
 
             <div class="system-banner">
                 <h1>System name</h1>
@@ -193,11 +193,21 @@
             <div class="button-group">
                 <a href="dashboard.html" class="btn">Summary</a>
                 
-                <button class="btn">Annoucement</button> 
+                <div class="button-group">
+                <a href="announcement.html" class="btn">Announcement</a>
             </div>
 
         </div>
     </div>
+
+    <script>
+          function handleLogout(event) {
+            event.preventDefault(); // Prevents instant empty link jumps
+            if (confirm("Are you sure you want to logout?")) {
+                window.location.href = "logIn.html";
+            }
+        }
+    </script>
 
 </body>
 </html>
