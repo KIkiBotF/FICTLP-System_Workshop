@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base Layout</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            width: 130px;
+            background-color: #ffffff;
+            padding-top: 80px;
+        }
+
+        .main-content {
+            flex: 1;
+            background-color: #f9eaed;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            cursor: pointer;
+        }
+
+        span {
+            margin-top: 8px;
+            font-family: sans-serif;
+            font-weight: bold;
+        }
+        .nav-item:hover{
+            background-color: #e8f4f8;
+        }
+    </style>
+</head>
+
+<body>
+
+    <aside class="sidebar">
+
+        <div class="nav-item">
+            <img src="Aset/logOutBtn.svg">
+            <span>Log Out</span>
+        </div>
+
+        <div class="nav-item">
+            <img src="Aset/homeBtn.svg">
+            <span>Home</span>
+        </div>
+
+        <div class="nav-item">
+            <img src="Aset/manageSubjectBtn.svg">
+            <span>Manage Subject</span>
+        </div>
+
+        <div class="nav-item">
+            <img src="Aset/reportBtn.svg">
+            <span>Report</span>
+        </div>
+
+        <div class="nav-item">
+            <img src="Aset/editQuizBtn.svg">
+            <span>Edit Quiz</span>
+        </div>
+        <div class="nav-item">
+            <img src="Aset/addNewSubject.svg">
+            <span>Add New Subject</span>
+        </div>
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+    </main>
+
+</body>
+
+</html>
