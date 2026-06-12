@@ -1,101 +1,558 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Session - Student LMS</title>
-    <link rel="stylesheet" href="quizStudent.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Quiz System</title>
+  <link rel="stylesheet" href="quizStudent.css" />
 </head>
 <body>
-    <header class="quiz-header">
-        <a href="chapter-view.html" class="back-arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-        </a>
-        <h1>QUIZ : C++ Programming</h1>
-    </header>
 
-    <div class="quiz-container">
-        <!-- Navigation Panel Left -->
-        <aside class="question-nav">
-            <div class="nav-row active">
-                <span class="q-label">Question 1</span>
-                <span class="status-dot completed">✓</span>
-            </div>
-            <div class="nav-row current">
-                <span class="q-label">Question 2</span>
-                <span class="status-dot empty"></span>
-            </div>
-            <div class="nav-row">
-                <span class="q-label">Question 3</span>
-                <span class="status-dot empty"></span>
-            </div>
-            <div class="nav-row">
-                <span class="q-label">Question 4</span>
-                <span class="status-dot empty"></span>
-            </div>
-            <div class="nav-row">
-                <span class="q-label">Question 5</span>
-                <span class="status-dot empty"></span>
-            </div>
-            <div class="nav-row">
-                <span class="q-label">Question 6</span>
-                <span class="status-dot empty"></span>
-            </div>
-            <div class="nav-row">
-                <span class="q-label">Question 7</span>
-                <span class="status-dot empty"></span>
-            </div>
-            <div class="nav-row">
-                <span class="q-label">Question 8</span>
-                <span class="status-dot empty"></span>
-            </div>
-            <div class="nav-row">
-                <span class="q-label">Question 9</span>
-                <span class="status-dot empty"></span>
-            </div>
-            <div class="nav-row">
-                <span class="q-label">Question 10</span>
-                <span class="status-dot empty"></span>
-            </div>
-        </aside>
+<header class="quiz-header">
+  <a class="back-arrow" href="dashboard.html">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+    </svg>
+  </a>
+  <h1 id="quizTitleDisplay">Subject: Loading...</h1>
+</header>
 
-        <!-- Main Question Content Right -->
-        <main class="question-box">
-            <h2>Question 2: What is the correct syntax to output "Hello World" in C++?</h2>
-            
-            <div class="question-image-box">
-                <svg class="img-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                <span>Code snippet diagram reference</span>
-            </div>
+<main class="quiz-container">
+  
+  <aside class="question-nav" id="questionNavContainer">
+    </aside>
 
-            <div class="options-grid">
-                <label class="option-card">
-                    <input type="radio" name="q2" value="a">
-                    <span class="radio-custom"></span>
-                    <span class="option-text">a. System.out.println("Hello World");</span>
-                </label>
-                <label class="option-card">
-                    <input type="radio" name="q2" value="b">
-                    <span class="radio-custom"></span>
-                    <span class="option-text">b. Console.WriteLine("Hello World");</span>
-                </label>
-                <label class="option-card">
-                    <input type="radio" name="q2" value="c">
-                    <span class="radio-custom"></span>
-                    <span class="option-text">c. print("Hello World")</span>
-                </label>
-                <label class="option-card selected">
-                    <input type="radio" name="q2" value="d" checked>
-                    <span class="radio-custom"></span>
-                    <span class="option-text">d. cout &lt;&lt; "Hello World";</span>
-                </label>
-            </div>
+  <section class="question-box">
+    <h2 id="qNumberAndText">Loading Question...</h2>
 
-            <div class="action-footer">
-                <button type="button" class="btn-clear">Clear</button>
-                <a href="performance.html" class="btn-next">Next</a>
-            </div>
-        </main>
+    <div class="question-image-box" id="codeImageBox">
+      <span id="codeDisplay">Loading snippet...</span>
     </div>
+
+    <div id="feedbackContainer"></div>
+
+    <div class="options-container" id="optionsContainer">
+      </div>
+
+    <footer class="action-footer">
+      <button class="btn-clear" onclick="clearSelection()">Clear</button>
+      <button class="btn-next" id="actionBtn" onclick="handleAction()">Next</button>
+    </footer>
+  </section>
+</main>
+
+<div id="resultOverlay" style="display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); justify-content: center; align-items: center; z-index: 9999;">
+  <div style="background: #ffffff; padding: 50px; border-radius: 40px; text-align: center; max-width: 500px; width: 90%; box-shadow: 0 4px 20px rgba(0,0,0,0.2);">
+    <h2 style="font-size: 2.5rem; color: #5346ed; margin-bottom: 10px;" id="finalScoreDisplay">0/10</h2>
+    <h3 style="font-size: 1.75rem; margin-bottom: 15px; color: #000000;">Quiz Completed!</h3>
+    <p style="color: #64748b; font-size: 1.1rem; margin-bottom: 30px;" id="resultFeedback">Good job completing this module.</p>
+    <button class="btn-next" style="margin: 0 auto; width: 200px;" onclick="exitQuiz()">Dashboard</button>
+  </div>
+</div>
+
+<script>
+  // quizData.js - Full Quiz Database for C++, COA, and Database Systems
+const quizMasterDatabase = {
+  "database": {
+    "1": {
+      title: "Database - Introduction to Databases & DBMS",
+      questions: [
+        { q: "What is a collection of related, logically organized data called?", a: ["Data mining", "Database", "Operating System", "Information Network"], correct: 1 },
+        { q: "Which software system allows users to define, create, maintain, and control access to a database?", a: ["Operating System (OS)", "Database Management System (DBMS)", "Integrated Development Environment (IDE)", "Web Browser"], correct: 1 },
+        { q: "Which of the following is a major disadvantage of traditional file-processing systems compared to a DBMS?", a: ["Data sharing", "Data redundancy and inconsistency", "Data security", "Easy maintenance"], correct: 1 },
+        { q: "What is data about data commonly known as?", a: ["Hyperdata", "Metadata", "Microdata", "Masterdata"], correct: 1 },
+        { q: "Which type of database user writes application programs to interact with the database?", a: ["End User", "Database Administrator (DBA)", "Application Programmer", "System Analyst"], correct: 2 },
+        { q: "Who is responsible for authorizing access to the database, coordinating and monitoring its use?", a: ["Data Entry Clerk", "Database Administrator (DBA)", "Network Engineer", "Web Developer"], correct: 1 },
+        { q: "Which property ensures that data remains accurate and consistent across the database?", a: ["Data Isolation", "Data Redundancy", "Data Integrity", "Data Dependency"], correct: 2 },
+        { q: "Which architecture level describes how data is physically stored on disk drives?", a: ["External Level", "Conceptual Level", "Internal/Physical Level", "Logical Level"], correct: 2 },
+        { q: "What defines the structure, behavior, and rules of a database system?", a: ["Database Schema", "Database Query", "Database Instance", "Database Record"], correct: 0 },
+        { q: "The collection of information stored in the database at a specific point in time is called a:", a: ["Schema", "Instance", "Template", "Metadata"], correct: 1 }
+      ]
+    },
+    "2": {
+      title: "Database - Entity-Relationship (ER) Modeling",
+      questions: [
+        { q: "In an ER diagram, what shape is used to represent an Entity type?", a: ["Diamond", "Circle", "Rectangle", "Oval"], correct: 2 },
+        { q: "What does an oval/ellipse shape represent in a standard ER diagram?", a: ["Entity", "Relationship", "Attribute", "Constraint"], correct: 2 },
+        { q: "Which attribute type can be divided into smaller sub-parts (e.g., Name into First Name and Last Name)?", a: ["Simple Attribute", "Composite Attribute", "Derived Attribute", "Multi-valued Attribute"], correct: 1 },
+        { q: "An attribute that can have multiple values for a single entity instance (like Phone Numbers) is a:", a: ["Multi-valued Attribute", "Derived Attribute", "Composite Attribute", "Key Attribute"], correct: 0 },
+        { q: "What type of attribute is calculated dynamically from other existing data (like calculating Age from Date of Birth)?", a: ["Key Attribute", "Simple Attribute", "Derived Attribute", "Complex Attribute"], correct: 2 },
+        { q: "In an ER diagram, a diamond symbol is used to represent a/an:", a: ["Entity type", "Relationship type", "Attribute key", "Weak entity set"], correct: 1 },
+        { q: "What is an entity type called if its existence depends on another identifying entity type?", a: ["Strong Entity", "Weak Entity", "Independent Entity", "Associative Entity"], correct: 1 },
+        { q: "Which concept defines the maximum number of relationship instances an entity can participate in (e.g., 1:1, 1:N, M:N)?", a: ["Cardinality Ratio", "Participation Constraint", "Degree of Relationship", "Specialization"], correct: 0 },
+        { q: "If every department must have at least one manager, what type of participation constraint is applied to Department?", a: ["Partial Participation", "Total Participation", "Optional Participation", "Zero Participation"], correct: 1 },
+        { q: "An attribute that uniquely identifies a specific entity instance is called a:", a: ["Foreign Key", "Composite Attribute", "Primary/Key Attribute", "Multivalued Attribute"], correct: 2 }
+      ]
+    },
+    "3": {
+      title: "Database - Relational Model & Constraints",
+      questions: [
+        { q: "In the relational model, a table is formally referred to as a:", a: ["Tuple", "Attribute", "Relation", "Domain"], correct: 2 },
+        { q: "What is a row in a relational database table called?", a: ["Attribute", "Tuple / Record", "Field", "Domain"], correct: 1 },
+        { q: "What is a column in a relational database table called?", a: ["Tuple", "Attribute / Field", "Relation", "Instance"], correct: 1 },
+        { q: "The set of all permissible atomic values for an attribute is called its:", a: ["Domain", "Tuple", "Schema", "Relation"], correct: 0 },
+        { q: "Which key is selected by the database designer to uniquely identify tuples within a relation?", a: ["Foreign Key", "Primary Key", "Candidate Key", "Super Key"], correct: 1 },
+        { q: "Any minimal set of attributes that can uniquely identify a row in a table is called a:", a: ["Foreign Key", "Secondary Key", "Candidate Key", "Derived Key"], correct: 2 },
+        { q: "Which rule states that no primary key value can be NULL?", a: ["Referential Integrity", "Entity Integrity", "Domain Integrity", "User-Defined Integrity"], correct: 1 },
+        { q: "An attribute in a table that references the primary key of another table is called a:", a: ["Candidate Key", "Composite Key", "Foreign Key", "Super Key"], correct: 2 },
+        { q: "Which integrity constraint ensures that a foreign key value must either match a valid primary key value or be NULL?", a: ["Entity Integrity", "Referential Integrity", "Domain Constraint", "Key Constraint"], correct: 1 },
+        { q: "What does the 'degree' of a relation represent?", a: ["The number of tuples/rows in the table", "The number of attributes/columns in the table", "The size of the database in memory", "The number of primary keys"], correct: 1 }
+      ]
+    },
+    "4": {
+      title: "Database - Relational Database Normalization",
+      questions: [
+        { q: "What is the primary purpose of database normalization?", a: ["To increase data redundancy", "To optimize raw graphics file rendering", "To minimize data redundancy and eliminate update anomalies", "To encrypt user passwords"], correct: 2 },
+        { q: "A table is in which normal form if all its attribute values are atomic (no repeating groups)?", a: ["1NF (First Normal Form)", "2NF (Second Normal Form)", "3NF (Third Normal Form)", "BCNF"], correct: 0 },
+        { q: "What condition must be met for a table to be in 2NF?", a: ["It must be in 1NF and have transitive dependencies removed", "It must be in 1NF and have all partial functional dependencies removed", "It must contain foreign keys", "It must be in 3NF first"], correct: 1 },
+        { q: "A partial functional dependency occurs when a non-prime attribute depends on:", a: ["The entire primary key", "Only a part of a composite primary key", "An entirely different table", "A foreign key value"], correct: 1 },
+        { q: "To achieve 3NF, a relation must be in 2NF and eliminate what type of dependency?", a: ["Partial Dependency", "Full Functional Dependency", "Transitive Dependency", "Multi-valued Dependency"], correct: 2 },
+        { q: "A transitive dependency occurs when a non-prime attribute depends on:", a: ["The primary key directly", "Another non-prime attribute", "A composite foreign key", "A candidate key attribute"], correct: 1 },
+        { q: "Which anomaly happens when deleting a row inadvertently destroys unrelated essential data?", a: ["Insertion Anomaly", "Deletion Anomaly", "Modification Anomaly", "Selection Anomaly"], correct: 1 },
+        { q: "Which normal form is strictly stronger than 3NF and handles overlapping candidate keys?", a: ["1NF", "2NF", "BCNF (Boyce-Codd Normal Form)", "4NF"], correct: 2 },
+        { q: "If attribute X uniquely determines attribute Y, this relationship is denoted as X → Y and is called a:", a: ["Functional Dependency", "Transitive Dependency", "Structural Hazard", "Join Dependency"], correct: 0 },
+        { q: "What are prime attributes?", a: ["Attributes that store prime numbers", "Attributes that are part of a candidate key", "Attributes that can never be updated", "Derived values"], correct: 1 }
+      ]
+    },
+    "5": {
+      title: "Database - Structured Query Language (SQL)",
+      questions: [
+        { q: "Which subset of SQL commands is used to define and modify database structures (e.g., CREATE, ALTER, DROP)?", a: ["DML (Data Manipulation Language)", "DDL (Data Definition Language)", "DCL (Data Control Language)", "TCL (Transaction Control Language)"], correct: 1 },
+        { q: "Which SQL command is used to add new rows of data into a table?", a: ["ADD ROW", "INSERT INTO", "UPDATE", "CREATE"], correct: 1 },
+        { q: "What SQL clause is used to filter query results based on a specified condition?", a: ["GROUP BY", "ORDER BY", "WHERE", "SELECT"], correct: 2 },
+        { q: "Which SQL command is used to change existing data inside a table?", a: ["CHANGE", "MODIFY", "UPDATE", "ALTER"], correct: 2 },
+        { q: "Which aggregate function is used to calculate the total number of rows returned by a query?", a: ["SUM()", "COUNT()", "AVG()", "TOTAL()"], correct: 1 },
+        { q: "To remove an entire table structure and all its data from the database, which command do you use?", a: ["DELETE TABLE", "REMOVE TABLE", "DROP TABLE", "TRUNCATE TABLE"], correct: 2 },
+        { q: "What clause is used to sort the output of a SELECT query in ascending or descending order?", a: ["SORT BY", "ORDER BY", "GROUP BY", "HAVING"], correct: 1 },
+        { q: "Which SQL keyword ensures that duplicate rows are eliminated from the query output?", a: ["UNIQUE", "DISTINCT", "CHECK", "UNION"], correct: 1 },
+        { q: "Which keyword is paired with the WHERE clause to check for values within a specific range?", a: ["IN", "LIKE", "BETWEEN", "EXISTS"], correct: 2 },
+        { q: "What SQL command is used to remove specific records from a table without destroying the table structure?", a: ["DROP", "REMOVE", "DELETE FROM", "ALTER"], correct: 2 }
+      ]
+    }
+  },
+  "cpp": {
+    "1": {
+      title: "C++ Introduction & Basic Syntax",
+      questions: [
+        { q: "Which header file allows us to work with input and output objects like cin and cout?", a: ["<cmath>", "<string>", "<iostream>", "<iomanip>"], correct: 2 },
+        { q: "Which of the following is a VALID variable name in C++?", a: ["int 2count;", "int total_sum;", "int total-sum;", "int switch;"], correct: 1 },
+        { q: "What is the correct way to declare an integer variable named 'score' with an initial value of 100?", a: ["score = 100;", "int score = 100;", "declare score = 100;", "num score = 100;"], correct: 1 },
+        { q: "What does every executable C++ program statement end with?", a: ["A colon (:)", "A period (.)", "A semicolon (;)", "A comma (,)"], correct: 2 },
+        { q: "How do you insert a single-line comment in a C++ source file?", a: ["# comment", "// comment", "/* comment", ""], correct: 1 },
+        { q: "Which data type should you use to store a precise fractional value like 3.14159?", a: ["int", "char", "double", "bool"], correct: 2 },
+        { q: "What character escape sequence represents a new line in C++ text stream?", a: ["\\t", "\\n", "\\a", "\\b"], correct: 1 },
+        { q: "What is the output of the following operation? 7 % 3", a: ["2", "1", "0.5", "2.33"], correct: 1 },
+        { q: "Which operator is used to extract data from the standard input stream (cin)?", a: ["<<", ">>", "==", "="], correct: 1 },
+        { q: "What happens during a syntax error?", a: ["The program produces the wrong math calculations", "The compiler crashes because it violates code structure rules", "The system runs out of physical memory", "The program loops forever"], correct: 1 }
+      ]
+    },
+    "2": {
+      title: "C++ Control Structures - Selection",
+      questions: [
+        { q: "What is the primary evaluation result of a conditional expression inside an if statement?", a: ["A string value", "An integer index", "A boolean value (true or false)", "A null memory address"], correct: 2 },
+        { q: "What is the result of the logical expression: (5 > 2) && (4 == 7)?", a: ["true", "false", "undefined", "1"], correct: 1 },
+        { q: "Which comparison operator represents 'NOT EQUAL TO' in C++?", a: ["=", "==", "!=", "<>"], correct: 2 },
+        { q: "When does the block of code inside an 'else' branch execute?", a: ["When the main 'if' condition evaluates to true", "When the main 'if' condition evaluates to false", "It always executes concurrently", "Only when a syntax crash occurs"], correct: 1 },
+        { q: "Which selection structure is cleanest for multi-way branches testing a single integral variable?", a: ["Simple if", "Nested if", "switch-case", "if-else ladder"], correct: 2 },
+        { q: "What is the role of the 'break' statement within a switch-case block?", a: ["To shut down the computer system", "To terminate and exit the switch block completely", "To jump straight to the default case", "To clear temporary system memory"], correct: 1 },
+        { q: "What is a 'nested if' structure?", a: ["An if statement written outside the main function", "An if statement containing multiple else elements", "An if statement placed inside another if or else block", "An if statement paired with a loop structure"], correct: 2 },
+        { q: "Will the message 'Pass' be displayed based on this segment? int marks = 75; if (marks >= 80) { cout << \"Pass\"; }", a: ["Yes", "No", "Syntax Error", "Infinite run"], correct: 1 },
+        { q: "What is the purpose of the 'default' keyword in a switch-case architecture?", a: ["To set an initial value", "To handle cases when no explicit match is found", "To end loop structures", "To invoke the main function"], correct: 1 },
+        { q: "Which logical operator requires BOTH expressions to be true for the result to be true?", a: ["|| (OR)", "&& (AND)", "! (NOT)", "^ (XOR)"], correct: 1 }
+      ]
+    },
+    "3": {
+      title: "C++ Control Structures - Repetition",
+      questions: [
+        { q: "What is the main goal of using a repetition (loop) structure?", a: ["To partition functions", "To allocate arrays in memory", "To execute a block of statements repeatedly", "To resolve system warnings"], correct: 2 },
+        { q: "Which C++ loop evaluates its test condition AFTER executing its body block?", a: ["while loop", "do-while loop", "for loop", "infinite loop"], correct: 1 },
+        { q: "What are the three expression elements inside a standard for-loop header?", a: ["Input, Process, Output", "Initialization, Condition, Update", "If, Else, Break", "Local, Global, Static"], correct: 1 },
+        { q: "What occurs if a loop's termination condition never becomes false?", a: ["The loop terminates immediately", "An infinite loop occurs", "A compiler error is thrown", "The output is set to zero"], correct: 1 },
+        { q: "How many times will this loop execute? for(int i = 0; i < 5; i++) { // Code }", a: ["4 times", "5 times", "6 times", "0 times"], correct: 1 },
+        { q: "What does the 'continue' statement do inside a loop block?", a: ["Exits the entire loop instantly", "Skips the rest of the current iteration and jumps to the next evaluation", "Terminates the main function execution", "Restarts the program counter from line 1"], correct: 1 },
+        { q: "What is the final value of x after this sequence completes? int x = 0; for(int i = 0; i < 3; i++) { x += 2; }", a: ["2", "4", "6", "8"], correct: 2 },
+        { q: "A loop placed inside the body of another loop is known as what?", a: ["Nested loop", "Double loop", "Multi loop", "Inner loop"], correct: 0 },
+        { q: "What is the operational difference between the expressions 'i++' and '++i'?", a: ["There is no difference at all", "i++ increments first, ++i uses the original value first", "i++ uses the original value first, ++i increments first", "i++ overrides the datatype format"], correct: 2 },
+        { q: "Which loop is optimal when the exact number of iterations is known before entry?", a: ["while loop", "do-while loop", "for loop", "sentinel loop"], correct: 2 }
+      ]
+    },
+    "4": {
+      title: "C++ Functions & Modular Programming",
+      questions: [
+        { q: "Why do we break down large source code structures into multiple modular functions?", a: ["To optimize CPU clock cycle speed", "To enhance readability, simplify debugging, and maximize reusability", "To bypass compiler stages", "To avoid encryption attacks"], correct: 1 },
+        { q: "What does the 'return type' specified in a function signature define?", a: ["The data type of the final value sent back by the function", "The physical storage path of the code", "The parameter collection pattern", "The nickname given to that module"], correct: 0 },
+        { q: "If a function performs an action but does not send back any value, what return keyword is used?", a: ["int", "null", "void", "empty"], correct: 2 },
+        { q: "What is the core distinction between function arguments and parameters?", a: ["They are identical expressions", "Parameters are actual data values passed; arguments are variable definitions", "Arguments are actual data values passed; parameters are variable definitions", "Arguments only process integer types"], correct: 2 },
+        { q: "What defines a 'local variable' within a program?", a: ["It is visible anywhere inside the execution context", "It can only be accessed within the specific block/function where it is declared", "It resides exclusively in secondary drives", "It shares a global visibility link"], correct: 1 },
+        { q: "Where are global variables declared in a C++ source file?", a: ["Outside of all function blocks, usually at the top of the file", "Directly inside the main() function context", "In a distinct parallel file", "Inside specialized switch blocks"], correct: 0 },
+        { q: "What is the proper syntax to call a function named 'calculateSum' that requires two inputs?", a: ["calculateSum;", "call calculateSum[];", "calculateSum(5, 10);", "void calculateSum(5, 10);"], correct: 2 },
+        { q: "What does the 'Pass-by-Value' mechanism imply when passing parameters to a function?", a: ["The function receives a clone copy of the data, leaving original variables unaltered", "The function binds directly with the original memory reference address", "The function automatically changes data items into strings", "The function purges the variable values on exit"], correct: 0 },
+        { q: "What is the programming technique called where a function invokes itself?", a: ["Looping-Function", "Recursion", "Inline iteration", "Feedback call"], correct: 1 },
+        { q: "What is the main purpose of a function prototype declaration?", a: ["To execute code blocks instantly", "To alert the compiler of a function's existence and signature before its main body definition", "To suppress runtime exception triggers", "To handle internet sockets"], correct: 1 }
+      ]
+    },
+    "5": {
+      title: "C++ Arrays & Data Structures",
+      questions: [
+        { q: "What is the fundamental definition of a standard Array in C++?", a: ["A collection storing random data categories dynamically", "A structured collection storing fixed-size elements of the same type sequentially", "A function sequence with zero return states", "An external filesystem connection pointer"], correct: 1 },
+        { q: "What index offset refers to the very first item element in a standard array?", a: ["1", "-1", "0", "Any positive value"], correct: 2 },
+        { q: "If an array is initialized to contain a size of 10 elements, what is the valid index of the last element?", a: ["10", "9", "11", "0"], correct: 1 },
+        { q: "How do you access the value of the THIRD element inside an array named 'marks'?", a: ["marks[3]", "marks(3)", "marks[2]", "marks{2}"], correct: 2 },
+        { q: "What runtime event happens if a routine attempts to fetch an index value higher than an array's boundary size?", a: ["Syntax Exception", "Out of Bounds Error / Runtime Crash", "Logic Mismatch", "The system silently ignores the request"], correct: 1 },
+        { q: "Which control sequence is cleanest for iterating through every element inside an array?", a: ["switch-case structures", "if-else sequences", "Repetition structures (Loops)", "Functional pointer updates"], correct: 2 },
+        { q: "What is a Two-Dimensional (2D) Array structure?", a: ["An array with two distinctive identifiers", "A tabular structure composed of rows and columns", "An array bound to hold exactly two items", "A function module sequence"], correct: 1 },
+        { q: "How are indices mapped inside a 2D array representation like grid[3][4]?", a: ["grid[column][row]", "grid[row][column]", "grid[size][index]", "grid[x][y]"], correct: 1 },
+        { q: "Given the statement int list[] = {5, 10, 15, 20};, what value is returned by list[2]?", a: ["5", "10", "15", "20"], correct: 2 },
+        { q: "Can a fundamental C++ array preserve mixed data types (e.g., storing floats and characters together)?", a: ["Yes", "No (elements must share the exact same data type)", "Only if allocated over 100 cells", "Only if paired with double values"], correct: 1 }
+      ]
+    }
+  },
+  "coa": {
+    "1": {
+      title: "COA Introduction & Von Neumann Architecture",
+      questions: [
+        { q: "What are the four primary functional components of a standard computer system?", a: ["Monitor, Keyboard, Mouse, Printer", "Processing, Storage, Input, Output", "Compiler, Linker, Loader, Editor", "SRAM, DRAM, Flash, Cache"], correct: 1 },
+        { q: "Which subsystem of the CPU executes arithmetic calculations and bitwise operations?", a: ["Control Unit (CU)", "Arithmetic Logic Unit (ALU)", "Memory Management Unit (MMU)", "Input/Output Interface"], correct: 1 },
+        { q: "What key characteristic distinguishes the Von Neumann architecture concept?", a: ["Separate storage units for code instructions and data structures", "Stored-program concept where instructions and data share the same memory space", "Exclusive use of RISC instruction structures", "Asynchronous parallel execution grids"], correct: 1 },
+        { q: "What is the function of the Program Counter (PC) register?", a: ["It counts the total number of code variables", "It holds the memory address of the next instruction to be fetched and executed", "It manages arithmetic overflow states", "It stores the product of logic calculations"], correct: 1 },
+        { q: "Which processor register preserves the data currently fetched from or ready to be written to memory?", a: ["Memory Address Register (MAR)", "Memory Data Register (MDR)", "Instruction Register (IR)", "Accumulator (AC)"], correct: 1 },
+        { q: "What type of system bus is used to transmit operational read/write selection codes between components?", a: ["Data Bus", "Address Bus", "Control Bus", "PCI Express Bus"], correct: 2 },
+        { q: "What are the three core sequence steps in a standard machine execution loop?", a: ["Load, Compile, Execute", "Fetch, Decode, Execute", "Read, Write, Clear", "Input, Process, Storage"], correct: 1 },
+        { q: "What is the role of the Control Unit (CU) inside the CPU structure?", a: ["To store user data files", "To orchestrate and direct timing signals between all hardware parts", "To perform high-speed floating-point calculations", "To handle network packet translations"], correct: 1 },
+        { q: "Why is the Address Bus described as unidirectional?", a: ["Data flows only to the storage cells", "Addresses are generated strictly by the CPU towards memory or peripherals", "It communicates using only a single signal wire", "It changes direction every clock phase cycle"], correct: 1 },
+        { q: "What is a major limitation known as the 'Von Neumann Bottleneck'?", a: ["Slow keyboard input speeds", "Data transfer throughput delays caused by sharing a single bus for instructions and data", "Operating system software bugs", "Power supply failures under load"], correct: 1 }
+      ]
+    },
+    "2": {
+      title: "COA Computer Evolution & Performance Metrics",
+      questions: [
+        { q: "What hardware component characterized first-generation computer computing technology?", a: ["Transistors", "Vacuum Tubes", "Integrated Circuits (ICs)", "Microprocessors"], correct: 1 },
+        { q: "What law asserts that the number of transistors on a microchip doubles roughly every two years?", a: ["Amdahl's Law", "Moore's Law", "Von Neumann's Law", "Boolean's Law"], correct: 1 },
+        { q: "What formula governs total CPU Execution Time for a program?", a: ["Time = Instructions * CPI * Clock Cycle Time", "Time = Instructions / CPI", "Time = Clock Rate * CPI", "Time = Cache Hits * Memory Latency"], correct: 0 },
+        { q: "What metric does 'CPI' stand for in microarchitecture analysis?", a: ["Cache Phase Interval", "Cycles Per Instruction", "Central Processing Instance", "Computer Performance Indicator"], correct: 1 },
+        { q: "How is the clock frequency speed of modern computer processors primarily quantified?", a: ["Megabytes (MB)", "Gigahertz (GHz)", "Nanoseconds (ns)", "MFLOPS"], correct: 1 },
+        { q: "What law deals with the theoretical speedup limit of a program when using parallel computing cores?", a: ["Moore's Law", "Amdahl's Law", "Ohm's Law", "Gates' Law"], correct: 1 },
+        { q: "If a processor has a clock rate of 2 GHz, what is the duration length of a single clock cycle?", a: ["0.5 nanoseconds", "1 nanosecond", "2 nanoseconds", "5 nanoseconds"], correct: 0 },
+        { q: "What core objective drove the transition from single-core architectures to multi-core chips?", a: ["To cut down physical fabrication space", "To bypass power consumption and heat limits while scaling performance", "To remove the need for system RAM setups", "To support basic character inputs"], correct: 1 },
+        { q: "What does 'MIPS' measure in historical computing contexts?", a: ["Memory Index Pointer System", "Millions of Instructions Per Second", "Multi-core Parallel Processing Scale", "Modular Instruction Phase Selector"], correct: 1 },
+        { q: "Which factor directly impacts the number of instructions required to run an application?", a: ["The physical monitor size", "The choice of ISA (Instruction Set Architecture) and compiler efficiency", "The capacity of the system power unit", "The hard disk write layout style"], correct: 1 }
+      ]
+    },
+    "3": {
+      title: "COA Memory Hierarchy & Cache Memory",
+      questions: [
+        { q: "Which memory layer is the fastest, closest, and smallest storage structure inside the CPU?", a: ["Main Memory (DRAM)", "Registers", "Level 2 Cache", "Solid State Drive (SSD)"], correct: 1 },
+        { q: "What characteristic defines volatile storage configurations?", a: ["Data is permanently etched and cannot change", "Data is lost immediately when operating electrical power is disconnected", "Data transfers happen using optical lasers", "Storage requires mechanical disc spinning"], correct: 1 },
+        { q: "What computing principle justifies the use of cache memory layers to accelerate processing?", a: ["The Principle of Locality (Temporal & Spatial)", "The Law of Diminishing Returns", "The Parallel Processing Rule", "The Volatile Speed Concept"], correct: 0 },
+        { q: "What hardware technology is typically used to implement internal high-speed CPU Cache?", a: ["DRAM (Dynamic RAM)", "SRAM (Static RAM)", "EEPROM", "Magnetic Core Storage"], correct: 1 },
+        { q: "What cache structure maps each memory block to exactly one specific predetermined cache line?", a: ["Fully Associative Mapping", "Direct Mapping", "Set-Associative Mapping", "Random Distribution Mapping"], correct: 1 },
+        { q: "What event takes place when the CPU requests a data word and finds it present in the cache layer?", a: ["Cache Miss", "Cache Hit", "Page Fault", "Bus Mismatch Exception"], correct: 1 },
+        { q: "What cache write policy updates both the cache line and main memory simultaneously?", a: ["Write-Back Policy", "Write-Through Policy", "Write-Allocation Policy", "Buffered Write Policy"], correct: 1 },
+        { q: "What does the hit ratio indicate in a memory design validation analysis?", a: ["The percentage of memory access requests found in the cache", "The speed ratio between SRAM and DRAM", "The failure frequency rate of storage chips", "The clock cycle count of a fetch step"], correct: 0 },
+        { q: "What algorithm is commonly used to choose which cache block to evict during a miss?", a: ["LRU (Least Recently Used)", "LIFO (Last In First Out)", "Shortest Job First", "Round Robin Allocation"], correct: 0 },
+        { q: "Why does Dynamic RAM (DRAM) require periodic refresh cycles?", a: ["To wipe out active spyware objects", "Because its charge leaks away from its internal capacitor storage cells over time", "To switch data streams from read to write", "To synchronize with the external hard disk drive clock"], correct: 1 }
+      ]
+    },
+    "4": {
+      title: "COA Input/Output Organization & Interfacing",
+      questions: [
+        { q: "What I/O technique requires the CPU to constantly poll a device status register to check for readiness?", a: ["Interrupt-Driven I/O", "Programmed I/O", "Direct Memory Access (DMA)", "Asynchronous Interfacing"], correct: 1 },
+        { q: "Which data transfer mechanism lets an I/O device exchange blocks of data directly with RAM without constant CPU intervention?", a: ["Programmed I/O", "Direct Memory Access (DMA)", "Polled Interfacing", "Vector Addressing"], correct: 1 },
+        { q: "What signal does a peripheral interface controller issue to pause active CPU tasks for immediate servicing?", a: ["Clock Trigger", "Interrupt Request (IRQ)", "Reset Signal", "Bus Grant Confirmation"], correct: 1 },
+        { q: "What routine does the CPU jump to immediately upon validating an authorized hardware interrupt request?", a: ["Main Execution Routine", "Interrupt Service Routine (ISR)", "Bootloader Subsystem", "Compiler Optimization Pass"], correct: 1 },
+        { q: "What I/O mapping scheme uses identical address maps and machine code commands for both memory cells and I/O registers?", a: ["Isolated I/O", "Memory-Mapped I/O", "Dedicated Bus Addressing", "Vector-Mapped Interface"], correct: 1 },
+        { q: "What is the primary role of a DMA Controller module?", a: ["To handle arithmetic division loops", "To take over system bus control for high-speed device-to-memory block transfers", "To decode complex switch case operations", "To modulate power line fluctuations"], correct: 1 },
+        { q: "What is an advantage of Isolated I/O over Memory-Mapped I/O configurations?", a: ["It eliminates the need for any system control wires", "It preserves the full main memory address space range for software access", "It drastically accelerates cache mapping calculations", "It runs without requiring separate I/O instructions"], correct: 1 },
+        { q: "What happens during a cycle-stealing operation by a DMA module?", a: ["The DMA wipes out cache lines to save space", "The DMA forces the processor to pause its bus access for one clock cycle to move data", "The DMA speeds up the main CPU clock frequency profile", "The operating system crashes and reboots"], correct: 1 },
+        { q: "What type of interrupt originates from an internally generated execution error, such as a division by zero?", a: ["Hardware Interrupt", "Software Interrupt / Trap / Exception", "External Maskable Signal", "Asynchronous Bus Interrupt"], correct: 1 },
+        { q: "What method resolves multiple concurrent device interrupts using a hardwired priority cascade loop?", a: ["Software Polling Cascade", "Daisy-Chaining Method", "Asynchronous Time Division", "Random Access Arbitration"], correct: 1 }
+      ]
+    },
+    "5": {
+      title: "COA Pipeline Architecture & Instruction Sets",
+      questions: [
+        { q: "What design strategy splits instruction processing stages into overlapping parallel execution segments?", a: ["Microprogramming Control", "Pipelining Architecture", "Von Neumann Interfacing", "Serial Task Scheduling"], correct: 1 },
+        { q: "What microarchitecture hazard is caused by an instruction requiring a data resource that has not yet been computed by a previous stage?", a: ["Structural Hazard", "Data Hazard", "Control Hazard", "Branch Mismatch Hazard"], correct: 1 },
+        { q: "What hazard takes place when multiple pipeline instructions contend for the same physical hardware resource simultaneously?", a: ["Data Hazard", "Structural Hazard", "Control Hazard", "Cache Miss Hazard"], correct: 1 },
+        { q: "What type of pipeline hazard is introduced by conditional branch instructions?", a: ["Structural Hazard", "Data Hazard", "Control Hazard", "Arithmetic Hazard"], correct: 2 },
+        { q: "What does the abbreviation 'RISC' stand for in modern hardware design classification?", a: ["Reduced Instruction Set Computer", "Random Index Storage Component", "Rotational Integrated System Core", "Register Interconnect Segment Controller"], correct: 0 },
+        { q: "What architectural feature typically defines a CISC processor design profile?", a: ["A minimal set of uniform, single-cycle instructions", "A large library of complex, variable-length instructions that perform multi-step memory operations", "An absolute absence of internal control registers", "Direct hardwired execution blocks only"], correct: 1 },
+        { q: "What operation does a pipeline stall (bubble) perform?", a: ["It permanently terminates the application software thread", "It injects delay cycles into the pipeline stages until data dependencies are resolved", "It forces the CPU clock to operate at double speed", "It clears out all active main memory addresses"], correct: 1 },
+        { q: "What technique optimizes data hazards by feeding calculation outputs directly from an ALU phase to a subsequent stage?", a: ["Pipeline Flushing", "Data Forwarding / Bypassing", "Branch Prediction Logic", "Microcode Exception Routing"], correct: 1 },
+        { q: "What part of a machine instruction specifies the operation to be performed?", a: ["Operand Identifier", "Opcode (Operation Code)", "Addressing Mode Specifier", "Register Offset Pointer"], correct: 1 },
+        { q: "Which addressing mode calculates the operand location by adding a constant offset directly to a base address register?", a: ["Immediate Addressing Mode", "Direct Addressing Mode", "Indexed / Displacement Addressing Mode", "Implied Addressing Mode"], correct: 2 }
+      ]
+    }
+  }
+};
+
+    let activeSubject = "cpp";
+    let currentChapter = "1";
+    let questionsList = [];
+    let currentQuestionIndex = 0;
+    
+    // Array to track student responses (null means unanswered)
+    let studentAnswers = Array(10).fill(null);
+    // Array to evaluate whether a question has been finalized/checked by the "Next" action
+    let evaluatedQuestions = Array(10).fill(false);
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const subjectParam = urlParams.get('subject');
+      const chapterParam = urlParams.get('chapter');
+      
+      if (subjectParam === "cpp" || subjectParam === "coa" || subjectParam === "database") {
+        activeSubject = subjectParam;
+      }
+      
+      if (chapterParam && quizMasterDatabase[activeSubject][chapterParam]) {
+        currentChapter = chapterParam;
+      }
+
+      let subjectDisplay = "";
+      if (activeSubject === "cpp") subjectDisplay = "C++ Programming";
+      else if (activeSubject === "coa") subjectDisplay = "Computer Organization & Architecture (COA)";
+      else subjectDisplay = "Database Systems";
+      
+      const chapterData = quizMasterDatabase[activeSubject][currentChapter];
+      document.getElementById("quizTitleDisplay").innerText = `${subjectDisplay} - ${chapterData.title}`;
+      
+      questionsList = chapterData.questions;
+
+      buildSidebarNav();
+      loadQuestion(0);
+    });
+
+    // Renders the left Navigation sidebar panel matching layout specs
+    function buildSidebarNav() {
+      const navContainer = document.getElementById("questionNavContainer");
+      navContainer.innerHTML = "";
+
+      questionsList.forEach((_, index) => {
+        const row = document.createElement("div");
+        row.className = "nav-row";
+        row.id = `navRow-${index}`;
+        row.onclick = () => loadQuestion(index);
+
+        const label = document.createElement("span");
+        label.className = "q-label";
+        label.innerText = `Question ${index + 1}`;
+
+        const circle = document.createElement("div");
+        circle.className = "status-circle";
+        circle.id = `statusCircle-${index}`;
+
+        row.appendChild(label);
+        row.appendChild(circle);
+        navContainer.appendChild(row);
+      });
+    }
+
+    // Displays the current selected question index into the Workspace area
+    function loadQuestion(index) {
+      currentQuestionIndex = index;
+
+      // Update row selection color indicator on left panel
+      document.querySelectorAll(".nav-row").forEach(r => r.classList.remove("current"));
+      document.getElementById(`navRow-${index}`).classList.add("current");
+
+      const currentQuestion = questionsList[index];
+
+      // Insert question string data
+      document.getElementById("qNumberAndText").innerText = `${index + 1}. ${currentQuestion.q}`;
+
+      // Check for code snippets presence
+      const codeBox = document.getElementById("codeImageBox");
+      if (currentQuestion.code) {
+        codeBox.classList.remove("hidden");
+        document.getElementById("codeDisplay").innerText = currentQuestion.code;
+      } else {
+        codeBox.classList.add("hidden");
+      }
+
+      // Flush previous workspace elements or display static evaluation responses
+      const feedbackContainer = document.getElementById("feedbackContainer");
+      feedbackContainer.innerHTML = "";
+
+      if (evaluatedQuestions[index]) {
+        showFeedbackMessage(studentAnswers[index] === currentQuestion.correct);
+      }
+
+      // Populate choices container mapping rules
+      const optionsContainer = document.getElementById("optionsContainer");
+      optionsContainer.innerHTML = "";
+
+      const prefixes = ["a. ", "b. ", "c. ", "d. "];
+      currentQuestion.a.forEach((optionText, optIdx) => {
+        const label = document.createElement("label");
+        label.className = "option-item";
+        
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "quiz_option";
+        radio.value = optIdx;
+        
+        // If question has been evaluated previously, freeze input interactions
+        if (evaluatedQuestions[index]) {
+          radio.disabled = true;
+          label.style.cursor = "default";
+        } else {
+          radio.onclick = () => selectOption(optIdx);
+        }
+
+        const dot = document.createElement("span");
+        dot.className = "radio-dot";
+
+        const textSpan = document.createElement("span");
+        textSpan.className = "option-text";
+        textSpan.innerHTML = `<b>${prefixes[optIdx]}</b>${optionText}`;
+
+        // Re-apply selection state data if user is stepping back/forward
+        if (studentAnswers[index] === optIdx) {
+          label.classList.add("checked");
+          radio.checked = true;
+        }
+
+        label.appendChild(radio);
+        label.appendChild(dot);
+        label.appendChild(textSpan);
+        optionsContainer.appendChild(label);
+      });
+
+      // Update button labels on final array step
+      const actionBtn = document.getElementById("actionBtn");
+      if (index === questionsList.length - 1) {
+        actionBtn.innerText = "Finish";
+      } else {
+        actionBtn.innerText = "Next";
+      }
+    }
+
+    // Handles option checked changes before evaluation
+    function selectOption(optIdx) {
+      if (evaluatedQuestions[currentQuestionIndex]) return;
+
+      const items = document.querySelectorAll(".option-item");
+      items.forEach(item => item.classList.remove("checked"));
+
+      const activeRadio = document.querySelector(`input[value="${optIdx}"]`);
+      if (activeRadio) {
+        activeRadio.parentElement.classList.add("checked");
+      }
+
+      // Temporary answer save (Does not trigger circle state yet)
+      studentAnswers[currentQuestionIndex] = optIdx;
+    }
+
+    // Clears check state for current active layout context
+    function clearSelection() {
+      if (evaluatedQuestions[currentQuestionIndex]) {
+        alert("This question has already been evaluated and locked.");
+        return;
+      }
+      
+      studentAnswers[currentQuestionIndex] = null;
+      document.querySelectorAll(".option-item").forEach(item => item.classList.remove("checked"));
+      document.querySelectorAll('input[name="quiz_option"]').forEach(radio => radio.checked = false);
+    }
+
+    // Displays standard text message in right workspace panel
+    function showFeedbackMessage(isCorrect) {
+      const feedbackContainer = document.getElementById("feedbackContainer");
+      feedbackContainer.innerHTML = "";
+
+      const msgDiv = document.createElement("div");
+      if (isCorrect) {
+        msgDiv.className = "feedback-msg correct";
+        msgDiv.innerText = "✓ Your Answer is CORRECT!";
+      } else {
+        msgDiv.className = "feedback-msg wrong";
+        msgDiv.innerText = "✗ Your Answer is INCORRECT!";
+      }
+      feedbackContainer.appendChild(msgDiv);
+    }
+
+    // CORE LOGIC: Evaluates question correctness on Next click, changes sidebar circle, then proceeds
+    function handleAction() {
+      if (studentAnswers[currentQuestionIndex] === null) {
+        alert("Please pick an option before proceeding!");
+        return;
+      }
+
+      // Evaluation Block: Executes on fresh button press submissions
+      if (!evaluatedQuestions[currentQuestionIndex]) {
+        evaluatedQuestions[currentQuestionIndex] = true;
+        
+        const correctIdx = questionsList[currentQuestionIndex].correct;
+        const isCorrect = (studentAnswers[currentQuestionIndex] === correctIdx);
+        
+        // 1. Render workspace feedback text alert
+        showFeedbackMessage(isCorrect);
+
+        // 2. Inject green check / red cross indicators directly into left sidebar circles
+        const circle = document.getElementById(`statusCircle-${currentQuestionIndex}`);
+        if (isCorrect) {
+          circle.className = "status-circle correct";
+          circle.innerText = "✓";
+          circle.style.color = "#ffffff";
+          circle.style.fontSize = "12px";
+          circle.style.fontWeight = "bold";
+        } else {
+          circle.className = "status-circle wrong";
+          circle.innerText = "✗";
+          circle.style.color = "#ffffff";
+          circle.style.fontSize = "12px";
+          circle.style.fontWeight = "bold";
+        }
+
+        // Lock current radio items instantly
+        document.querySelectorAll('input[name="quiz_option"]').forEach(radio => radio.disabled = true);
+
+        // Brief delay (1.2 seconds) to let user observe result metrics before transitioning
+        setTimeout(() => {
+          proceedToNextSteps();
+        }, 1200);
+      } else {
+        // If navigating back to an already checked item, click passes immediately
+        proceedToNextSteps();
+      }
+    }
+
+    // Handles progression routing
+    function proceedToNextSteps() {
+      if (currentQuestionIndex < questionsList.length - 1) {
+        loadQuestion(currentQuestionIndex + 1);
+      } else {
+        calculateAndShowFinalResults();
+      }
+    }
+
+    // Aggregates scoring rules and fires overlay card
+    function calculateAndShowFinalResults() {
+      let finalScore = 0;
+      questionsList.forEach((q, idx) => {
+        if (studentAnswers[idx] === q.correct) {
+          finalScore++;
+        }
+      });
+
+      document.getElementById("finalScoreDisplay").innerText = `${finalScore}/10`;
+      
+      const feedbackText = document.getElementById("resultFeedback");
+      if (finalScore === 10) {
+        feedbackText.innerText = "Exceptional performance! You achieved a perfect score!";
+      } else if (finalScore >= 5) {
+        feedbackText.innerText = "Congratulations! You passed this module quiz!";
+      } else {
+        feedbackText.innerText = "Keep learning! Review the chapter slides and try again to improve.";
+      }
+
+      document.getElementById("resultOverlay").style.display = "flex";
+    }
+
+    function exitQuiz() {
+      window.location.href = "CoursePageStudent.html";
+    }
+  </script>
 </body>
 </html>

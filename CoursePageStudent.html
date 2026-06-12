@@ -5,376 +5,377 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Course Module</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #c9b8bc;
-      --sidebar-bg: #fff;
-      --card-bg: #fff;
-      --preview-bg: #ede5e7;
-      --accent: #5b6cee;
-      --accent-hover: #4757d4;
-      --text-dark: #1a1a1a;
-      --text-muted: #6b6b6b;
-      --sidebar-icon: #1a1a1a;
-      --sidebar-w: 90px;
-      --radius-card: 18px;
-      --radius-btn: 50px;
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      min-height: 100vh;
-      display: flex;
-    }
-
-    /* ── Sidebar ── */
-    .sidebar {
-      width: var(--sidebar-w);
-      background: var(--sidebar-bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 28px 0 24px;
-      gap: 8px;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      flex-shrink: 0;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: background 0.18s;
-      width: 72px;
-      text-decoration: none;
-    }
-
-    .nav-item:hover { background: #f0f0f0; }
-
-    .nav-item svg {
-      width: 26px;
-      height: 26px;
-      stroke: var(--sidebar-icon);
-      fill: none;
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .nav-item span {
-      font-size: 10.5px;
-      font-weight: 600;
-      color: var(--text-dark);
-      letter-spacing: 0.01em;
-    }
-
-    /* highlight active */
-    .nav-item.active svg { stroke: var(--accent); }
-    .nav-item.active span { color: var(--accent); }
-
-    /* ── Main ── */
-    .main {
-      flex: 1;
-      padding: 40px 36px 40px 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    /* ── Header ── */
-    .page-header {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .page-header h1 {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--text-dark);
-      letter-spacing: -0.02em;
-    }
-
-    .btn-start {
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-btn);
-      padding: 9px 22px;
-      font-size: 13.5px;
-      font-weight: 700;
-      cursor: pointer;
-      letter-spacing: 0.01em;
-      transition: background 0.18s, transform 0.12s;
-      white-space: nowrap;
-    }
-
-    .btn-start:hover { background: var(--accent-hover); transform: translateY(-1px); }
-    .btn-start:active { transform: translateY(0); }
-
-    .progress-label {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    /* ── Content grid ── */
-    .content-grid {
-      display: grid;
-      grid-template-columns: 1fr 260px;
-      gap: 24px;
-      align-items: start;
-    }
-
-    /* ── Chapter list ── */
-    .chapter-list {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .chapter-card {
-      background: var(--card-bg);
-      border-radius: var(--radius-card);
-      padding: 22px 28px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      transition: transform 0.15s, box-shadow 0.15s;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-    }
-
-    .chapter-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.10);
-    }
-
-    .chapter-card:active { transform: translateY(0); }
-
-    .chapter-num {
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      min-width: 26px;
-    }
-
-    .chapter-name {
-      font-size: 17px;
-      font-weight: 900;
-      color: var(--text-dark);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      flex: 1;
-      text-align: center;
-    }
-
-    .chapter-status {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      border: 2px solid #ddd;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .chapter-status.done {
-      border-color: var(--accent);
-      background: var(--accent);
-    }
-
-    .chapter-status.done::after {
-      content: '';
-      display: block;
-      width: 6px;
-      height: 10px;
-      border: 2px solid #fff;
-      border-top: none;
-      border-left: none;
-      transform: rotate(45deg) translate(-1px, -1px);
-    }
-
-    /* ── Poor Chapter panel ── */
-    .poor-panel {
-      background: var(--preview-bg);
-      border-radius: var(--radius-card);
-      padding: 24px 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .poor-panel-title {
-      font-size: 15px;
-      font-weight: 800;
-      color: var(--text-dark);
-      letter-spacing: 0.01em;
-    }
-
-    .poor-item {
-      background: #fff;
-      border-radius: 12px;
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .poor-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #e05a5a;
-      flex-shrink: 0;
-    }
-
-    .poor-item-text {
-      flex: 1;
-    }
-
-    .poor-item-name {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-dark);
-    }
-
-    .poor-item-reason {
-      font-size: 11.5px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .poor-score {
-      font-size: 13px;
-      font-weight: 800;
-      color: #e05a5a;
-    }
-
-    /* ── Responsive ── */
-    @media (max-width: 720px) {
-      .content-grid { grid-template-columns: 1fr; }
-      .preview-panel { display: none; }
-      .main { padding: 24px 18px; }
-    }
-  </style>
+  <link rel="stylesheet" href="CoursePageStudent.css">
 </head>
 <body>
 
-  <!-- Sidebar -->
   <aside class="sidebar">
-    <a class="nav-item" href="#">
-      <!-- Log out -->
+    <a class="nav-item" href="logout.html">
       <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       <span>Log out</span>
     </a>
-    <a class="nav-item active" href="#">
-      <!-- Home -->
+    <a class="nav-item active" href="dashboard.html">
       <svg viewBox="0 0 24 24"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
       <span>Home</span>
     </a>
-    <a class="nav-item" href="#">
-      <!-- Performance -->
+    <a class="nav-item" href="performance.html">
       <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/><polyline points="6 12 10 8 14 11 18 7"/></svg>
       <span>Performance</span>
     </a>
-    <a class="nav-item" href="#">
-      <!-- Subject -->
+    <a class="nav-item" href="subjects.html">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       <span>Subject</span>
     </a>
-    <a class="nav-item" href="#">
-      <!-- Achievement -->
+    <a class="nav-item" href="achievements.html">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M12 13v9M8 18l4 4 4-4"/></svg>
       <span>Achievement</span>
     </a>
   </aside>
 
-  <!-- Main content -->
   <main class="main">
     <div>
       <div class="page-header">
-        <h1>Welcome Back to <em style="font-style:normal">course name</em></h1>
-        <button class="btn-start">Start Module</button>
+        <h1>Welcome Back to <span id="courseNameTitle">Loading Course...</span></h1>
+        <button class="btn-start" id="startModuleBtn" onclick="enrollCourse()">Start Module</button>
       </div>
-      <p class="progress-label" style="margin-top:6px">Current Progress: Module (0%)</p>
+      <p class="progress-label" id="progressLabel" style="margin-top:6px">Current Progress: Module (0%)</p>
     </div>
 
     <div class="content-grid">
-      <!-- Chapters -->
-      <div class="chapter-list">
-        <div class="chapter-card">
-          <span class="chapter-num">01</span>
-          <span class="chapter-name">Chapter 1</span>
-          <span class="chapter-status"></span>
-        </div>
-        <div class="chapter-card">
-          <span class="chapter-num">02</span>
-          <span class="chapter-name">Chapter 2</span>
-          <span class="chapter-status"></span>
-        </div>
-        <div class="chapter-card">
-          <span class="chapter-num">03</span>
-          <span class="chapter-name">Chapter 3</span>
-          <span class="chapter-status"></span>
-        </div>
-        <div class="chapter-card">
-          <span class="chapter-num">04</span>
-          <span class="chapter-name">Chapter 4</span>
-          <span class="chapter-status"></span>
-        </div>
-        <div class="chapter-card">
-          <span class="chapter-num">05</span>
-          <span class="chapter-name">Chapter 5</span>
-          <span class="chapter-status"></span>
-        </div>
-      </div>
+      <div class="chapter-list" id="chapterListContainer"></div>
 
-      <!-- Poor Chapter Panel -->
-      <div class="poor-panel">
+      <div class="poor-panel" id="poorPanel">
         <div class="poor-panel-title">Poor Chapter Display</div>
-        <div class="poor-item">
-          <div class="poor-dot"></div>
-          <div class="poor-item-text">
-            <div class="poor-item-name">Chapter 2</div>
-            <div class="poor-item-reason">Low quiz score</div>
-          </div>
-          <span class="poor-score">32%</span>
-        </div>
-        <div class="poor-item">
-          <div class="poor-dot"></div>
-          <div class="poor-item-text">
-            <div class="poor-item-name">Chapter 4</div>
-            <div class="poor-item-reason">Incomplete exercises</div>
-          </div>
-          <span class="poor-score">45%</span>
-        </div>
-        <div class="poor-item">
-          <div class="poor-dot"></div>
-          <div class="poor-item-text">
-            <div class="poor-item-name">Chapter 5</div>
-            <div class="poor-item-reason">Not attempted</div>
-          </div>
-          <span class="poor-score">0%</span>
+        <div class="poor-panel-content" id="poorPanelContent">
+          <div style="padding: 20px; text-align: center; color: #64748b;">📊 Chapter statistics will appear here</div>
         </div>
       </div>
     </div>
   </main>
 
+  <script>
+    // Master database data mapping silibus (Dah selaras dengan quizData.js)
+    const courseData = {
+      cpp: {
+        name: "C++ Programming",
+        chapters: [
+          "Basic Syntax & I/O",        
+          "Control Structures & Loops", 
+          "Functions & Scope",         
+          "Arrays & Strings",          
+          "Pointers & References"      
+        ]
+      },
+      db: {
+        name: "Database Systems",
+        chapters: [
+          "Introduction to Databases & DBMS",       
+          "Entity-Relationship (ER) Modeling",      
+          "Relational Model & Constraints",         
+          "Relational Database Normalization",      
+          "Structured Query Language (SQL)"         
+        ]
+      },
+      coa: {
+        name: "Computer Organization and Architecture",
+        chapters: [
+          "Introduction & Von Neumann Architecture",
+          "Computer Evolution & Performance Metrics",
+          "Memory Hierarchy & Cache Memory",         
+          "Input/Output Organization & Interfacing", 
+          "Pipeline Architecture & Instruction Sets"  
+        ]
+      }
+    };
 
+    // Mengambil subjek aktif daripada local storage (Default 'db')
+    const currentSubjectKey = localStorage.getItem('selectedQuizSubject') || 'db';
+    const currentCourse = courseData[currentSubjectKey];
 
+    // Penanda unik state pendaftaran & kemajuan mengikut subjek
+    const ENROL_KEY = `enrolled_${currentSubjectKey}`;
+    const PROGRESS_KEY = `completed_chapters_${currentSubjectKey}`;
+    const QUIZ_SCORES_KEY = `quiz_scores_${currentSubjectKey}`;
+
+    let isEnrolled = localStorage.getItem(ENROL_KEY) === 'true';
+    let completedChapters = JSON.parse(localStorage.getItem(PROGRESS_KEY)) || [];
+    let quizScores = JSON.parse(localStorage.getItem(QUIZ_SCORES_KEY)) || {};
+
+    document.addEventListener("DOMContentLoaded", function() {
+      if (currentCourse) {
+        document.getElementById("courseNameTitle").innerText = currentCourse.name;
+      }
+      
+      updateEnrollmentUI();
+      renderChapters();
+      calculateProgress();
+      updatePoorPanel();
+      
+      // Listen for storage changes (in case quiz completion updates from another tab)
+      window.addEventListener('storage', function(e) {
+        if (e.key === PROGRESS_KEY || e.key === QUIZ_SCORES_KEY) {
+          completedChapters = JSON.parse(localStorage.getItem(PROGRESS_KEY)) || [];
+          quizScores = JSON.parse(localStorage.getItem(QUIZ_SCORES_KEY)) || {};
+          renderChapters();
+          calculateProgress();
+          updatePoorPanel();
+        }
+      });
+    });
+
+    // Melakukan pendaftaran modul (Klik butang Start Module)
+    function enrollCourse() {
+      if (!isEnrolled) {
+        isEnrolled = true;
+        localStorage.setItem(ENROL_KEY, 'true');
+        updateEnrollmentUI();
+        renderChapters(); // Segarkan senarai kad serta-merta untuk buka sekatan
+        calculateProgress();
+        updatePoorPanel();
+        showNotification("✅ Successfully enrolled! All chapters are now unlocked.", "success");
+      }
+    }
+
+    // Mengemas kini rupa butang pendaftaran
+    function updateEnrollmentUI() {
+      const btn = document.getElementById("startModuleBtn");
+      if (isEnrolled) {
+        btn.innerText = "Enrolled ✓";
+        btn.classList.add("enrolled");
+        btn.disabled = true;
+      } else {
+        btn.innerText = "Start Module";
+        btn.classList.remove("enrolled");
+        btn.disabled = false;
+      }
+    }
+
+    // Menjana kad bab secara dinamik dengan kawalan perlindungan pendaftaran DAN TICK
+    function renderChapters() {
+      const container = document.getElementById("chapterListContainer");
+      container.innerHTML = ""; 
+
+      if (!currentCourse) return;
+
+      currentCourse.chapters.forEach((chapterName, index) => {
+        const displayNum = String(index + 1).padStart(2, '0');
+        const isDone = completedChapters.includes(index);
+        const quizScore = quizScores[index];
+        
+        const card = document.createElement("a");
+        card.className = "chapter-card";
+        
+        // Add completed class for styling tick
+        if (isDone) {
+          card.classList.add("completed");
+        }
+        
+        // --- LOGIK UTAMA SEKATAN ENROLMENT ---
+        if (!isEnrolled) {
+          card.classList.add("locked");
+          card.removeAttribute("href"); // Buang pautan terus supaya tidak boleh diceroboh
+          card.onclick = function(e) {
+            e.preventDefault();
+            alert("🔒 Access Denied! Please click the 'Start Module' button above to unlock the slides and video tutorials.");
+          };
+        } else {
+          // Jika sudah daftar, hantar parameter subjek dan chapter (1-5) ke URL destinasi
+          const targetUrl = `ChapterStudent.html?subject=${currentSubjectKey}&chapter=${index + 1}`;
+          card.setAttribute("href", targetUrl);
+          
+          card.onclick = function() {
+            // Backup backup data dalam local storage (opsional)
+            localStorage.setItem("current_reading_chapter_idx", index);
+            localStorage.setItem("current_reading_chapter_name", chapterName);
+          };
+        }
+
+        // Create status icon - TICK for completed chapters
+        let statusIcon = '';
+        if (isDone) {
+          statusIcon = '<span class="chapter-status done">✓</span>';
+        } else if (isEnrolled && !isDone) {
+          statusIcon = '<span class="chapter-status pending">○</span>';
+        } else {
+          statusIcon = '<span class="chapter-status locked">🔒</span>';
+        }
+        
+        // Show score badge if quiz completed
+        let scoreBadge = '';
+        if (quizScore !== undefined && isDone) {
+          scoreBadge = `<span class="score-badge">${quizScore}/10</span>`;
+        }
+
+        card.innerHTML = `
+          <span class="chapter-num">${displayNum}</span>
+          <span class="chapter-name">${chapterName}</span>
+          ${scoreBadge}
+          ${statusIcon}
+        `;
+        
+        container.appendChild(card);
+      });
+    }
+
+    // Mengira peratusan progress terkini
+    function calculateProgress() {
+      if (!currentCourse) return;
+      const totalChapters = currentCourse.chapters.length;
+      const completedCount = completedChapters.length;
+      
+      const percentage = totalChapters > 0 ? Math.round((completedCount / totalChapters) * 100) : 0;
+      document.getElementById("progressLabel").innerHTML = `📚 Current Progress: ${percentage}% (${completedCount}/${totalChapters} chapters completed)`;
+    }
+    
+    // Update Poor Panel with detailed chapter performance
+    function updatePoorPanel() {
+      const panelContent = document.getElementById("poorPanelContent");
+      if (!panelContent) return;
+      
+      if (!currentCourse) {
+        panelContent.innerHTML = '<div style="padding: 20px; text-align: center; color: #64748b;">No course data available</div>';
+        return;
+      }
+      
+      const totalChapters = currentCourse.chapters.length;
+      const completedCount = completedChapters.length;
+      const percentage = totalChapters > 0 ? Math.round((completedCount / totalChapters) * 100) : 0;
+      
+      // Calculate average score
+      let totalScore = 0;
+      let scoredChapters = 0;
+      for (let i = 0; i < totalChapters; i++) {
+        if (quizScores[i] !== undefined) {
+          totalScore += quizScores[i];
+          scoredChapters++;
+        }
+      }
+      const avgScore = scoredChapters > 0 ? Math.round(totalScore / scoredChapters) : 0;
+      
+      // Determine performance message
+      let performanceMsg = '';
+      let msgColor = '#64748b';
+      if (percentage === 100) {
+        performanceMsg = '🎉 Excellent! You have mastered all chapters!';
+        msgColor = '#10b981';
+      } else if (percentage >= 60) {
+        performanceMsg = '👍 Good progress! Keep going to complete all chapters.';
+        msgColor = '#f59e0b';
+      } else if (percentage > 0) {
+        performanceMsg = '📖 You have started! Complete more chapters to improve.';
+        msgColor = '#3b82f6';
+      } else if (isEnrolled) {
+        performanceMsg = '🚀 Ready to start? Click on any chapter above to begin learning!';
+        msgColor = '#5346ed';
+      } else {
+        performanceMsg = '🔒 Click "Start Module" to unlock all chapters and begin your learning journey!';
+        msgColor = '#94a3b8';
+      }
+      
+      // Build chapter list for poor panel
+      let chaptersHtml = '';
+      currentCourse.chapters.forEach((chapterName, idx) => {
+        const isCompleted = completedChapters.includes(idx);
+        const score = quizScores[idx];
+        const scoreDisplay = score !== undefined ? `${score}/10` : 'Not taken';
+        const statusIcon = isCompleted ? '✅' : '⭕';
+        const statusClass = isCompleted ? 'completed' : 'pending';
+        
+        chaptersHtml += `
+          <div class="poor-chapter-item ${statusClass}">
+            <span class="poor-chapter-num">${String(idx + 1).padStart(2, '0')}</span>
+            <span class="poor-chapter-name">${chapterName.length > 25 ? chapterName.substring(0, 25) + '...' : chapterName}</span>
+            <span class="poor-chapter-score">${scoreDisplay}</span>
+            <span class="poor-chapter-status">${statusIcon}</span>
+          </div>
+        `;
+      });
+      
+      panelContent.innerHTML = `
+        <div class="stats-summary">
+          <div class="stat-card">
+            <div class="stat-value">${completedCount}/${totalChapters}</div>
+            <div class="stat-label">Chapters Done</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${percentage}%</div>
+            <div class="stat-label">Completion</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">${avgScore}/10</div>
+            <div class="stat-label">Avg. Score</div>
+          </div>
+        </div>
+        <div class="performance-message" style="color: ${msgColor};">
+          ${performanceMsg}
+        </div>
+        <div class="chapters-header">
+          <span>#</span>
+          <span>Chapter</span>
+          <span>Score</span>
+          <span>Status</span>
+        </div>
+        <div class="poor-chapters-list">
+          ${chaptersHtml}
+        </div>
+      `;
+    }
+    
+    // Function to mark a chapter as completed (called from quiz page)
+    function markChapterCompleted(chapterIndex, score) {
+      // Add to completed chapters if not already
+      if (!completedChapters.includes(chapterIndex)) {
+        completedChapters.push(chapterIndex);
+        localStorage.setItem(PROGRESS_KEY, JSON.stringify(completedChapters));
+      }
+      
+      // Save quiz score
+      quizScores[chapterIndex] = score;
+      localStorage.setItem(QUIZ_SCORES_KEY, JSON.stringify(quizScores));
+      
+      // Update UI
+      renderChapters();
+      calculateProgress();
+      updatePoorPanel();
+      
+      // Show success notification
+      showNotification(`🎉 Congratulations! Chapter ${chapterIndex + 1} completed with score ${score}/10!`, "success");
+      
+      // Check if all chapters completed
+      if (completedChapters.length === currentCourse.chapters.length) {
+        showNotification("🏆 Amazing! You have completed all chapters! 🎓", "success");
+      }
+    }
+    
+    // Simple notification function
+    function showNotification(message, type) {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.innerHTML = message;
+      notification.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: ${type === 'success' ? '#10b981' : '#3b82f6'};
+        color: white;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-weight: 500;
+        z-index: 10000;
+        animation: slideIn 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      `;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+    
+    // Expose function globally for quiz page to call
+    window.markChapterCompleted = markChapterCompleted;
+  </script>
 </body>
 </html>

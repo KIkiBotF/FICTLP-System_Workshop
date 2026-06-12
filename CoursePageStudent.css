@@ -1,0 +1,337 @@
+*, *::before, *::after { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+:root {
+  --bg: #c9b8bc;
+  --sidebar-bg: #fff;
+  --card-bg: #fff;
+  --preview-bg: #ede5e7;
+  --accent: #5b6cee;
+  --accent-hover: #4757d4;
+  --text-dark: #1a1a1a;
+  --text-muted: #6b6b6b;
+  --sidebar-icon: #1a1a1a;
+  --sidebar-w: 90px;
+  --radius-card: 18px;
+  --radius-btn: 50px;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  display: flex;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--sidebar-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px 0 24px;
+  gap: 8px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  flex-shrink: 0;
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.18s;
+  width: 72px;
+  text-decoration: none;
+}
+
+.nav-item:hover { background: #f0f0f0; }
+
+.nav-item svg {
+  width: 26px;
+  height: 26px;
+  stroke: var(--sidebar-icon);
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nav-item span {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-dark);
+  letter-spacing: 0.01em;
+}
+
+.nav-item.active svg { stroke: var(--accent); }
+.nav-item.active span { color: var(--accent); }
+
+/* ── Main ── */
+.main {
+  flex: 1;
+  padding: 40px 36px 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Header ── */
+.page-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.page-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-dark);
+  letter-spacing: -0.02em;
+}
+
+.btn-start {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-btn);
+  padding: 9px 22px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: background 0.18s, transform 0.12s;
+  white-space: nowrap;
+}
+
+.btn-start:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.btn-start:active { transform: translateY(0); }
+
+/* Rupa butang apabila sudah di-enrol */
+.btn-start.enrolled {
+  background: #2ec4b6;
+  cursor: default;
+}
+.btn-start.enrolled:hover {
+  transform: none;
+  background: #2ec4b6;
+}
+
+.progress-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* ── Content grid ── */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ── Chapter list ── */
+.chapter-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.chapter-card {
+  background: var(--card-bg);
+  border-radius: var(--radius-card);
+  padding: 22px 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  text-decoration: none;
+}
+
+.chapter-status.done {
+  color: #10b981;
+  font-size: 1.3rem;
+  font-weight: bold;
+  background: #dcfce7;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.chapter-status.pending {
+  color: #94a3b8;
+  font-size: 1rem;
+  background: #f1f5f9;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+.chapter-status.locked {
+  color: #94a3b8;
+  font-size: 0.9rem;
+  background: #f1f5f9;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+
+.chapter-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  min-width: 26px;
+}
+
+.chapter-name {
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--text-dark);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  flex: 1;
+  text-align: center;
+}
+
+/* Poor Panel Styles */
+.poor-panel {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 2rem;
+  height: fit-content;
+}
+
+.poor-panel-title {
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  color: white;
+  padding: 15px 20px;
+  font-weight: 700;
+}
+
+.poor-panel-content {
+  padding: 15px;
+}
+
+.stats-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.stat-card {
+  background: #f8fafc;
+  padding: 10px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #5346ed;
+}
+
+.stat-label {
+  font-size: 0.7rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.performance-message {
+  background: #fef3c7;
+  padding: 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.chapters-header {
+  display: grid;
+  grid-template-columns: 30px 1fr 55px 35px;
+  gap: 8px;
+  padding: 8px 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #64748b;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 8px;
+}
+
+.poor-chapters-list {
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.poor-chapter-item {
+  display: grid;
+  grid-template-columns: 30px 1fr 55px 35px;
+  gap: 8px;
+  padding: 8px 0;
+  font-size: 0.75rem;
+  border-bottom: 1px solid #f1f5f9;
+  align-items: center;
+}
+
+.poor-chapter-item.completed {
+  background: #f0fdf4;
+  margin: 0 -8px;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.poor-chapter-num {
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.poor-chapter-name {
+  color: #1e293b;
+}
+
+.poor-chapter-score {
+  font-weight: 600;
+  color: #10b981;
+  text-align: center;
+  font-size: 0.7rem;
+}
+
+.poor-chapter-status {
+  text-align: center;
+  font-size: 1rem;
+}
+
+@media (max-width: 720px) {
+  .content-grid { grid-template-columns: 1fr; }
+  .main { padding: 24px 18px; }
+}
