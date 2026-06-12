@@ -1,3 +1,20 @@
+<?php
+// Handle form submission
+$error_message = '';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Check hardcoded credentials
+    if ($email === 'admin123@gmail.com' && $password === 'abc123') {
+        header("Location: mainPage.php");
+        exit();
+    } else {
+        $error_message = "Invalid email or password!";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,11 +31,12 @@
         </div>
 
     <div class="logInForm-container">
-    <form id="details-container" action="/login" method="POST">
+    <form id="details-container" action="mainPage.php" method="POST">
         <div class="input-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required>
         </div>
+        
         
         <div class="input-group">
             <div class="label-row">
@@ -30,7 +48,7 @@
         
         <div class="button-container">
             <button type="reset" class="btn-clear">Clear</button>
-            <button type="submit" class="btn-login" href="mainPage.html">Log in</button>
+            <button type="submit" class="btn-login" href="mainPage.php">Log in</button>
         </div>
     </form>
 </div>
