@@ -168,7 +168,7 @@
         /* Subject-Style Stacked Card Setup */
         .cards-stack {
             width: 100%;
-            max-width: 900px; /* Allows smooth horizontal stretching across wide desktop viewports */
+            max-width: 900px;
             display: flex;
             flex-direction: column;
             gap: 25px;
@@ -177,17 +177,23 @@
         .subject-style-card {
             background-color: #ffffff;
             border-radius: 14px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
             overflow: hidden;
             text-decoration: none;
             display: flex;
             flex-direction: column;
-            transition: transform 0.2s ease;
             width: 100%;
+            
+            /* --- CARD SHADOW EFFECT --- */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 
+                        0 4px 10px rgba(0, 0, 0, 0.04);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
 
+        /* Smooth Lift Effect on Hover */
         .subject-style-card:hover {
-            transform: translateY(-2px);
+            transform: translateY(-4px);
+            box-shadow: 0 16px 35px rgba(0, 0, 0, 0.12), 
+                        0 6px 15px rgba(0, 0, 0, 0.06);
         }
 
         /* Headers */
@@ -290,42 +296,41 @@
                 <a href="manageStudents.html" class="subject-style-card">
                     <div class="card-header header-students">
                         <h2>Students Directory</h2>
-                        <span class="meta-tag">(Active Database)</span>
                     </div>
                     <div class="card-body">
                         <ul class="details-list">
-                            <li>Manage Enrolled Students</li>
-                            <li>Track Student Status</li>
+                            <li>Manage Students</li>
+                            
                         </ul>
-                        <div class="metric-badge" id="student-count">54</div>
+                        <div class="metric-badge" id="student-count"></div>
                     </div>
                 </a>
 
                 <a href="manageLecturers.html" class="subject-style-card">
                     <div class="card-header header-lecturers">
                         <h2>Lecturer Directory</h2>
-                        <span class="meta-tag">(Faculty Members)</span>
+                        
                     </div>
                     <div class="card-body">
                         <ul class="details-list">
-                            <li>Monitor Active Instructors</li>
-                            <li>Configure Profiles</li>
+                            <li>Manage Lecturers</li>
+                           
                         </ul>
-                        <div class="metric-badge" id="lecturer-count">12</div>
+                        <div class="metric-badge" id="lecturer-count"></div>
                     </div>
                 </a>
 
                 <a href="manageSubjects.html" class="subject-style-card">
                     <div class="card-header header-subjects">
                         <h2>Course Catalog</h2>
-                        <span class="meta-tag">(Syllabus Matrix)</span>
+                        
                     </div>
                     <div class="card-body">
                         <ul class="details-list">
-                            <li>Computer Organization</li>
-                            <li>Database Structures</li>
+                            <li>Manage Courses</li>
+                            
                         </ul>
-                        <div class="metric-badge" id="subject-count">6</div>
+                        <div class="metric-badge" id="subject-count"></div>
                     </div>
                 </a>
 
