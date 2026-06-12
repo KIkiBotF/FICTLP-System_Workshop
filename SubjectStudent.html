@@ -9,38 +9,33 @@
 </head>
 <body>
 
-  <nav class="sidebar">
-    <a class="nav-item" href="logout.html">
-      <span class="icon">
-        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      </span>
-      <span class="label">Log out</span>
-    </a>
-    <a class="nav-item" href="dashboard.html">
-      <span class="icon">
-        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-      </span>
-      <span class="label">Home</span>
-    </a>
-    <a class="nav-item" href="performance.html">
-      <span class="icon">
-        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      </span>
-      <span class="label">Performance</span>
-    </a>
-    <a class="nav-item active" href="subjects.html">
-      <span class="icon">
-        <svg viewBox="0 0 24 24"><rect x="2" y="3" width="8" height="10" rx="1"/><rect x="14" y="3" width="8" height="10" rx="1"/><rect x="2" y="16" width="8" height="5" rx="1"/><rect x="14" y="16" width="8" height="5" rx="1"/></svg>
-      </span>
-      <span class="label">Subject</span>
-    </a>
-    <a class="nav-item" href="achievements.html">
-      <span class="icon">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-      </span>
-      <span class="label">Achievement</span>
-    </a>
-  </nav>
+    <!-- sidebar.html -->
+<aside class="sidebar">
+    <div class="nav-item" data-page="dashboard" onclick="navigateTo('dashboard.html')">
+        <div class="icon"><img src="Aset/logOutBtn.svg" alt="Logout"></div>
+        <span class="label">Log Out</span>
+    </div>
+
+    <div class="nav-item" data-page="home" onclick="navigateTo('dashboard.html')">
+        <div class="icon"><img src="Aset/homeBtn.svg" alt="Home"></div>
+        <span class="label">Home</span>
+    </div>
+
+    <div class="nav-item" data-page="performance" onclick="navigateTo('performance.html')">
+        <div class="icon"><img src="Aset/performanceBtn.svg" alt="Performance"></div>
+        <span class="label">Performance</span>
+    </div>
+
+    <div class="nav-item" data-page="subject" onclick="navigateTo('subjects.html')">
+        <div class="icon"><img src="Aset/manageSubjectBtn.svg" alt="Subject"></div>
+        <span class="label">Subject</span>
+    </div>
+
+    <div class="nav-item" data-page="achievement" onclick="navigateTo('achievements.html')">
+        <div class="icon"><img src="Aset/archievementBtn.svg" alt="Achievement"></div>
+        <span class="label">Achievement</span>
+    </div>
+</aside>
 
   <main class="main">
     <h1 class="page-title">Subject</h1>

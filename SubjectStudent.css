@@ -61,22 +61,28 @@ body {
 .nav-item.active { background: #fce9e4; color: #c0503a; }
 
 .nav-item .icon {
-    width: 26px; height: 26px;
-    display: flex; align-items: center; justify-content: center;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.nav-item .icon svg { 
-    width: 22px; height: 22px; 
-    stroke: currentColor; 
-    fill: none; 
-    stroke-width: 1.7; 
+.nav-item .icon img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
 }
 
-.nav-item .label {
+.nav-item .label,
+.nav-item span {
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.01em;
+    line-height: 1.2;
+    text-align: center;
 }
+
 
 /* ── Main ── */
 .main {
