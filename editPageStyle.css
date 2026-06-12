@@ -1,0 +1,145 @@
+/* --- Global Reset --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    width: 100vw;
+    background-color: #f9eaed; /* Matches your core theme */
+    overflow-x: hidden;
+}
+
+/* --- Top Bar & Header Styling --- */
+.top-bar {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center; /* Centers the h1 perfectly */
+    align-items: center;
+    padding: 40px 50px 20px 50px;
+}
+
+.back-btn {
+    position: absolute;
+    left: 60px; /* Anchors the arrow to the left side */
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.back-btn:hover {
+    transform: scale(1.1) translateX(-3px); /* Slight bounce left on hover */
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #1a1a1a;
+    font-weight: 700;
+}
+
+/* --- Main Content Styling --- */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding-top: 30px;
+    padding-bottom: 50px;
+}
+
+/* --- Form Container Styling --- */
+.form-wrapper {
+    width: 85%;
+    max-width: 850px;
+}
+
+.form-container {
+    background-color: #eaeaeb; 
+    padding: 45px 50px;
+    border-radius: 20px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+    display: flex;
+    flex-direction: column;
+    gap: 35px; 
+}
+
+.form-row {
+    display: flex;
+    align-items: flex-start;
+}
+
+.form-row label {
+    width: 250px; 
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    padding-top: 15px; 
+}
+
+/* --- Input Specific Styling --- */
+.form-row input[type="text"], 
+.form-row textarea {
+    flex: 1;
+    border: 1px solid #d1d1d1;
+    border-radius: 10px; 
+    padding: 15px 20px;
+    font-size: 1.1rem;
+    background-color: #fff;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.form-row input[type="text"] {
+    height: 55px;
+}
+
+.form-row textarea {
+    height: 180px;
+    resize: vertical; 
+}
+
+/* Focus states */
+.form-row input[type="text"]:focus, 
+.form-row textarea:focus {
+    outline: none;
+    border-color: #a8ddec; 
+    box-shadow: 0 0 0 4px rgba(168, 221, 236, 0.3);
+}
+
+/* --- Button Styling --- */
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 25px;
+}
+
+.save-btn {
+    background-color: #d1d1d1;
+    border: none;
+    padding: 12px 45px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.save-btn:hover {
+    background-color: #c0c0c0;
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+.save-btn:active {
+    transform: translateY(0);
+}

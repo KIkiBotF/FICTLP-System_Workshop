@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Subject - CoreKnowledge</title>
+    <link rel="stylesheet" href="Aset/sidebar.css">
     <style>
         * {
             margin: 0;
@@ -19,38 +20,6 @@
             width: 100vw;
             overflow: hidden;
         }
-
-        /* --- Sidebar Styling --- */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            width: 150px;
-            background-color: #ffffff;
-            padding-top: 40px; /* Reduced to match image spacing better */
-            box-shadow: 2px 0 5px rgba(0,0,0,0.05); /* Slight shadow for separation */
-            z-index: 10;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 15px 10px;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .nav-item span {
-            margin-top: 8px;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-
-        .nav-item:hover {
-            background-color: #e8f4f8;
-        }
-
         /* --- Main Content Styling --- */
         .main-content {
             flex: 1;
@@ -162,7 +131,7 @@
         </div>
 
         <div class="nav-item">
-            <img src="Aset/editQuizBtn.svg" alt="Edit Quiz" class="icon-placeholder">
+            <img style="width: 40px;height: 40px;" src="Aset/editQuizBtn.svg" alt="Edit Quiz" class="icon-placeholder">
             <span>Edit Quiz</span>
         </div>
         
