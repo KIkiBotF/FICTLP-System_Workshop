@@ -1,3 +1,20 @@
+<?php
+// Handle form submission
+$error_message = '';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Check hardcoded credentials
+    if ($email === 'admin123@gmail.com' && $password === 'abc123') {
+        header("Location: mainPage.php");
+        exit();
+    } else {
+        $error_message = "Invalid email or password!";
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

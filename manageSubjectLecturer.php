@@ -20,13 +20,15 @@
             width: 100vw;
             overflow: hidden;
         }
+
         /* --- Main Content Styling --- */
         .main-content {
             flex: 1;
             background-color: #f9eaed;
             display: flex;
             flex-direction: column;
-            align-items: center; /* Centers content horizontally */
+            align-items: center;
+            /* Centers content horizontally */
             padding-top: 50px;
         }
 
@@ -38,19 +40,22 @@
 
         /* --- Subject Card Styling --- */
         .card-container {
-            width: 80%; /* Adjust width as needed */
+            width: 80%;
+            /* Adjust width as needed */
             max-width: 900px;
         }
 
         .subject-card {
             background-color: #fff;
             border-radius: 15px;
-            overflow: hidden; /* Ensures the blue header stays within rounded corners */
+            overflow: hidden;
+            /* Ensures the blue header stays within rounded corners */
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
         .card-header {
-            background-color: #a8ddec; /* Light blue from your image */
+            background-color: #a8ddec;
+            /* Light blue from your image */
             padding: 15px 25px;
         }
 
@@ -68,7 +73,8 @@
 
         .subject-topics {
             list-style-type: disc;
-            padding-left: 20px; /* Indent bullets */
+            padding-left: 20px;
+            /* Indent bullets */
         }
 
         .subject-topics li {
@@ -81,6 +87,7 @@
             display: flex;
             gap: 20px;
         }
+
         .action-btn {
             display: flex;
             flex-direction: column;
@@ -89,44 +96,47 @@
             background: none;
             border: none;
         }
+
         .action-btn span {
             margin-top: 5px;
             font-size: 0.75rem;
             font-weight: normal;
             color: #333;
         }
+
         .icon-placeholder {
             width: 32px;
             height: 32px;
             object-fit: contain;
         }
-        #manageSubjectBox span{
+
+        #manageSubjectBox span {
             margin-top: -10px;
-            
+
         }
-        span a{
+
+        span a {
             color: #000;
             text-decoration: none;
         }
-
     </style>
 </head>
 
 <body>
 
     <aside class="sidebar">
-        <div class="nav-item">
+        <div class="nav-item" onclick="window.location.href='logIn.php'">
             <img src="Aset/logOutBtn.svg" alt="Log Out" class="icon-placeholder">
             <span>Log Out</span>
         </div>
 
-        <div class="nav-item">
+        <div class="nav-item" onclick="window.location.href='mainPage.php'">
             <img src="Aset/homeBtn.svg" alt="Home" class="icon-placeholder">
             <span>Home</span>
         </div>
 
         <div class="nav-item active" id="manageSubjectBox">
-            <img  id="manageSubjectIcon" style="width: 50px;height: 50px;" src="Aset/manageSubjectBtn.svg" alt="Manage Subject" class="icon-placeholder">
+            <img id="manageSubjectIcon" style="width: 50px;height: 50px;" src="Aset/manageSubjectBtn.svg" alt="Manage Subject" class="icon-placeholder">
             <span>Manage Subject</span>
         </div>
 
@@ -139,7 +149,7 @@
             <img style="width: 40px;height: 40px;" src="Aset/editQuizBtn.svg" alt="Edit Quiz" class="icon-placeholder">
             <span>Edit Quiz</span>
         </div>
-        
+
         <div class="nav-item">
             <a href="addSubject.php"><img src="Aset/addNewSubject.svg" alt="Add New Subject" class="icon-placeholder"></a>
             <span><a id="addSubjectLink" href="addSubject.php">Add new subject</a></span>
@@ -153,20 +163,20 @@
 
         <div class="card-container">
             <div class="subject-card">
-                
+
                 <div class="card-header">
                     <h2>Database</h2>
                 </div>
-                
+
                 <div class="card-body">
                     <ul class="subject-topics">
                         <li>SQL (Structured Query Language)</li>
                         <li>Database Design</li>
                     </ul>
-                    
+
                     <div class="card-actions">
-                        <button class="action-btn">
-                            <img src="Aset/editBtn.svg" alt="Edit" class="icon-placeholder"> 
+                        <button class="action-btn" onclick="window.location.href='editSubject.php'">
+                            <img src="Aset/editBtn.svg" alt="Edit" class="icon-placeholder">
                             <span>Edit</span>
                         </button>
                         <button class="action-btn">
@@ -178,8 +188,7 @@
 
             </div>
         </div>
-        </main>
-
+    </main>
 </body>
 
 </html>

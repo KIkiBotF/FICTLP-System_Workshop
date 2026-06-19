@@ -173,26 +173,26 @@
 
 <body>
 
-    <aside class="sidebar">
-        <div class="nav-item">
-            <img src="Aset/logOutBtn.svg" alt="Log Out" class="icon-placeholder">
-            <span>Log Out</span>
-        </div>
+   <aside class="sidebar">
+    <div class="nav-item" onclick="window.location.href='logIn.php'">
+        <img src="Aset/logOutBtn.svg" alt="Log Out" class="icon-placeholder">
+        <span>Log Out</span>
+    </div>
 
-        <div class="nav-item">
-            <img src="Aset/homeBtn.svg" alt="Home" class="icon-placeholder">
-            <span>Home</span>
-        </div>
+    <div class="nav-item" onclick="window.location.href='mainPage.php'">
+        <img src="Aset/homeBtn.svg" alt="Home" class="icon-placeholder">
+        <span>Home</span>
+    </div>
 
-        <div class="nav-item">
-            <img style="width: 50px;height: 50px;" src="Aset/manageSubjectBtn.svg" alt="Manage Subject" class="icon-placeholder">
-            <span>Manage Subject</span>
-        </div>
+    <div class="nav-item" onclick="window.location.href='manageSubjectLecturer.php'">
+        <img style="width: 50px;height: 50px;" src="Aset/manageSubjectBtn.svg" alt="Manage Subject" class="icon-placeholder">
+        <span>Manage Subject</span>
+    </div>
 
-        <div class="nav-item">
-            <img src="Aset/reportBtn.svg" alt="Report" class="icon-placeholder">
-            <span>Report</span>
-        </div>
+    <div class="nav-item">
+        <img src="Aset/reportBtn.svg" alt="Report" class="icon-placeholder">
+        <span>Report</span>
+    </div>
 
         <div class="nav-item">
             <a href="editQuiz.php">

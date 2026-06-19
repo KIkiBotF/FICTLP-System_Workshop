@@ -16,6 +16,8 @@
 
     <main class="main-content">
         <div class="form-wrapper">
+
+        <form action="manageSubjectLecturer.php" method="POST" class="form-wrapper">
             <div class="form-container">
                 <div class="form-row">
                     <label for="subjectCode">Subject Code:</label>
@@ -36,6 +38,7 @@
             <div class="button-container">
                 <button type="submit" class="save-btn">Save</button>
             </div>
+        </form>
         </div>
     </main>
 
