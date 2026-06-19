@@ -14,11 +14,12 @@
         </div>
 
     <div class="logInForm-container">
-    <form id="details-container" action="/login" method="POST">
+    <form id="details-container" action="mainPage.php" method="POST">
         <div class="input-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required>
         </div>
+        
         
         <div class="input-group">
             <div class="label-row">
@@ -30,7 +31,7 @@
         
         <div class="button-container">
             <button type="reset" class="btn-clear">Clear</button>
-            <button type="submit" class="btn-login" href="mainPage.html">Log in</button>
+            <button type="submit" class="btn-login" href="mainPage.php">Log in</button>
         </div>
     </form>
 </div>

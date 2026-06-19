@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Subject - CoreKnowledge</title>
-    <link rel="stylesheet" href="Aset/sidebar.css">
+    <link rel="stylesheet" href="sidebar.css">
     <style>
         * {
             margin: 0;
@@ -86,18 +86,19 @@
         }
 
         .form-container {
-            background-color: #0202fa; /* Softer, more modern grey */
+            background-color: #fff; /* Softer, more modern grey */
             padding: 45px 50px;
             border-radius: 20px; /* Modern rounded corners */
             box-shadow: 0 10px 30px rgba(0,0,0,0.08); /* Adds depth */
             display: flex;
             flex-direction: column;
-            gap: 35px; 
+            gap: 15px; 
         }
 
         .form-row {
             display: flex;
-            align-items: flex-start;
+            flex-direction: column;
+            gap: 10px;
         }
 
         .form-row label {
@@ -146,7 +147,7 @@
         }
 
         .save-btn {
-            background-color: #d1d1d1;
+            background-color: #FFFF66;
             border: none;
             padding: 12px 45px;
             font-size: 1.2rem;
@@ -159,8 +160,8 @@
         }
 
         .save-btn:hover {
-            background-color: #c0c0c0;
-            transform: translateY(-2px); /* Slight lift effect on hover */
+            background-color: #FF9900;
+            transform: translateY(-2px); 
             box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
         
@@ -194,13 +195,17 @@
         </div>
 
         <div class="nav-item">
-            <img style="width: 40px;height: 40px;" src="Aset/editQuizBtn.svg" alt="Edit Quiz" class="icon-placeholder">
-            <span>Edit Quiz</span>
-        </div>
+            <a href="editQuiz.php">
+        <img style="width: 40px;height: 40px;" src="Aset/editQuizBtn.svg" alt="Edit Quiz" class="icon-placeholder">
+    </a>
+        <a href="editQuiz.php"><span>Edit Quiz</span></a>
+    </div>
         
         <div class="nav-item active">
-            <img src="Aset/addNewSubject.svg" alt="Add New Subject" class="icon-placeholder">
-            <span>Add new subject</span>
+            <a href="addSubject.php">
+                <img src="Aset/addNewSubject.svg" alt="Add New Subject" class="icon-placeholder">
+            </a>
+            <a href="addSubject.php"><span>Add new subject</span></a>
         </div>
     </aside>
 
@@ -223,11 +228,13 @@
                     <label for="subjectDesc">Subject Description:</label>
                     <textarea id="subjectDesc" name="subjectDesc" placeholder="Provide a brief description of the subject..."></textarea>
                 </div>
-            </div>
-
             <div class="button-container">
                 <button type="submit" class="save-btn">Save</button>
             </div>
+
+            </div>
+
+
         </div>
     </main>
 

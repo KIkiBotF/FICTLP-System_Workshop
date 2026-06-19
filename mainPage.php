@@ -30,7 +30,7 @@
         </div>
         
         <div class="button-container">
-            <a href="subject.html" class="dashboard-btn">Dashboard</a>
+            <a href="manageSubjectLecturer.php" class="dashboard-btn">Dashboard</a>
         </div>
     </div>
 </body>

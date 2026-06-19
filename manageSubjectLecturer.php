@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Subject - CoreKnowledge</title>
-    <link rel="stylesheet" href="Aset/sidebar.css">
+    <link rel="stylesheet" href="sidebar.css">
     <style>
         * {
             margin: 0;
@@ -81,7 +81,6 @@
             display: flex;
             gap: 20px;
         }
-
         .action-btn {
             display: flex;
             flex-direction: column;
@@ -90,20 +89,26 @@
             background: none;
             border: none;
         }
-
         .action-btn span {
             margin-top: 5px;
             font-size: 0.75rem;
             font-weight: normal;
             color: #333;
         }
-        
-        /* Placeholder styling for icons if assets are missing */
         .icon-placeholder {
             width: 32px;
             height: 32px;
             object-fit: contain;
         }
+        #manageSubjectBox span{
+            margin-top: -10px;
+            
+        }
+        span a{
+            color: #000;
+            text-decoration: none;
+        }
+
     </style>
 </head>
 
@@ -120,8 +125,8 @@
             <span>Home</span>
         </div>
 
-        <div class="nav-item active">
-            <img style="width: 50px;height: 50px;" src="Aset/manageSubjectBtn.svg" alt="Manage Subject" class="icon-placeholder">
+        <div class="nav-item active" id="manageSubjectBox">
+            <img  id="manageSubjectIcon" style="width: 50px;height: 50px;" src="Aset/manageSubjectBtn.svg" alt="Manage Subject" class="icon-placeholder">
             <span>Manage Subject</span>
         </div>
 
@@ -136,8 +141,8 @@
         </div>
         
         <div class="nav-item">
-            <img src="Aset/addNewSubject.svg" alt="Add New Subject" class="icon-placeholder">
-            <span>Add new subject</span>
+            <a href="addSubject.php"><img src="Aset/addNewSubject.svg" alt="Add New Subject" class="icon-placeholder"></a>
+            <span><a id="addSubjectLink" href="addSubject.php">Add new subject</a></span>
         </div>
     </aside>
 

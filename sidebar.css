@@ -17,16 +17,16 @@
             padding: 15px 10px;
             cursor: pointer;
             text-align: center;
+            gap: 5px;
         }
 
         .nav-item span {
-            margin-top: 8px;
             font-size: 0.85rem;
             font-weight: bold;
         }
 
         .nav-item:hover {
-            background-color: #e8f4f8;
+            background-color: #006699;
         }
 
 
@@ -34,4 +34,7 @@
             width: 32px;
             height: 32px;
             object-fit: contain;
+        }
+        a{
+            text-decoration: none;
         }
