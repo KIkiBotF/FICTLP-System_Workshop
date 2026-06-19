@@ -6,12 +6,14 @@
     font-family: Arial, sans-serif; /* Clean sans-serif font */
 }
 
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background-color: #ffffff; 
+    background-image: url(Aset/ftmk.jpg);
 }
 
 /* 3. Main Wrapper */

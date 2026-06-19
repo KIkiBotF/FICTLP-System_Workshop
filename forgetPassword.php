@@ -23,9 +23,9 @@
                 <input type="email" id="emailInput" required>
 
                 <div class="button-container">
-                    <button class="btn-primary" type="button" name="recovery">Send Recovery Instruction</button>
-                    <a class="btn-link" type="button" name="backToLogin" href="logIn.html">Back to Login Page</a>
-                </div>
+    <button class="btn-primary" type="button" name="recovery">Send Recovery Instruction</button>
+    <a class="btn-link" href="logIn.php">Back to Login Page</a>
+</div>
             </form>
         </div>
     </div>

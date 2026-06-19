@@ -98,7 +98,6 @@ body {
     font-weight: bold;
     padding: 15px 80px;
     border: 2px solid #000;
-    border-radius: 50px; /* This creates the completely rounded pill shape */
     cursor: pointer;
     transition: transform 0.1s ease-in-out;
 }
