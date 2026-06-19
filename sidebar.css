@@ -38,3 +38,13 @@
         a{
             text-decoration: none;
         }
+        span a {
+            color: #000;
+            text-decoration: none;
+        }
+
+        .icon-placeholder {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }

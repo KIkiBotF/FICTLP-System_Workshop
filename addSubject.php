@@ -51,10 +51,6 @@
             color: #333;
         }
 
-        .nav-item:hover {
-            background-color: #e8f4f8;
-        }
-
         .icon-placeholder {
             width: 32px;
             height: 32px;

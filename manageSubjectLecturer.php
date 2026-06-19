@@ -103,21 +103,9 @@
             font-weight: normal;
             color: #333;
         }
-
-        .icon-placeholder {
-            width: 32px;
-            height: 32px;
-            object-fit: contain;
-        }
-
         #manageSubjectBox span {
             margin-top: -10px;
 
-        }
-
-        span a {
-            color: #000;
-            text-decoration: none;
         }
     </style>
 </head>
