@@ -1,47 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Subject - CoreKnowledge</title>
-    <link rel="stylesheet" href="EditPageStyle.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="editSubjectStyle.css">
 </head>
-</head>
-
 <body>
-    <header class="top-bar">
-        <h1>Edit Subject</h1>
-    </header>
+    
+    <?php include("sidebar.php"); ?>
 
     <main class="main-content">
-        <div class="form-wrapper">
-
-        <form action="manageSubjectLecturer.php" method="POST" class="form-wrapper">
-            <div class="form-container">
-                <div class="form-row">
-                    <label for="subjectCode">Subject Code:</label>
-                    <input type="text" id="subjectCode" name="subjectCode" placeholder="Enter code (e.g., BITS 1234)">
-                </div>
-
-                <div class="form-row">
-                    <label for="subjectTitle">Subject Title:</label>
-                    <input type="text" id="subjectTitle" name="subjectTitle" placeholder="Enter title">
-                </div>
-
-                <div class="form-row">
-                    <label for="subjectDesc">Subject Description:</label>
-                    <textarea id="subjectDesc" name="subjectDesc" placeholder="Update the description of the subject..."></textarea>
-                </div>
-            </div>
-
-            <div class="button-container">
-                <button type="submit" class="save-btn">Save</button>
-            </div>
-        </form>
+        
+        <div class="header-container">
+            <h1>Database</h1> 
         </div>
+
+        <div class="chapter-list">
+            <a href="editSubjectContent.php" class="chapter-btn">CHAPTER 1</a>
+            <a href="#" class="chapter-btn">CHAPTER 2</a>
+            <a href="#" class="chapter-btn">CHAPTER 3</a>
+            <a href="#" class="chapter-btn">CHAPTER 4</a>
+            <a href="#" class="chapter-btn">CHAPTER 5</a>
+        </div>
+
     </main>
-
 </body>
-
 </html>
