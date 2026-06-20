@@ -9,7 +9,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($email === 'admin123@gmail.com' && $password === 'abc123') {
         header("Location: mainPage.php");
         exit();
-    } else {
+    }
+    else if ($email === 'student123@gmail.com' && $password === 'abc123') {
+        header("Location: mainPageStudent.php");
+        exit();
+    }
+    else {
         $error_message = "Invalid email or password!";
     }
 }
