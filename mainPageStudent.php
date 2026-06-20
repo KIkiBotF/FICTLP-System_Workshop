@@ -9,7 +9,7 @@
 <body>
 
 <div class="icon">
-    <a href="logout.html" class="logout-btn
+    <a href="index.php" class="logout-btn">
           <img src="Aset/logOutBtn.svg" alt="Logout">
           <span class="label">Log Out</span>
         </div>
@@ -24,7 +24,7 @@
         <h2 class="msg-welcome">Welcome Back!</h2>
         <p class="msg-user">username....</p>
 
-        <a href="SubjectStudent.html" class="btn-subject">Subject</a>
+        <a href="SubjectStudent.php" class="btn-subject">Subject</a>
 
     </div>
 

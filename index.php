@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
     <div class="logInForm-container">
-    <form id="details-container" action="mainPage.php" method="POST">
+    <form id="details-container" action="" method="POST">
         <div class="input-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required>
@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         <div class="button-container">
             <button type="reset" class="btn-clear">Clear</button>
-            <button type="submit" class="btn-login" href="mainPage.php">Log in</button>
+            <button type="submit" class="btn-login">Log in</button>
         </div>
     </form>
 </div>
