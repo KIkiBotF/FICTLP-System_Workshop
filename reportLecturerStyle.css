@@ -1,0 +1,134 @@
+/* --- General Reset & Layout --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    background-color: #f9eaed; 
+}
+
+/* --- Main Content Styling --- */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 50px;
+    overflow-y: auto;
+}
+
+h1 {
+    font-size: 2.2rem;
+    color: #1a1a1a;
+    margin-bottom: 40px;
+    font-weight: 700;
+}
+
+/* --- Unified Container (Matches Add Subject) --- */
+.report-wrapper {
+    width: 85%;
+    max-width: 950px;
+    margin-bottom: 50px;
+}
+
+.report-container {
+    background-color: #fff;
+    padding: 45px 50px;
+    border-radius: 20px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    display: flex;
+    flex-direction: column;
+    gap: 40px; /* Space between filter and cards */
+}
+
+/* --- Filter Container --- */
+.filter-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid #eee; /* Separates filter from data */
+}
+
+.filter-row label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.filter-row select {
+    flex: 1;
+    max-width: 400px;
+    border: 1px solid #d1d1d1;
+    border-radius: 10px; 
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    appearance: none; /* Removes default OS styling for a cleaner look */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position-x: 95%;
+    background-position-y: 50%;
+}
+
+.filter-row select:focus {
+    outline: none;
+    border-color: #a8ddec; 
+    box-shadow: 0 0 0 4px rgba(168, 221, 236, 0.3);
+}
+
+/* --- Summary Cards --- */
+.summary-cards {
+    display: flex;
+    gap: 25px;
+    justify-content: space-between;
+}
+
+.card {
+    background-color: #fff; 
+    border-radius: 15px;
+    padding: 30px 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); /* Softer, modern shadow */
+    border: 1px solid #f0f0f0;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px); /* Gentle lift effect on hover */
+}
+
+.card h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #666;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card .card-value {
+    font-size: 3rem;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+/* Semantic Top Borders */
+.card-total { border-top: 5px solid #a8ddec; } /* Soft Blue */
+.card-pass { border-top: 5px solid #8fe0a4; }  /* Soft Green */
+.card-fail { border-top: 5px solid #fc9a9a; }  /* Soft Red */

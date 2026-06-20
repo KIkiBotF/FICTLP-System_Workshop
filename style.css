@@ -6,12 +6,20 @@
     font-family: Arial, sans-serif; /* Clean sans-serif font */
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 30d4aaaecc69ac1fc0c6a0b1f1a00325cc5f04d4
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
     background-color: #ffffff; 
+<<<<<<< HEAD
+=======
+    background-image: url(Aset/ftmk.jpg);
+>>>>>>> 30d4aaaecc69ac1fc0c6a0b1f1a00325cc5f04d4
 }
 
 /* 3. Main Wrapper */
