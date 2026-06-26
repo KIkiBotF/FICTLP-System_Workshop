@@ -83,3 +83,23 @@ body {
     background: none;
     border: none;
 }
+@media(max-width:780px){
+    .main-content{
+        .main-content{
+            padding-top: 20px;
+        }
+        .header-container h1{
+            font-size: 2rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .card-container{
+            width: 95%;
+        }
+        .card-actions{
+            gap: 10px;
+        }
+
+
+    }
+}
