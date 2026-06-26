@@ -6,13 +6,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Check hardcoded credentials
-    if ($email === 'admin123@gmail.com' && $password === 'abc123') {
-        header("Location: mainPage.php");
-        exit();
-    } else {
-        $error_message = "Invalid email or password!";
-    }
-}
+    if(isset($_POST['loginBtn'])){
+        if ($email === 'lecturer123@gmail.com' && $password === 'abc123') {
+            header("Location: mainPage.php");
+            exit();
+            }
+            else {
+                $error_message = "Invalid email or password!";
+                }
+                }
+                }
 ?>
 
 <!DOCTYPE html>
@@ -31,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
     <div class="logInForm-container">
-    <form id="details-container" action="mainPage.php" method="POST">
+    <form id="details-container" action="" method="POST">
         <div class="input-group">
             <label for="email">Email</label>
             <input type="email" id="email" name="email" required>
@@ -41,14 +44,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="input-group">
             <div class="label-row">
                 <label for="password">Password</label>
-                <a href="forgetPassword.html" class="forgot-password">Forget password?</a>
+                <a href="forgetPassword.php" class="forgot-password">Forget password?</a>
             </div>
             <input type="password" id="password" name="password" required>
         </div>
         
         <div class="button-container">
             <button type="reset" class="btn-clear">Clear</button>
-            <button type="submit" class="btn-login" href="mainPage.php">Log in</button>
+            <button type="submit" class="btn-login" name="loginBtn">Log in</button>
         </div>
     </form>
 </div>
