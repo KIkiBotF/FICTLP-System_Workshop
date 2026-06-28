@@ -1,0 +1,176 @@
+/* ── Global Styles ── */
+:root {
+    --sidebar-w: 110px;
+    --sidebar-bg: #ffffff; /* Background sidebar dikemaskan dengan warna putih padu */
+    --text-light: #757575;
+    --text-active: #5c6bcb;
+    --bg-active: #e8eaf6;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f9dad8;
+    color: #333333;
+    display: flex;
+}
+
+/* ── Sidebar (Dikemaskan & Diasingkan Pertindihan) ── */
+.sidebar {
+    width: var(--sidebar-w);
+    background: var(--sidebar-bg);
+    border-right: 1px solid #ece8e5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 28px 0 24px;
+    position: fixed;
+    top: 0; 
+    left: 0; 
+    bottom: 0;
+    z-index: 10;
+}
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 80px;
+    padding: 12px 6px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    color: var(--text-light);
+}
+
+.nav-item:hover {
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.nav-item.active {
+    color: var(--text-active);
+    background-color: var(--bg-active);
+    font-weight: 600;
+}
+
+.nav-item .icon {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-item .icon img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+}
+
+.nav-item .label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.nav-item.active .label {
+    font-weight: 600;
+}
+
+/* ── Main Content ── */
+.main-content {
+    margin-left: var(--sidebar-w);
+    padding: 40px;
+    width: calc(100% - var(--sidebar-w));
+    min-height: 100vh;
+}
+
+.content-header {
+    margin-bottom: 40px;
+}
+
+.content-header h1 {
+    font-size: 32px;
+    font-weight: 600;
+    color: #000;
+    margin-bottom: 5px;
+}
+
+.congrats-msg {
+    font-size: 16px;
+    color: #333;
+}
+
+/* ── Grid & Certificates ── */
+.certificates-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 30px;
+    max-width: 850px;
+}
+
+.cert-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.cert-thumbnail-link {
+    text-decoration: none;
+    width: 100%;
+    display: block;
+}
+
+.cert-frame {
+    background-color: #c4c4c4;
+    padding: 15px;
+    border-radius: 0 0 35px 35px;
+    border-top: 1px solid #b5b5b5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+
+.cert-frame:hover {
+    transform: translateY(-3px);
+}
+
+.cert-frame img {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.cert-title {
+    margin-top: 15px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #222;
+    text-align: center;
+    max-width: 280px;
+    line-height: 1.4;
+}
