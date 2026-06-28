@@ -1,0 +1,83 @@
+/* layout.css - Sidebar styles from layout.html */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    width: 130px;
+    background-color: #ffffff;
+    padding-top: 80px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+    z-index: 100;
+}
+
+.main-content {
+    flex: 1;
+    background-color: #f9eaed;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+}
+
+.nav-item span {
+    margin-top: 8px;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+.nav-item:hover {
+    background-color: #e8f4f8;
+}
+
+.nav-item.active {
+    background-color: #e8f4f8;
+    position: relative;
+}
+
+.nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #5346ed;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 80px;
+    }
+    
+    .nav-item span {
+        font-size: 10px;
+    }
+    
+    .nav-item svg {
+        width: 20px;
+        height: 20px;
+    }
+}
