@@ -1,7 +1,5 @@
 
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,12 +7,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Subject - CoreKnowledge</title>
-    <link rel="stylesheet" href="sidebar.css">
     <link rel="stylesheet" href="manageSubject.css"> 
 </head>
 
 <body>
-<?php include("sidebar.php") ?>;
+<?php include("sidebarStudent.php") ?>;
     <main class="main-content">
         <div class="header-container">
             <h1>Manage Subject</h1>

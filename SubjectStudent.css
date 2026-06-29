@@ -5,82 +5,25 @@
 }
 
 :root {
-    --bg: #fdf5f3;
+    /* Ditukar kepada warna pastel pink lembut sepadan dengan Manage Subject */
+    --bg: #f9eff0; 
     --sidebar-bg: #fff;
-    --sidebar-w: 88px;
-    --teal-header: #7dbfb2;
-    --teal-light: #e8f5f3;
-    --blue-header: #a8c8e8;
-    --blue-light: #eaf3fb;
-    --green-header: #a8d4a0;
-    --green-light: #edf7eb;
-    --text-dark: #1a1a2e;
-    --text-mid: #4a4a6a;
-    --text-light: #7a7a9a;
-    --card-radius: 14px;
-    --shadow: 0 2px 16px rgba(0,0,0,0.07);
+    --sidebar-w: 150px; /* Diselaraskan mengikut lebar fail sidebarStudent.php anda */
+    
+    /* Warna pengepala kad biru lembut seperti di halaman Manage Subject */
+    --card-header-bg: #abd9e9; 
+    
+    --text-dark: #000000;
+    --text-mid: #333333;
+    --card-radius: 16px;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
 }
 
 body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: Arial, sans-serif; /* Menggunakan font asas yang bersih */
     background: var(--bg);
     min-height: 100vh;
     display: flex;
-}
-
-/* ── Sidebar ── */
-.sidebar {
-    width: var(--sidebar-w);
-    background: var(--sidebar-bg);
-    border-right: 1px solid #ece8e5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 28px 0 24px;
-    gap: 6px;
-    position: fixed;
-    top: 0; left: 0; bottom: 0;
-    z-index: 10;
-}
-
-.nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-    width: 68px;
-    padding: 10px 6px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: background 0.18s;
-    text-decoration: none;
-    color: var(--text-light);
-}
-
-.nav-item:hover { background: #f3eeec; }
-.nav-item.active { background: #fce9e4; color: #c0503a; }
-
-.nav-item .icon {
-    width: 26px;
-    height: 26px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.nav-item .icon img {
-    max-width: 100%;
-    max-height: 100%;
-    display: block;
-}
-
-.nav-item .label,
-.nav-item span {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    line-height: 1.2;
-    text-align: center;
 }
 
 
@@ -93,7 +36,7 @@ body {
 }
 
 .page-title {
-    font-family: 'Playfair Display', serif;
+    font-family: Arial, sans-serif; /* Menggunakan font asas yang bersih */
     font-size: 42px;
     color: var(--text-dark);
     line-height: 1.1;
@@ -112,39 +55,37 @@ body {
     background: #fff;
     border-radius: var(--card-radius);
     box-shadow: var(--shadow);
-    margin-bottom: 22px;
+    margin-bottom: 28px;
     overflow: hidden;
     transition: transform 0.18s, box-shadow 0.18s;
     cursor: pointer;
-    display: block; /* Tukar ke block supaya tag <a> membungkus card dengan betul */
-    text-decoration: none; /* Buang underline pada teks dalam card */
+    display: block; 
+    text-decoration: none;
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Border nipis luaran */
 }
 
-.card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 28px rgba(0,0,0,0.10);
-}
-
+/* Memastikan semua pengepala kad menggunakan warna biru seragam yang sama */
 .card-header {
     padding: 16px 28px;
     display: flex;
-    align-items: center;
-    gap: 14px;
+    align-items: baseline;
+    gap: 10px;
+    background: var(--card-header-bg) !important; /* Paksa guna warna biru Manage Subject */
 }
 
 .card-header h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
+    font-family: Arial, sans-serif;
+    font-size: 24px;
     color: var(--text-dark);
-    font-weight: 700;
+    font-weight: bold;
 }
 
 .card-header .lecturer {
-    font-size: 12px;
-    color: var(--text-mid);
+    font-size: 14px;
+    color: #555555;
     font-style: italic;
-    font-weight: 400;
-    margin-left: 2px;
+    font-weight: normal;
+    margin-left: 5px;
 }
 
 .card.teal .card-header  { background: var(--teal-header); }
@@ -152,16 +93,16 @@ body {
 .card.green .card-header { background: var(--green-header); }
 
 .card-body {
-    padding: 20px 28px 24px;
+    padding: 24px 32px;
     background: #fff;
 }
 
+/* Mengekalkan susunan grid jika mahu, atau tukar ke 1fr jika mahu sebaris ke bawah */
 .topics {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4px 32px;
+    grid-template-columns: 1fr; /* Ditukar ke 1 ruangan supaya list turun ke bawah seperti Manage Subject */
+    gap: 8px;
 }
-
 .topics.single-col {
     grid-template-columns: 1fr;
 }
@@ -169,19 +110,22 @@ body {
 .topic-item {
     display: flex;
     align-items: center;
-    gap: 9px;
-    font-size: 14.5px;
+    gap: 12px;
+    font-size: 16px;
     color: var(--text-mid);
-    padding: 5px 0;
-    font-weight: 500;
+    padding: 4px 0;
+    font-weight: normal;
 }
 
+/* Mengubah suai elemen bulatan menjadi hitam kecil klasik (Unaltered List Look) */
 .topic-item::before {
     content: '';
     display: inline-block;
-    width: 7px; height: 7px;
+    width: 5px; 
+    height: 5px;
     border-radius: 50%;
     flex-shrink: 0;
+    background: #000000 !important; /* Diwajibkan warna hitam tulen */
 }
 
 .card.teal .topic-item::before  { background: var(--teal-header); }

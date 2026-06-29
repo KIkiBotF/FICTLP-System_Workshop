@@ -18,7 +18,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Gambar FTMK di belakang */
+/* Gambar latar belakang */
 body::before {
     content: "";
     position: absolute;
@@ -26,11 +26,11 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('Aset/FTMK.jpg') !important; 
+    background-image: url('Aset/MainBG.png'); 
     background-size: cover;         
     background-position: center;  
     background-repeat: no-repeat; 
-    opacity: 0.15; 
+    opacity: 1; 
     z-index: -1;                  
 }
 
@@ -58,11 +58,14 @@ body::before {
     stroke: #ffffff; 
 }
 
+.logout-action:hover .icon-exit {
+    filter: invert(74%) sepia(59%) saturate(1915%) hue-rotate(177deg) brightness(101%) contrast(98%);
+}
+
 .logout-text {
     font-size: 13px;
     font-weight: bold;
-    color: #ffffff; 
-    border-bottom: 2px solid #38bdf8; /* Garis bawah biru cyan */
+    color: #000000; 
     padding-bottom: 1px;
     transition: color 0.2s;
 }

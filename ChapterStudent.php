@@ -9,44 +9,7 @@
 </head>
 <body>
 
-  <aside class="sidebar">
-    <nav class="nav-container">
-      <div class="nav-item" data-page="logout" onclick="window.location.href='logout.html'">
-        <div class="icon">
-          <img src="Aset/logOutBtn.svg" alt="Logout">
-        </div>
-        <span class="label">Log Out</span>
-      </div>
-
-      <div class="nav-item" data-page="home" onclick="window.location.href='mainPageStudent.html'">
-        <div class="icon">
-          <img src="Aset/homeBtn.svg" alt="Home">
-        </div>
-        <span class="label">Home</span>
-      </div>
-
-      <div class="nav-item" data-page="performance" onclick="window.location.href='performanceStudent.html'">
-        <div class="icon">
-          <img src="Aset/performanceBtn.svg" alt="Performance">
-        </div>
-        <span class="label">Performance</span>
-      </div>
-
-      <div class="nav-item active" data-page="subject" onclick="window.location.href='SubjectStudent.html'">
-        <div class="icon">
-          <img src="Aset/manageSubjectBtn.svg" alt="Subject">
-        </div>
-        <span class="label">Subject</span>
-      </div>
-
-      <div class="nav-item" data-page="achievement" onclick="window.location.href='AchievementStudent.html'">
-        <div class="icon">
-          <img src="Aset/archievementBtn.svg" alt="Achievement">
-        </div>
-        <span class="label">Achievement</span>
-      </div>
-    </nav>
-  </aside>
+<?php include 'sidebarStudent.php'; ?>
 
   <main class="main">
 

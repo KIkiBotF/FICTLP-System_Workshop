@@ -11,10 +11,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             header("Location: mainPage.php");
             exit();
         } else if ($email == 'admin123@gmail.com' && $password == 'abc123') {
-            header("mainPageAdmin.php");
+            // SEBELUM: header("mainPageAdmin.php");
+            header("Location: mainPageAdmin.php"); // TAMBAH Location:
             exit();
         } else if ($email == 'student123@gmail.com' && $password == 'abc123') {
-            header("mainPageStudent.php");
+            // SEBELUM: header("mainPageStudent.php");
+            header("Location: mainPageStudent.php"); // TAMBAH Location:
             exit();
         } else {
             $error_message = "Invalid email or password!";
@@ -36,6 +38,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="wrapper">
         <div class="title-container">
+            <div class="logo-container" style="padding-bottom: 10px;">    
+                <img src="Aset/LogoUtem.png" alt="Logo UTeM" class="login-logo-utem">
+                <img src="Aset/FTMK2.png" alt="Logo FTMK" class="login-logo-ftmk">
+            </div>
             <h1>Welcome Back!</h1>
             <h3>login to your account</h3>
         </div>

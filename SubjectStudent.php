@@ -4,50 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Subject</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="subjectStudent.css">
 </head>
 <body>
-
-<aside class="sidebar">
-    <nav>
-        <div class="nav-item" data-page="logout" onclick="logout()">
-            <div class="icon">
-                <img src="Aset/logOutBtn.svg" alt="Logout">
-            </div>
-            <span class="label">Log Out</span>
-        </div>
-
-        <div class="nav-item" data-page="home" onclick="navigateTo('mainPageStudent.html')">
-            <div class="icon">
-                <img src="Aset/homeBtn.svg" alt="Home">
-            </div>
-            <span class="label">Home</span>
-        </div>
-
-        <div class="nav-item" data-page="performance" onclick="navigateTo('performanceStudent.html')">
-            <div class="icon">
-                <img src="Aset/performanceBtn.svg" alt="Performance">
-            </div>
-            <span class="label">Performance</span>
-        </div>
-
-        <div class="nav-item" data-page="subject" onclick="navigateTo('SubjectStudent.html')">
-            <div class="icon">
-                <img src="Aset/manageSubjectBtn.svg" alt="Subject">
-            </div>
-            <span class="label">Subject</span>
-        </div>
-
-        <div class="nav-item" data-page="achievement" onclick="navigateTo('AchievementStudent.html')">
-            <div class="icon">
-                <img src="Aset/archievementBtn.svg" alt="Achievement">
-            </div>
-            <span class="label">Achievement</span>
-        </div>
-    </nav>
-</aside>
-
+<?php include 'sidebarStudent.php'; ?>
+  
 <script>
     // Fungsi navigasi
     function navigateTo(page) {
@@ -66,7 +27,7 @@
     <h1 class="page-title">Subject</h1>
     <p class="page-subtitle">Choose subject:</p>
 
-    <a href="CoursePageStudent.html" class="card teal" onclick="selectSubject('cpp')">
+    <a href="CoursePageStudent.php" class="card teal" onclick="selectSubject('cpp')">
       <div class="card-header">
         <h2>C++ Programming</h2>
         <span class="lecturer">(Madam Rosleen)</span>
@@ -82,7 +43,7 @@
       </div>
     </a>   
 
-    <a href="CoursePageStudent.html" class="card blue" onclick="selectSubject('db')">
+    <a href="CoursePageStudent.php" class="card blue" onclick="selectSubject('db')">
       <div class="card-header">
         <h2>Database</h2>
         <span class="lecturer">(Madam Mas Aina)</span>
@@ -98,7 +59,7 @@
       </div>
     </a>
 
-    <a href="CoursePageStudent.html" class="card green" onclick="selectSubject('coa')">
+    <a href="CoursePageStudent.php" class="card green" onclick="selectSubject('coa')">
       <div class="card-header">
         <h2>Computer Organization and Architecture</h2>
         <span class="lecturer">(Sir Arif)</span>

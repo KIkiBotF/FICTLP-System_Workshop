@@ -5,97 +5,27 @@
 }
 
 :root {
-    /* Background lembut diselaraskan dengan modul lain */
-    --bg: #f4f5fa; 
-    --sidebar-bg: #ffffff;
-    --accent: #5b6cee;
-    --accent-hover: #4757d4;
-    --text-dark: #1e293b;
-    --text-muted: #64748b;
-    --sidebar-w: 95px;
+    --bg: #fcf0f0; /* Softer pinkish background matching Edit Quiz */
+    --card-bg: #ffffff;
+    --accent: #9acbd0; /* Soft cyan/blue from the 'Load Quiz' button */
+    --text-dark: #2d3748;
+    --text-muted: #718096;
+    --border-light: #e2e8f0;
+    --sidebar-w: 105px;
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family:segoe UI, Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--bg);
     color: var(--text-dark);
     display: flex;
     min-height: 100vh;
 }
 
-/* ── SIDEBAR STYLE (UNIFIED & CLEAN) ── */
-.sidebar {
-    width: var(--sidebar-w);
-    background: var(--sidebar-bg);
-    border-right: 1px solid #e2e8f0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px 0;
-    position: fixed;
-    top: 0; 
-    left: 0; 
-    bottom: 0;
-    z-index: 100;
-}
-
-.nav-container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    align-items: center;
-    width: 100%;
-}
-
-.nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    width: 76px;
-    padding: 12px 4px;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-decoration: none;
-    color: var(--text-muted);
-}
-
-.nav-item:hover { 
-    background: #f1f5f9; 
-    color: var(--text-dark);
-}
-
-.nav-item.active { 
-    background: #eff6ff; 
-    color: var(--accent); 
-}
-
-.nav-item .icon {
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.nav-item .icon img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
-
-.nav-item .label {
-    font-size: 11px;
-    font-weight: 600;
-    text-align: center;
-}
-
-/* ── MAIN CONTENT AREA (FIXED OVERLAP) ── */
+/* ── MAIN CONTENT AREA ── */
 .main-content {
     margin-left: var(--sidebar-w);
-    padding: 40px;
+    padding: 50px 40px; 
     width: calc(100% - var(--sidebar-w));
     display: flex;
     flex-direction: column;
@@ -106,63 +36,67 @@ body {
     margin-bottom: 30px;
     text-align: center;
     width: 100%;
-    max-width: 850px;
 }
 
 .content-header h1 {
     font-size: 32px;
-    font-weight: 900;
     color: var(--text-dark);
-    text-align: left;
+    text-align: center; /* Centered to match Edit Quiz */
 }
 
-/* ── METRICS CHART DESIGN (RETAINED AS ORIGINAL) ── */
+/* ── NEW CARD DESIGN (Separated & Rounded) ── */
 .metrics-card {
-    background-color: #ffffff;
     width: 100%;
     max-width: 850px;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px; /* Creates the space between top control and bottom content */
+    background: transparent;
+    border: none;
+    box-shadow: none;
 }
 
 .selector-wrapper {
-    background-color: #f1f5f9;
-    padding: 16px 24px;
+    background-color: var(--card-bg);
+    padding: 24px;
     display: flex;
+    justify-content: center; /* Centers the select input */
     align-items: center;
-    gap: 12px;
-    border-bottom: 1px solid #e2e8f0;
+    gap: 16px;
+    border-radius: 20px; /* Deeply rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); /* Soft, elegant shadow */
 }
 
 .selector-wrapper label {
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--text-dark);
 }
 
 .custom-select {
-    flex: 1;
     background-color: #ffffff;
-    border: 1px solid #cbd5e1;
-    padding: 8px 12px;
+    border: 1px solid var(--border-light);
+    padding: 10px 20px;
     font-size: 15px;
-    font-weight: 600;
+    font-weight: 500;
     outline: none;
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: 30px; /* Pill shape matching reference */
     color: var(--text-dark);
+    width: 250px;
 }
 
 .chart-container {
-    background-color: #ffffff;
-    padding: 40px 30px;
+    background-color: var(--card-bg);
+    padding: 40px 50px;
     display: flex;
     flex-direction: column;
     gap: 32px;
+    border-radius: 20px; /* Deeply rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
 }
 
+/* ── PROGRESS BARS ── */
 .topic-row {
     display: flex;
     align-items: center;
@@ -171,9 +105,9 @@ body {
 
 .topic-title {
     font-size: 15px;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--text-dark);
-    width: 250px; /* Lebarkan sedikit supaya teks nama topik tak patah pelik */
+    width: 250px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -181,28 +115,26 @@ body {
 
 .progress-bar-wrapper {
     flex: 1;
-    height: 20px;
+    height: 18px;
     background-color: #f1f5f9;
-    border-radius: 10px;
+    border-radius: 20px; /* Pill shape */
     overflow: hidden;
-    border: 1px solid #e2e8f0;
 }
 
 .bar-fill {
     height: 100%;
-    background-color: #10b981; /* Warna hijau emerald kemas */
-    border-radius: 10px;
+    background-color: var(--accent); /* Uses the soft cyan/blue */
+    border-radius: 20px;
     transition: width 0.4s ease-out;
 }
 
 .percentage-value {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 700;
     color: var(--text-dark);
     width: 50px;
     text-align: right;
 }
-
 /* ── RESPONSIVE COMPATIBILITY ── */
 @media (max-width: 768px) {
     .main-content { padding: 24px; }
