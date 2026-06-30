@@ -89,13 +89,23 @@
     /* Make text smaller and handle long text like "Add new subject" */
     .nav-item span {
         font-size: 10px !important;
-        line-height: 1.1; 
+        line-height: 1.1;
         display: block;
     }
 
     /* Reset the desktop negative margin so it aligns with other text */
     #manageSubjectBox span {
         margin-top: 0;
+    }
+    #manageSubjectIcon{
+        width: 50px !important;
+        height: 50px !important;
+    }
+    #manageSubjectBox{
+        margin-top: 23px;
+    }
+    #manageSubjectBox span{
+        background-color: #006699;
     }
 }
 
