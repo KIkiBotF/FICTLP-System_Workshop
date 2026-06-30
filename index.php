@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check hardcoded credentials
     if (isset($_POST['loginBtn'])) {
         if ($email === 'lecturer123@gmail.com' && $password === 'abc123') {
-            header("Location: mainPage.php");
+            header("Location: mainPageLecturer.php");
             exit();
         } else if ($email == 'admin123@gmail.com' && $password == 'abc123') {
             // SEBELUM: header("mainPageAdmin.php");

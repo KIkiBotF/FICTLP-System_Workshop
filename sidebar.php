@@ -185,7 +185,7 @@
             <span>Log Out</span>
         </a>
 
-        <a href="mainPage.php" class="nav-item">
+        <a href="mainPageLecturer.php" class="nav-item">
             <img src="Aset/homeBtn.svg" alt="Home" class="icon-placeholder" id="homeIcon">
             <span>Home</span>
         </a>
@@ -204,11 +204,6 @@
         <a href="editQuizLecturer.php" class="nav-item">
             <img src="Aset/editQuizBtn.svg" alt="Edit Quiz" class="icon-placeholder">
             <span>Edit Quiz</span>
-        </a>
-
-        <a href="addSubject.php" class="nav-item">
-            <img src="Aset/addNewSubject.svg" alt="Add New Subject" class="icon-placeholder">
-            <span>Add new subject</span>
         </a>
     </aside>
 
