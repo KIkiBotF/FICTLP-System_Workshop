@@ -16,7 +16,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Gambar latar belakang */
 body::before {
     content: "";
     position: absolute;
@@ -32,9 +31,6 @@ body::before {
     z-index: -1;                  
 }
 
-/* ==========================================
-   2. SEKSYEN LOG OUT (ATAS KIRI)
-   ========================================== */
 .logout-wrapper {
     position: absolute;
     top: 25px;
@@ -45,12 +41,12 @@ body::before {
 .logout-action {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Tukar ke center supaya icon & teks ngam tengah */
+    align-items: center;
     text-decoration: none;
 }
 
 .icon-exit {
-    width: 24px; /* Set saiz standard untuk ikon svg */
+    width: 24px; 
     height: 24px;
     margin-bottom: 4px;
     stroke: #ffffff; 
@@ -69,12 +65,9 @@ body::before {
 }
 
 .logout-action:hover .logout-text {
-    color: #38bdf8; /* Efek highlight warna cyan bila hover */
+    color: #38bdf8; 
 }
 
-/* ==========================================
-   3. KANDUNGAN UTAMA (KOTAK GLASSMORPHISM)
-   ========================================== */
 .center-content {
     text-align: center;
     width: 100%;
@@ -109,9 +102,7 @@ body::before {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-/* ==========================================
-   5. TEKS MESEJ & USERNAME
-   ========================================== */
+
 .msg-welcome {
     font-size: 32px;
     font-weight: bold;
@@ -125,9 +116,6 @@ body::before {
     margin-bottom: 40px;
 }
 
-/* ==========================================
-   6. BUTANG SUBJECT (MODEN MATCHING)
-   ========================================== */
 .btn-subject {
     display: inline-block;
     text-decoration: none;
