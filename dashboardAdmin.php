@@ -1,3 +1,45 @@
+<?php
+// --- DATABASE CONFIGURATION ---
+$host = "100.81.48.34"; // Your Tailscale IP
+$port = "3307";          
+$dbname = "fictlp db";  
+$username = "bubustailo"; 
+$password = "Student@123";
+
+// Initializing counts
+$studentCount = 0;
+$lecturerCount = 0;
+$subjectCount = 0;
+
+try {
+    $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    
+    // 1. Fetch Students Count (Matched to your 'user' table layout)
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM user WHERE Role = 'Student'");
+    $stmt->execute();
+    $studentCount = $stmt->fetchColumn();
+
+    // 2. Fetch Lecturers Count (Assumed 'Lecturer' role configuration)
+    $stmt = $conn->prepare("SELECT COUNT(*) FROM user WHERE Role = 'Lecturer'");
+    $stmt->execute();
+    $lecturerCount = $stmt->fetchColumn();
+
+    // 3. Fetch Course/Subject Count 
+    // Note: Change 'course' to your exact table name if it differs (e.g., 'subject')
+    try {
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM subject");
+        $stmt->execute();
+        $subjectCount = $stmt->fetchColumn();
+    } catch (PDOException $e) {
+        // Fallback placeholder value if your course table has a different name
+        $subjectCount = 0; 
+    }
+
+} catch(PDOException $e) {
+    die("Database Connection Failed: " . $e->getMessage());
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -45,7 +87,6 @@
             height: 100%;
         }
 
-        /* Clean modern list wrapper container */
         .sidebar nav {
             width: 100%;
             display: flex;
@@ -55,7 +96,7 @@
 
         .nav-item {
             width: 100%;
-            height: 85px; /* Fixed proportional structural height cell for symmetry */
+            height: 85px; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -70,7 +111,6 @@
             transition: background-color 0.15s ease;
         }
 
-        /* Active State (Summary Tab Highlight) */
         .nav-item.active {
             background-color: #d9d9d9;
         }
@@ -79,7 +119,6 @@
             background-color: #f5f5f5;
         }
 
-        /* Universal bounding box size for icons */
         .icon {
             width: 24px;
             height: 24px;
@@ -91,29 +130,12 @@
             flex-shrink: 0;
         }
 
-        /* Ensure images scale down cleanly within the uniform icon frame */
         .icon img {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
 
-        /* Announcement Custom CSS Icon (Globe Matrix Balanced) */
-        .icon-announcement {
-            border: 2px solid #000;
-            border-radius: 50%;
-        }
-        .icon-announcement::before, .icon-announcement::after {
-            content: ''; 
-            position: absolute; 
-            top: 0; left: 0; right: 0; bottom: 0;
-            border: 1px solid #000; 
-            border-radius: 50%;
-        }
-        .icon-announcement::before { transform: scaleX(0.4); }
-        .icon-announcement::after { transform: scaleY(0.4); border-radius: 0; border-left: none; border-right: none; }
-
-        /* Navigation Labels Design Typography */
         .nav-item .label {
             font-size: 11px;
             font-weight: bold;
@@ -128,7 +150,7 @@
         /* --- MAIN DASHBOARD CONTENT --- */
         .main-content {
             flex: 1;
-            background-color: #fdf8f5; /* Off-white background tint */
+            background-color: #fdf8f5; 
             padding: 40px 60px;
             display: flex;
             flex-direction: column;
@@ -168,21 +190,15 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            
-            /* TIMELISS DEPTH SHADOW EFFECT */
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06), 
-                        0 4px 12px rgba(0, 0, 0, 0.03);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.03);
             transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
 
-        /* Smooth Lift Effect on Hover */
         .subject-style-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1), 
-                        0 6px 16px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1), 0 6px 16px rgba(0, 0, 0, 0.04);
         }
 
-        /* Headers */
         .card-header {
             padding: 18px 24px;
             display: flex;
@@ -197,12 +213,10 @@
             font-weight: bold;
         }
 
-        /* Colors matched to mockup */
         .header-students { background-color: #eed6c5; }
         .header-lecturers { background-color: #c9e6f2; }
         .header-subjects { background-color: #cbe3cc; }
 
-        /* Card Content Row */
         .card-body {
             padding: 24px;
             background-color: #ffffff;
@@ -231,7 +245,6 @@
             font-size: 12px;
         }
 
-        /* Counter numbers badge display */
         .metric-badge {
             font-size: 32px;
             font-weight: bold;
@@ -243,102 +256,26 @@
             text-align: center;
         }
 
-        /* --- MOBILE & TABLET RESPONSIVE COMPATIBILITY --- */
         @media (max-width: 768px) {
-            body {
-                overflow-y: auto;
-            }
-
-            .window-frame {
-                flex-direction: column;
-                height: auto;
-                min-height: 100vh;
-            }
-
-            /* Shift structural layout elements into a clean mobile layout banner grid */
+            body { overflow-y: auto; }
+            .window-frame { flex-direction: column; height: auto; min-height: 100vh; }
             .sidebar {
-                width: 100%;
-                max-width: 100%;
-                height: auto;
-                flex-direction: row;
-                justify-content: space-around;
-                padding-top: 0;
-                border-right: none;
-                border-bottom: 1px solid #dcdcdc;
-                position: sticky;
-                top: 0;
-                z-index: 100;
+                width: 100%; max-width: 100%; height: auto; flex-direction: row;
+                justify-content: space-around; padding-top: 0; border-right: none;
+                border-bottom: 1px solid #dcdcdc; position: sticky; top: 0; z-index: 100;
             }
-
-            .sidebar nav {
-                flex-direction: row;
-                width: 100%;
-                justify-content: space-around;
-            }
-
-            .nav-item {
-                width: auto;
-                height: 70px;
-                padding: 5px 10px;
-                flex: 1;
-            }
-
-            .main-content {
-                padding: 30px 20px;
-                align-items: center;
-                height: auto;
-            }
-
-            .main-content h1 {
-                font-size: 32px;
-                text-align: center;
-            }
-
-            .main-content .subtitle {
-                margin-bottom: 25px;
-                text-align: center;
-            }
-
-            .cards-stack {
-                gap: 20px;
-            }
-
-            .card-header {
-                padding: 14px 20px;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 4px;
-            }
-
-            .card-header h2 {
-                font-size: 18px;
-            }
-
-            .card-body {
-                padding: 20px;
-                flex-direction: column-reverse;
-                gap: 15px;
-                align-items: center;
-                text-align: center;
-            }
-
-            .details-list {
-                flex-direction: column;
-                gap: 10px;
-                width: 100%;
-            }
-
-            .details-list li {
-                justify-content: center;
-                font-size: 14px;
-            }
-
-            .metric-badge {
-                font-size: 28px;
-                width: 100%;
-                max-width: 120px;
-                text-align: center;
-            }
+            .sidebar nav { flex-direction: row; width: 100%; justify-content: space-around; }
+            .nav-item { width: auto; height: 70px; padding: 5px 10px; flex: 1; }
+            .main-content { padding: 30px 20px; align-items: center; height: auto; }
+            .main-content h1 { font-size: 32px; text-align: center; }
+            .main-content .subtitle { margin-bottom: 25px; text-align: center; }
+            .cards-stack { gap: 20px; }
+            .card-header { padding: 14px 20px; flex-direction: column; align-items: flex-start; gap: 4px; }
+            .card-header h2 { font-size: 18px; }
+            .card-body { padding: 20px; flex-direction: column-reverse; gap: 15px; align-items: center; text-align: center; }
+            .details-list { flex-direction: column; gap: 10px; width: 100%; }
+            .details-list li { justify-content: center; font-size: 14px; }
+            .metric-badge { font-size: 28px; width: 100%; max-width: 120px; text-align: center; }
         }
     </style>
 </head>
@@ -355,21 +292,21 @@
                     <span class="label">Log Out</span>
                 </div>
            
-                <div class="nav-item" data-page="home" onclick="window.location.href='mainPage.html'">
+                <div class="nav-item" data-page="home" onclick="window.location.href='mainPage.php'">
                     <div class="icon">
                         <img src="Aset/homeBtn.svg" alt="Home">
                     </div>
                     <span class="label">Home</span>
                 </div>
 
-                <div class="nav-item active" data-page="dashboard">
+                <div class="nav-item active" data-page="Information">
                     <div class="icon">
                         <img src="Aset/summaryBtn.svg" alt="Summary">
                     </div>
-                    <span class="label">Dashboard</span>
+                    <span class="label">Information</span>
                 </div>
         
-                <div class="nav-item" data-page="announcement" onclick="window.location.href='announcement.html'">
+                <div class="nav-item" data-page="announcement" onclick="window.location.href='announcement.php'">
                     <div class="icon">
                         <img src="Aset/annoucment.svg" alt="Announcement">
                     </div>
@@ -379,44 +316,44 @@
         </aside>
 
         <main class="main-content">
-            <h1>Dashboard Summary</h1>
+            <h1>Information Dashboard</h1>
             <div class="subtitle">System overview metrics:</div>
 
             <div class="cards-stack">
                 
-                <a href="manageStudents.html" class="subject-style-card">
+                <a href="manageStudents.php" class="subject-style-card">
                     <div class="card-header header-students">
-                        <h2>Students Directory</h2>
+                        <h2>Students List</h2>
                     </div>
                     <div class="card-body">
                         <ul class="details-list">
                             <li>Manage Students</li>
                         </ul>
-                        <div class="metric-badge" id="student-count"></div>
+                        <div class="metric-badge" id="student-count"><?php echo (int)$studentCount; ?></div>
                     </div>
                 </a>
 
-                <a href="manageLecturers.html" class="subject-style-card">
+                <a href="manageLecturers.php" class="subject-style-card">
                     <div class="card-header header-lecturers">
-                        <h2>Lecturer Directory</h2>
+                        <h2>Lecturer List</h2>
                     </div>
                     <div class="card-body">
                         <ul class="details-list">
                             <li>Manage Lecturers</li>
                         </ul>
-                        <div class="metric-badge" id="lecturer-count"></div>
+                        <div class="metric-badge" id="lecturer-count"><?php echo (int)$lecturerCount; ?></div>
                     </div>
                 </a>
 
-                <a href="manageSubjects.html" class="subject-style-card">
+                <a href="manageSubjects.php" class="subject-style-card">
                     <div class="card-header header-subjects">
-                        <h2>Course Catalog</h2>
+                        <h2>Subjects List</h2>
                     </div>
                     <div class="card-body">
                         <ul class="details-list">
-                            <li>Manage Courses</li>
+                            <li>Manage Subjects</li>
                         </ul>
-                        <div class="metric-badge" id="subject-count"></div>
+                        <div class="metric-badge" id="subject-count"><?php echo (int)$subjectCount; ?></div>
                     </div>
                 </a>
 

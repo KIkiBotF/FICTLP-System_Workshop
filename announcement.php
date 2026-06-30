@@ -1,3 +1,22 @@
+<?php
+session_start();
+
+// Define the file where the global announcement will be saved
+$announcementFile = 'announcement.txt';
+
+// Handle form submission to update the announcement
+$successMessage = '';
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['announcementText'])) {
+    $message = trim($_POST['announcementText']);
+    if (!empty($message)) {
+        file_put_contents($announcementFile, $message);
+        $successMessage = "Success! The announcement has been updated.";
+    }
+}
+
+// Read current announcement or set a fallback default
+$currentAnnouncement = file_exists($announcementFile) ? file_get_contents($announcementFile) : "Welcome to our website";
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -54,7 +73,7 @@
 
         .nav-item {
             width: 100%;
-            height: 85px; /* Fixed proportional structural height cell for symmetry */
+            height: 85px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -69,7 +88,6 @@
             transition: background-color 0.15s ease;
         }
 
-        /* Active highlight state matching system layout */
         .nav-item.active {
             background-color: #d9d9d9;
         }
@@ -78,7 +96,6 @@
             background-color: #f5f5f5;
         }
 
-        /* Universal bounding box size for icons */
         .icon {
             width: 24px;
             height: 24px;
@@ -90,14 +107,12 @@
             flex-shrink: 0;
         }
 
-        /* Ensure images scale down cleanly within the uniform icon frame */
         .icon img {
             width: 100%;
             height: 100%;
             object-fit: contain;
         }
 
-        /* Navigation Labels Design Typography */
         .nav-item .label {
             font-size: 11px;
             font-weight: bold;
@@ -112,7 +127,7 @@
         /* --- MAIN DASHBOARD CONTENT AREA --- */
         .main-content {
             flex: 1;
-            background-color: #fdf8f5; /* Workspace warm white background tint */
+            background-color: #fdf8f5;
             padding: 40px 60px;
             display: flex;
             flex-direction: column;
@@ -131,13 +146,26 @@
 
         .main-content .subtitle {
             font-size: 14px;
-            color: #d88267; /* Terracotta highlight accent */
+            color: #d88267;
             margin-bottom: 30px;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 680px;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid #c3e6cb;
         }
 
         /* --- ANNOUNCEMENT CONTAINER MODULE --- */
         .announcement-box {
-            background-color: #e9ecef; /* Deepened greyish slate tone for maximum visibility */
+            background-color: #e9ecef;
             width: 100%;
             max-width: 680px;
             height: 310px;
@@ -149,11 +177,9 @@
             position: relative;
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08), 
                         0 4px 14px rgba(0, 0, 0, 0.04);
-            border: 1px solid #ced4da; /* Distinct border structure */
-            transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+            border: 1px solid #ced4da;
         }
         
-        /* Interactive focus shadow shift */
         .announcement-box:focus-within {
             border-color: #adb5bd;
             background-color: #e2e6ea;
@@ -161,7 +187,6 @@
                         0 4px 16px rgba(0, 0, 0, 0.05);
         }
 
-        /* Embedded high-contrast input card */
         .input-container {
             background-color: #ffffff;
             border: 1px solid #dee2e6;
@@ -171,7 +196,6 @@
             width: 100%;
         }
 
-        /* Workspace Textarea Control */
         .announcement-input {
             width: 100%;
             height: 100%;
@@ -191,16 +215,14 @@
             font-weight: 400;
         }
 
-        /* Send Actions Footer Row */
         .action-row {
             display: flex;
             justify-content: flex-end;
             padding-top: 12px;
         }
 
-        /* Styled Action Button using Light Sage Accent */
         .btn-send {
-            background-color: #cbe3cc; /* Signature sage green */
+            background-color: #cbe3cc;
             color: #234e25;
             font-family: inherit;
             font-size: 13px;
@@ -225,14 +247,12 @@
             transform: scale(0.97);
         }
 
-        /* Paper Airplane Arrow Translation */
         .icon-send-arrow {
             font-size: 11px;
             transform: rotate(-15deg);
             display: inline-block;
         }
 
-        /* Responsive Layout Breakpoints */
         @media (max-width: 768px) {
             body { overflow-y: auto; }
             .window-frame { flex-direction: column; height: auto; min-height: 100vh; }
@@ -242,9 +262,7 @@
                 border-bottom: 1px solid #dcdcdc; position: sticky; top: 0; z-index: 100;
             }
             .sidebar nav {
-                flex-direction: row;
-                width: 100%;
-                justify-content: space-around;
+                flex-direction: row; width: 100%; justify-content: space-around;
             }
             .nav-item { width: auto; height: 70px; padding: 5px 10px; flex: 1; }
             .main-content { padding: 30px 20px; height: auto; }
@@ -268,18 +286,18 @@
                     <span class="label">Log Out</span>
                 </div>
            
-                <div class="nav-item" data-page="home" onclick="window.location.href='mainPage.html'">
+                <div class="nav-item" data-page="home" onclick="window.location.href='mainPage.php'">
                     <div class="icon">
                         <img src="Aset/homeBtn.svg" alt="Home">
                     </div>
                     <span class="label">Home</span>
                 </div>
 
-                <div class="nav-item" data-page="dashboard" onclick="window.location.href='dashboard.html'">
+                <div class="nav-item" data-page="dashboard" onclick="window.location.href='dashboard.php'">
                     <div class="icon">
                         <img src="Aset/summaryBtn.svg" alt="Summary">
                     </div>
-                    <span class="label">Dashboard</span>
+                    <span class="label">Information</span>
                 </div>
         
                 <div class="nav-item active" data-page="announcement">
@@ -295,20 +313,25 @@
             <h1>Global Announcement</h1>
             <div class="subtitle">Broadcast important system-wide headers, maintenance alerts, or welcoming updates here:</div>
 
-            <div class="announcement-box">
+            <?php if (!empty($successMessage)): ?>
+                <div class="alert-success"><?php echo htmlspecialchars($successMessage); ?></div>
+            <?php endif; ?>
+
+            <form action="announcement.php" method="POST" class="announcement-box">
                 <div class="input-container">
                     <textarea 
                         class="announcement-input" 
+                        name="announcementText" 
                         id="announcementText" 
-                        placeholder="Type your system message here...">&ldquo;Welcome to our website&rdquo;</textarea>
+                        placeholder="Type your system message here..."><?php echo htmlspecialchars($currentAnnouncement); ?></textarea>
                 </div>
                 
                 <div class="action-row">
-                    <button class="btn-send" onclick="broadcastAnnouncement()">
+                    <button type="submit" class="btn-send">
                         <span class="icon-send-arrow">➔</span> Send to All Users
                     </button>
                 </div>
-            </div>
+            </form>
         </main>
 
     </div>
@@ -318,18 +341,6 @@
             if (confirm("Are you sure you want to logout?")) {
                 window.location.href = "logIn.html";
             }
-        }
-
-        function broadcastAnnouncement() {
-            const message = document.getElementById('announcementText').value.trim();
-            
-            if (message === "") {
-                alert("Please type a valid announcement message before broadcasting.");
-                return;
-            }
-            
-            // Simulates an immediate operational live database broadcast alert
-            alert(`Success! The announcement has been sent to all system accounts:\n\n${message}`);
         }
     </script>
 </body>
