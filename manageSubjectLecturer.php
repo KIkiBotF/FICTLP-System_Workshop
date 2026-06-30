@@ -12,7 +12,7 @@
 </head>
 
 <body>
-<?php include("sidebarStudent.php") ?>;
+<?php include("sidebar.php") ?>;
     <main class="main-content">
         <div class="header-container">
             <h1>Manage Subject</h1>
