@@ -83,3 +83,57 @@ body {
     background: none;
     border: none;
 }
+
+#manageSubjectIcon{
+    width: 50px;
+    height: 50px;
+}
+@media(max-width:780px){
+    
+    .main-content{
+        .main-content{
+            padding-top: 20px;
+        }
+        .header-container h1{
+            font-size: 2rem;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .card-container{
+            width: 95%;
+        }
+        .card-actions{
+            gap: 10px;
+        }
+    }
+    #logOutIcon{
+        width: 25px !important;
+        height: 25px !important;
+    }
+    .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start; /* Pushes everything to align from the top */
+        padding: 8px 5px 0 5px; /* Add a little top padding so icons don't hit the ceiling */
+        flex: 1;
+        gap: 4px; /* Creates a uniform space between ALL icons and their text */
+    }
+    #manageSubjectBox span {
+        margin-top: 0 !important; 
+    }
+    .nav-item img, .icon-placeholder {
+        width: 30px !important;
+        height: 30px !important;
+        margin: 0 !important; /* Prevents individual icons from shifting */
+        padding: 0 !important;
+        object-fit: contain; /* Ensures the SVG shapes don't distort */
+    }
+    
+    /* 4. Ensure text aligns uniformly */
+    .nav-item span {
+        text-align: center;
+        line-height: 1.1;
+        margin: 0 !important;
+    }
+}

@@ -6,9 +6,7 @@
     <title>Sidebar Lecturer</title>
 
     <style>
-/* ==========================================================================
-   1. LAYOUT SIDEBAR (DESKTOP) - DIBETULKAN UNTUK KESAN BORDER SHADOW SEMPURNA
-   ========================================================================== */
+
 .sidebar {
     display: flex;
     flex-direction: column;
@@ -74,6 +72,61 @@
 /* Larasan khas asal untuk menu Manage Subject desktop */
 #manageSubjectBox span {
     margin-top: -10px;
+
+}
+@media (max-width: 780px) {
+    body {
+        display: block !important;
+        padding-bottom: 80px; 
+    }
+    
+    .sidebar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 75px; /* Increased slightly to give the larger icons room */
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center; /* Ensures items don't stretch */
+        padding-top: 0;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+    
+    .nav-item {
+        padding: 5px; /* Reduced padding to fit smaller screens better */
+        flex: 1; /* Distributes space evenly across all 6 buttons */
+    }
+    
+    /* Make all icons uniformly larger */
+    .icon-placeholder, .nav-item img {
+        width: 32px !important;
+        height: 32px !important;
+        margin-bottom: 3px; /* Small gap between icon and text */
+    }
+    
+    /* Make text smaller and handle long text like "Add new subject" */
+    .nav-item span {
+        font-size: 10px !important;
+        line-height: 1.1;
+        display: block;
+    }
+
+    /* Reset the desktop negative margin so it aligns with other text */
+    #manageSubjectBox span {
+        margin-top: 0;
+    }
+    #manageSubjectIcon{
+        width: 50px !important;
+        height: 50px !important;
+    }
+    #manageSubjectBox{
+        margin-top: 23px;
+    }
+    #manageSubjectBox span{
+        background-color: #006699;
+    }
 }
 
 /* ==========================================================================
@@ -132,15 +185,16 @@
             <span>Log Out</span>
         </a>
 
-        <a href="mainPageLecturer.php" class="nav-item">
+        <a href="mainPage.php" class="nav-item">
             <img src="Aset/homeBtn.svg" alt="Home" class="icon-placeholder" id="homeIcon">
             <span>Home</span>
         </a>
 
-        <a href="manageSubjectLecturer.php" class="nav-item" id="manageSubjectBox">
-            <img id="manageSubjectIcon" src="Aset/manageSubjectBtn.svg" alt="Manage Subject" class="icon-placeholder">
-            <span>Manage Subject</span>
-        </a>
+<a href="manageSubjectLecturer.php" class="nav-item" id="manageSubjectBox">
+    <!-- Removed inline style="width: 50px; height: 50px;" -->
+    <img id="manageSubjectIcon" src="Aset/manageSubjectBtn.svg" alt="Manage Subject" class="icon-placeholder">
+    <span>Manage Subject</span>
+</a>
 
         <a href="reportLecturer.php" class="nav-item">
             <img src="Aset/reportBtn.svg" alt="Report" class="icon-placeholder">
