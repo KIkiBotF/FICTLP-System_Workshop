@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,7 +12,7 @@
 </head>
 
 <body>
-<?php include("sidebar.php") ?>;
+<?php include("sidebarStudent.php") ?>;
     <main class="main-content">
         <div class="header-container">
             <h1>Manage Subject</h1>
