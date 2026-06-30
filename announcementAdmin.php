@@ -1,21 +1,32 @@
 <?php
 session_start();
 
-// Define the file where the global announcement will be saved
-$announcementFile = 'announcement.txt';
+// Define the PHP data file path
+$announcementDataFile = 'announcement_data.php';
 
 // Handle form submission to update the announcement
 $successMessage = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['announcementText'])) {
     $message = trim($_POST['announcementText']);
     if (!empty($message)) {
-        file_put_contents($announcementFile, $message);
-        $successMessage = "Success! The announcement has been updated.";
+        // Clean up text quotes to prevent breaking the injected PHP variable syntax
+        $safeMessage = addslashes($message);
+        
+        // Construct the PHP file content dynamically as valid code
+        $phpCode = "<?php\n\$currentAnnouncement = \"" . $safeMessage . "\";\n?>";
+        
+        // Save directly as an executable PHP configuration file
+        file_put_contents($announcementDataFile, $phpCode);
+        $successMessage = "Success! The announcement has been updated directly.";
     }
 }
 
-// Read current announcement or set a fallback default
-$currentAnnouncement = file_exists($announcementFile) ? file_get_contents($announcementFile) : "Welcome to our website";
+// Include the generated data file if it exists to read the current live message
+if (file_exists($announcementDataFile)) {
+    include($announcementDataFile);
+} else {
+    $currentAnnouncement = "Welcome to our website";
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,13 +48,13 @@ $currentAnnouncement = file_exists($announcementFile) ? file_get_contents($annou
                 <div class="alert-success"><?php echo htmlspecialchars($successMessage); ?></div>
             <?php endif; ?>
 
-            <form action="announcement.php" method="POST" class="announcement-box">
+            <form action="announcementAdmin.php" method="POST" class="announcement-box">
                 <div class="input-container">
                     <textarea
                         class="announcement-input" 
                         name="announcementText" 
                         id="announcementText" 
-                        placeholder="Type your system message here..."><?php echo htmlspecialchars($currentAnnouncement); ?></textarea>
+                        placeholder="Type your system message here..."><?php echo htmlspecialchars(stripslashes($currentAnnouncement)); ?></textarea>
                 </div>
                 
                 <div class="action-row">
