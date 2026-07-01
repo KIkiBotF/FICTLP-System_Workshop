@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     if (isset($_POST['loginBtn'])) {
-        $stmt = $conn->prepare("SELECT Password, Role FROM user WHERE Email = ?");
+        $stmt = $conn->prepare("SELECT Password, Name, Role FROM user WHERE Email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -32,6 +32,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             // Verify the password
             if ($password === $row['Password']) {
+                $_SESSION['username'] = $row['Name'];
                 
                 if ($password === '123456') {
                     $_SESSION['reset_email'] = $email;
