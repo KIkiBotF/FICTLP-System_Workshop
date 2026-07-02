@@ -12,64 +12,63 @@ $password = "Student@123";
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     header('Content-Type: application/json');
     
-    // --- ACTION: DELETE ---
-    if ($_POST['action'] === 'delete') {
-        $studentId = $_POST['student_id'] ?? '';
-        try {
-            $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
-            // MATCHED TO DATABASE: table 'user', column 'userID'
-            $stmt = $conn->prepare("DELETE FROM user WHERE userID = :student_id AND Role = 'Student'");
-            $stmt->bindParam(':student_id', $studentId, PDO::PARAM_STR);
-            $stmt->execute();
-            
-            echo json_encode(['success' => true]);
-            exit;
-        } catch(PDOException $e) {
-            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
-            exit;
+// ACTION: DELETE
+        if ($_POST['action'] === 'delete') {
+            $studentId = $_POST['student_id'] ?? '';
+            try {
+                $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
+                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                
+                // FIXED: Added =, and removed spaces in :student_id
+                $stmt = $conn->prepare("DELETE FROM user WHERE userID = :student_id AND Role = 'Student'");
+                $stmt->bindParam(':student_id', $studentId, PDO::PARAM_STR);
+                $stmt->execute();
+                
+                echo json_encode(['success' => true]);
+                exit;
+            } catch (PDOException $e) {
+                echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+                exit;
+            }
         }
-    }
-    
-    // --- ACTION: UPDATE ---
-    if ($_POST['action'] === 'update') {
-        $oldId = $_POST['old_id'] ?? '';
-        $newId = $_POST['new_id'] ?? '';
-        $newName = $_POST['new_name'] ?? '';
-        
-        try {
-            $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
-            // MATCHED TO DATABASE: table 'user', columns 'userID', 'Name'
-            $stmt = $conn->prepare("UPDATE user SET userID = :new_id, Name = :new_name WHERE userID = :old_id AND Role = 'Student'");
-            $stmt->bindParam(':new_id', $newId, PDO::PARAM_STR);
-            $stmt->bindParam(':new_name', $newName, PDO::PARAM_STR);
-            $stmt->bindParam(':old_id', $oldId, PDO::PARAM_STR);
-            $stmt->execute();
-            
-            echo json_encode(['success' => true]);
-            exit;
-        } catch(PDOException $e) {
-            echo json_encode(['success' => false, 'error' => $e->getMessage()]);
-            exit;
-        }
-    }
-}
 
-// --- MAIN FETCH DATA FOR THE VIEW ROSTER ---
-try {
-    $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    // MATCHED TO DATABASE: Selected userID, Name, user_status from table 'user' filtering for Role='Student'
-    $stmt = $conn->prepare("SELECT userID AS student_id, Name AS name, user_status AS status FROM user WHERE Role = 'Student'");
-    $stmt->execute();
-    $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch(PDOException $e) {
-    die("Database Connection Failed: " . $e->getMessage());
-}
+        // ACTION: UPDATE
+        if ($_POST['action'] === 'update') {
+            $oldId = $_POST['old_id'] ?? '';
+            $newId = $_POST['new_id'] ?? '';
+            $newName = $_POST['new_name'] ?? '';
+            try {
+                $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
+                $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                
+                // FIXED: Added missing = signs and removed spaces in variables!
+                $stmt = $conn->prepare("UPDATE user SET userID = :new_id, Name = :new_name WHERE userID = :old_id AND Role = 'Student'");
+                $stmt->bindParam(':new_id', $newId, PDO::PARAM_STR);
+                $stmt->bindParam(':new_name', $newName, PDO::PARAM_STR);
+                $stmt->bindParam(':old_id', $oldId, PDO::PARAM_STR);
+                $stmt->execute();
+                
+                echo json_encode(['success' => true]);
+                exit;
+            } catch (PDOException $e) {
+                echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+                exit;
+            }
+        }
+    }
+
+    // MAIN FETCH DATA FOR THE VIEW ROSTER
+    try {
+        $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
+        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
+        // FIXED: Changed user status to verification_Status to match phpMyAdmin!
+        $stmt = $conn->prepare("SELECT userID AS student_id, Name AS name, verification_Status AS status FROM user WHERE Role = 'Student'");
+        $stmt->execute();
+        $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        die("Database Connection Failed: " . $e->getMessage());
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -239,8 +238,8 @@ try {
             formData.append('old_id', oldId);
             formData.append('new_id', newId);
             formData.append('new_name', newName);
-
-            fetch('manageStudents.php', {
+            
+            fetch('manageStudentsAdmin.php', {
                 method: 'POST',
                 body: formData
             })
@@ -279,7 +278,7 @@ try {
                 formData.append('action', 'delete');
                 formData.append('student_id', studentId);
 
-                fetch('manageStudents.php', {
+                fetch('manageStudentsAdmin.php', {
                     method: 'POST',
                     body: formData
                 })

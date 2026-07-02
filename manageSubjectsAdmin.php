@@ -1,14 +1,10 @@
 <?php
-// --- DATABASE CONFIGURATION ---
 $host = "100.81.48.34";
 $port = "3307";          
 $dbname = "fictlp db";  
 $username = "bubustailo"; 
 $password = "Student@123";
 
-// ==========================================
-// HANDLES INLINE POST ACTIONS (DELETE / UPDATE)
-// ==========================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     header('Content-Type: application/json');
     
@@ -18,9 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         try {
             $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
-            // MATCHED TO DATABASE: table 'subject', column 'Subject_Code'
-            $stmt = $conn->prepare("DELETE FROM subject WHERE Subject_Code = :subject_code");
+
+    $stmt = $conn->prepare("DELETE FROM subject WHERE Subject_Code = :subject_code");
             $stmt->bindParam(':subject_code', $subjectCode, PDO::PARAM_STR);
             $stmt->execute();
             
@@ -43,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
             // MATCHED TO DATABASE: table 'subject', columns 'Subject_Code', 'Title'
-            $stmt = $conn->prepare("UPDATE subject SET Subject_Code = :new_code, Title = :new_title WHERE Subject_Code = :old_code");
+          $stmt = $conn->prepare("UPDATE subject SET Subject_Code = :new_code, Title = :new_title WHERE Subject_Code = :old_code");
             $stmt->bindParam(':new_code', $newCode, PDO::PARAM_STR);
             $stmt->bindParam(':new_title', $newTitle, PDO::PARAM_STR);
             $stmt->bindParam(':old_code', $oldCode, PDO::PARAM_STR);
@@ -65,12 +60,13 @@ try {
     
     // Changed to COUNT(*) to accurately count how many rows exist per subject code
     $query = "SELECT 
-                Subject_Code AS subject_code, 
-                Title AS title,
-                COUNT(*) AS enrolled 
-              FROM subject 
-              GROUP BY Subject_Code, Title";
-              
+        s.Subject_Code AS subject_code, 
+        s.Title AS title, 
+        COUNT(e.userID) AS enrolled
+    FROM subject s
+    LEFT JOIN enrollment e ON s.Subject_Code = e.Subject_Code
+    GROUP BY s.Subject_Code, s.Title";
+
     $stmt = $conn->prepare($query);
     $stmt->execute();
     $subjects = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -243,7 +239,7 @@ try {
             formData.append('new_code', newCode);
             formData.append('new_title', newName);
 
-            fetch('manageSubjects.php', {
+            fetch('manageSubjectsAdmin.php', {
                 method: 'POST',
                 body: formData
             })
@@ -282,7 +278,7 @@ try {
                 formData.append('action', 'delete');
                 formData.append('subject_code', subjectCode);
 
-                fetch('manageSubjects.php', {
+                fetch('manageSubjectsAdmin.php', {
                     method: 'POST',
                     body: formData
                 })
