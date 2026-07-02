@@ -1,0 +1,140 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif; 
+}
+
+body {
+    background-color: #bbb0b0; 
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('Aset/MainBG.png'); 
+    background-size: cover;         
+    background-position: center;  
+    background-repeat: no-repeat; 
+    opacity: 1; 
+    z-index: -1;                  
+}
+
+.logout-wrapper {
+    position: absolute;
+    top: 25px;
+    left: 25px;
+    z-index: 10;
+}
+
+.logout-action {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+}
+
+.icon-exit {
+    width: 24px; 
+    height: 24px;
+    margin-bottom: 4px;
+    stroke: #ffffff; 
+}
+
+.logout-action:hover .icon-exit {
+    filter: invert(74%) sepia(59%) saturate(1915%) hue-rotate(177deg) brightness(101%) contrast(98%);
+}
+
+.logout-text {
+    font-size: 13px;
+    font-weight: bold;
+    color: #000000; 
+    padding-bottom: 1px;
+    transition: color 0.2s;
+}
+
+.logout-action:hover .logout-text {
+    color: #38bdf8; 
+}
+
+.center-content {
+    text-align: center;
+    width: 100%;
+    max-width: 600px; 
+    padding: 0 0 50px 0; 
+    background-color: rgba(15, 23, 42, 0.8); 
+    backdrop-filter: blur(12px); 
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.08); 
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
+    z-index: 1;
+    overflow: hidden; 
+}
+
+/* ==========================================
+   4. KOTAK BANNER TAJUK (GAYA BARU: SLEEK & SLIM)
+   ========================================== */
+.grey-banner {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed); 
+    padding: 14px 0;          
+    width: 100%;              
+    margin-bottom: 45px;      
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.grey-banner h1 {
+    font-size: 26px;          
+    font-weight: 800;
+    color: #ffffff; 
+    letter-spacing: 2px;      
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+
+.msg-welcome {
+    font-size: 32px;
+    font-weight: bold;
+    color: #ffffff; 
+    margin-bottom: 8px;
+}
+
+.msg-user {
+    font-size: 15px;
+    color: #94a3b8; 
+    margin-bottom: 40px;
+}
+
+.btn-subject {
+    display: inline-block;
+    text-decoration: none;
+    background: linear-gradient(135deg, #06b6d4, #3b82f6); 
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 14px 80px;
+    border: none; 
+    border-radius: 12px; 
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(6, 182, 212, 0.25);
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-subject:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(6, 182, 212, 0.4);
+}
+
+.btn-subject:active {
+    transform: translateY(0);
+}
