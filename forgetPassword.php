@@ -8,7 +8,7 @@ require 'PHPMailer/PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/PHPMailer/src/SMTP.php';
 
 $host = "100.81.48.34";
-$port = "3307";          
+$port = "3307"; 
 $dbname = "fictlp db";  
 $username = "bubustailo"; 
 $password = "Student@123";
