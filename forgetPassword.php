@@ -114,6 +114,7 @@ $conn->close();
 </head>
 <body>
     <div class="wrapper">
+
         <div class="title-container">
             <div class="logo-container">
                 <img src="Aset/LogoUtem.png" alt="Logo UTeM" class="login-logo-utem">
@@ -122,6 +123,20 @@ $conn->close();
             <h1>FICTLP SYSTEM</h1>
             <h3>Forgot Password</h3>
         </div>
+
+        <div class="header">
+            <header>
+                <h1>Forgot Password?</h1>
+            </header>
+            <h2>Enter your registered email address to<br>receive password recovery instruction</h2>
+        </div>
+
+        <div class="email-container">
+            <form>
+                <label for="emailInput">Email</label>
+                <input type="email" id="emailInput" required>
+                <button type="submit" name="recovery">Send OTP</button>
+            </form>
 
         <div class="logInForm-container">
             <p style="text-align: center; margin-bottom: 25px; color: #333; font-size: 14px; line-height: 1.5;">
@@ -133,7 +148,12 @@ $conn->close();
                     <input type="email" id="email" name="email" placeholder="example@student.utem.edu.my" required autocomplete="off">
                 </div>
                 <div class="button-container">
+
                     <button type="submit">Request OTP</button>
+
+                    <button class="btn-primary" type="button" name="recovery">Send Recovery Instruction</button>
+                    <a class="btn-link" href="index.php">Back to Login Page</a>
+                    
                 </div>
             </form>
         </div>
