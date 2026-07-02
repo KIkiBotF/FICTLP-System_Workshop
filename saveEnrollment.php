@@ -10,7 +10,15 @@ $password = "Student@123";
 
 $conn = new mysqli($host, $username, $password, $dbname, $port);
 
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!isset($_POST['subjectCode']) || trim($_POST['subjectCode']) === '') {
+        die("error: subjectCode missing");
+    }
+
     $email = $_SESSION['email'] ?? '';
     $subjectCode = mysqli_real_escape_string($conn, $_POST['subjectCode']);
 
@@ -30,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($conn->query($sql)) {
         echo "success";
     } else {
-        echo "error";
+        echo "error: " . $conn->error;
     }
 }
 ?>

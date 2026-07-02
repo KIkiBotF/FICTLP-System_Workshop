@@ -35,9 +35,9 @@
   <script>
     // --- KEKALKAN SEGALA LOGIK JAVASCRIPT ASAL KAU DEKAT SINI ---
     const courseData = {
-      cpp: { name: "C++ Programming", chapters: ["Basic Syntax & I/O", "Control Structures & Loops", "Functions & Scope", "Arrays & Strings", "Pointers & References"] },
-      db: { name: "Database Systems", chapters: ["Introduction to Databases & DBMS", "Entity-Relationship (ER) Modeling", "Relational Model & Constraints", "Relational Database Normalization", "Structured Query Language (SQL)"] },
-      coa: { name: "Computer Organization and Architecture", chapters: ["Introduction & Von Neumann Architecture", "Computer Evolution & Performance Metrics", "Memory Hierarchy & Cache Memory", "Input/Output Organization & Interfacing", "Pipeline Architecture & Instruction Sets"] }
+      cpp: { name: "C++ Programming", chapters: ["Basic Syntax & I/O", "Control Structures & Loops", "Functions & Scope"] },
+      db: { name: "Database Systems", chapters: ["Introduction to Databases & DBMS", "Entity-Relationship (ER) Modeling", "Structured Query Language (SQL)"] },
+      coa: { name: "Computer Organization and Architecture", chapters: ["Introduction & Von Neumann Architecture", "Computer Evolution & Performance Metrics", "Pipeline Architecture & Instruction Sets"] }
     };
     const currentSubjectKey = localStorage.getItem('selectedQuizSubject') || 'db';
     const currentCourse = courseData[currentSubjectKey];

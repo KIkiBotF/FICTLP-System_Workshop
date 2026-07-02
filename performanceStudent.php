@@ -23,19 +23,19 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error); 
 }
 
-// 3. Ambil data prestasi kuiz pelajar dari database (Ditambah topic5)
+// 3. Ambil data prestasi kuiz pelajar dari database (3 topic sahaja ikut jumlah chapter semasa)
 $performance_data = [
     'cpp' => [
-        'topic1' => 0, 'topic2' => 0, 'topic3' => 0, 'topic4' => 0, 'topic5' => 0,
-        'details' => ['topic1' => '0/0', 'topic2' => '0/0', 'topic3' => '0/0', 'topic4' => '0/0', 'topic5' => '0/0']
+        'topic1' => 0, 'topic2' => 0, 'topic3' => 0,
+        'details' => ['topic1' => '0%', 'topic2' => '0%', 'topic3' => '0%']
     ],
     'db' => [
-        'topic1' => 0, 'topic2' => 0, 'topic3' => 0, 'topic4' => 0, 'topic5' => 0,
-        'details' => ['topic1' => '0/0', 'topic2' => '0/0', 'topic3' => '0/0', 'topic4' => '0/0', 'topic5' => '0/0']
+        'topic1' => 0, 'topic2' => 0, 'topic3' => 0,
+        'details' => ['topic1' => '0%', 'topic2' => '0%', 'topic3' => '0%']
     ],
     'coa' => [
-        'topic1' => 0, 'topic2' => 0, 'topic3' => 0, 'topic4' => 0, 'topic5' => 0,
-        'details' => ['topic1' => '0/0', 'topic2' => '0/0', 'topic3' => '0/0', 'topic4' => '0/0', 'topic5' => '0/0']
+        'topic1' => 0, 'topic2' => 0, 'topic3' => 0,
+        'details' => ['topic1' => '0%', 'topic2' => '0%', 'topic3' => '0%']
     ]
 ];
 
@@ -52,32 +52,42 @@ if ($stmt) {
     $result = $stmt->get_result();
     
     while ($row = $result->fetch_assoc()) {
-        $subject = strtolower($row['Subject_Code']); // 'cpp', 'db', atau 'coa'
-        $quiz_title = $row['Quiz_title'];           // Contoh: "Basics & Data Types"
+        // FIX: Subject_Code dalam DB adalah kod PANJANG (DITP2913, DITP1113,
+        // DITS1133), bukan 'cpp'/'db'/'coa'. Perlu mapping dulu sebelum
+        // digunakan sebagai key array $performance_data.
+        $subjectCodeMap = [
+            'ditp2913' => 'db',
+            'ditp1113' => 'cpp',
+            'dits1133' => 'coa'
+        ];
+        $rawSubjectCode = strtolower($row['Subject_Code']);
+        $subject = $subjectCodeMap[$rawSubjectCode] ?? $rawSubjectCode;
+
+        $quiz_title = $row['Quiz_title'];           // Contoh: "CH01 DATABASE" / "Chapter 1: Introduction to C++"
         $grade = intval($row['Grade']);
         $passing_mark = intval($row['Passing_Mark']) > 0 ? intval($row['Passing_Mark']) : 100; // Elakkan pembahagian dengan 0
         
-        // Pemetaan tajuk kuiz kepada ID Elemen (topic1 - topic5)
+        // FIX: Pemetaan tajuk kuiz kepada ID Elemen (topic1 - topic5) guna
+        // regex supaya berfungsi untuk semua format tajuk sedia ada
+        // ("CH01 DATABASE", "Chapter 1: ...", "Topic 01: ...")
         $topic_key = '';
-        if (strpos($quiz_title, 'Basics') !== false || strpos($quiz_title, 'Topic 01') !== false) {
-            $topic_key = 'topic1';
-        } elseif (strpos($quiz_title, 'Control') !== false || strpos($quiz_title, 'Topic 02') !== false) {
-            $topic_key = 'topic2';
-        } elseif (strpos($quiz_title, 'Loops') !== false || strpos($quiz_title, 'Topic 03') !== false || strpos($quiz_title, 'Model') !== false || strpos($quiz_title, 'Hierarchy') !== false) {
-            $topic_key = 'topic3';
-        } elseif (strpos($quiz_title, 'Functions') !== false || strpos($quiz_title, 'Topic 04') !== false || strpos($quiz_title, 'Normalization') !== false || strpos($quiz_title, 'Input/Output') !== false) {
-            $topic_key = 'topic4';
-        } elseif (strpos($quiz_title, 'Arrays') !== false || strpos($quiz_title, 'Topic 05') !== false || strpos($quiz_title, 'SQL') !== false || strpos($quiz_title, 'Pipelining') !== false) {
-            $topic_key = 'topic5';
+        if (preg_match('/(?:CH|Chapter|Topic)\s*0?(\d)/i', $quiz_title, $m)) {
+            $chapterDigit = intval($m[1]);
+            if ($chapterDigit >= 1 && $chapterDigit <= 3) {
+                $topic_key = 'topic' . $chapterDigit;
+            }
         }
         
         // Masukkan peratusan ke dalam array prestasi jika subjek wujud
         if ($topic_key && isset($performance_data[$subject])) {
-            $percentage = round(($grade / $passing_mark) * 100);
-            if ($percentage > 100) $percentage = 100; // Hadkan maksimum 100%
+            // FIX: Grade dalam table `score` SUDAH dalam bentuk peratusan
+            // (0-100), jadi TIDAK perlu dibahagi dengan Passing_Mark lagi.
+            // Passing_Mark cuma ambang lulus (contoh 70 = perlu 70%), bukan
+            // markah penuh/max.
+            $percentage = $grade > 100 ? 100 : $grade; // Hadkan maksimum 100%
             
             $performance_data[$subject][$topic_key] = $percentage;
-            $performance_data[$subject]['details'][$topic_key] = "$grade/$passing_mark";
+            $performance_data[$subject]['details'][$topic_key] = "$grade%";
         }
     }
     $stmt->close();
@@ -136,22 +146,6 @@ $conn->close();
                     </div>
                     <span class="percentage-value" id="text-topic3">0%</span>
                 </div>
-
-                <div class="topic-row" id="row-topic4">
-                    <span class="topic-title" id="title-topic4">Topic 04</span>
-                    <div class="progress-bar-wrapper">
-                        <div class="bar-fill" id="fill-topic4" style="width: 0%;"></div>
-                    </div>
-                    <span class="percentage-value" id="text-topic4">0%</span>
-                </div>
-
-                <div class="topic-row" id="row-topic5">
-                    <span class="topic-title" id="title-topic5">Topic 05</span>
-                    <div class="progress-bar-wrapper">
-                        <div class="bar-fill" id="fill-topic5" style="width: 0%;"></div>
-                    </div>
-                    <span class="percentage-value" id="text-topic5">0%</span>
-                </div>
             </div>
         </div>
     </main>
@@ -165,23 +159,17 @@ $conn->close();
             'cpp': {
                 'topic1': "Topic 01: Basics & Data Types",
                 'topic2': "Topic 02: Control Structures",
-                'topic3': "Topic 03: Loops",
-                'topic4': "Topic 04: Functions",
-                'topic5': "Topic 05: Arrays & Pointers"
+                'topic3': "Topic 03: Loops"
             },
             'db': {
                 'topic1': "Topic 01: Introduction to Database",
                 'topic2': "Topic 02: Entity-Relationship Diagram (ERD)",
-                'topic3': "Topic 03: Relational Model & Constraints",
-                'topic4': "Topic 04: Normalization",
-                'topic5': "Topic 05: SQL Structured Query Language"
+                'topic3': "Topic 03: Relational Model & Constraints"
             },
             'coa': {
                 'topic1': "Topic 01: Number Systems & Logic Gates",
                 'topic2': "Topic 02: Central Processing Unit (CPU)",
-                'topic3': "Topic 03: Memory Hierarchy & Cache",
-                'topic4': "Topic 04: Input/Output (I/O) Organization",
-                'topic5': "Topic 05: Pipelining & Instruction Sets"
+                'topic3': "Topic 03: Memory Hierarchy & Cache"
             }
         };
 
@@ -191,15 +179,15 @@ $conn->close();
             const currentSubjectTitles = subjectTopics[selectedSubject];
 
             if (currentData && currentSubjectTitles) {
-                // Gelung pemetaan dialirkan sepenuhnya dari topic1 sehingga topic5
-                const topics = ['topic1', 'topic2', 'topic3', 'topic4', 'topic5'];
+                // Gelung pemetaan dialirkan dari topic1 sehingga topic3 (3 chapter sahaja)
+                const topics = ['topic1', 'topic2', 'topic3'];
                 
                 topics.forEach(topic => {
                     const percentage = currentData[topic] || 0;
-                    const scoreDetail = currentData['details'][topic] || '0/0';
+                    const scoreDetail = currentData['details'][topic] || '0%';
                     const baseTitle = currentSubjectTitles[topic];
                     
-                    if (scoreDetail !== '0/0') {
+                    if (scoreDetail !== '0%') {
                         document.getElementById(`title-${topic}`).innerText = `${baseTitle} (${scoreDetail})`;
                     } else {
                         document.getElementById(`title-${topic}`).innerText = baseTitle;

@@ -81,8 +81,10 @@ $displaySubject = strtoupper($subjectKey) === 'CPP' ? 'C++' : htmlspecialchars($
             
             let qId = questions[index].Question_ID;
             let isAnswered = studentAnswers[qId] ? 'correct' : ''; 
+            let tickIcon = studentAnswers[qId] ? '✔' : ''; // Masukkan icon tick
             
-            row.innerHTML = `<span>Soalan ${index + 1}</span><div class="status-circle ${isAnswered}" id="status-${index}"></div>`;
+            row.className = "nav-item-border"; 
+            row.innerHTML = `<span>Question ${index + 1}</span><div class="status-circle ${isAnswered}" id="status-${index}">${tickIcon}</div>`;
             navContainer.appendChild(row);
         });
     }
@@ -116,38 +118,54 @@ $displaySubject = strtoupper($subjectKey) === 'CPP' ? 'C++' : htmlspecialchars($
         }
     }
 
-    function selectOpt(opt) {
+     function selectOpt(opt) {
         let qId = questions[currentIdx].Question_ID;
         studentAnswers[qId] = opt;
-        document.getElementById(`status-${currentIdx}`).className = "status-circle correct";
+        
+        // Update DOM terus untuk masukkan kelas dan icon tick
+        let statusEl = document.getElementById(`status-${currentIdx}`);
+        statusEl.className = "status-circle correct";
+        statusEl.innerHTML = "✔"; 
+        
         loadQuestion(currentIdx);
     }
 
     function clearSelection() {
         let qId = questions[currentIdx].Question_ID;
         delete studentAnswers[qId];
-        document.getElementById(`status-${currentIdx}`).className = "status-circle";
+        
+        // Buang kelas dan icon tick
+        let statusEl = document.getElementById(`status-${currentIdx}`);
+        statusEl.className = "status-circle";
+        statusEl.innerHTML = ""; 
+        
         loadQuestion(currentIdx);
     }
+    
 
     function handleAction() {
         if(currentIdx < questions.length - 1) {
+            // Jika soalan belum habis, gerak ke soalan seterusnya
             loadQuestion(currentIdx + 1);
         } else {
-            // Selesai kuiz, hantar jawapan, quiz_id, dan nama subjek sekali
+            // 2. Jika sudah soalan terakhir, jalankan fungsi SUBMIT ini:
             fetch('SubmitQuiz.php', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
-                    answers: studentAnswers, 
-                    quiz_id: chapterId,
-                    subject: subjectKey
+                    answers: studentAnswers, // Object jawapan pelajar
+                    quiz_id: chapterId,      // ID Bab
+                    subject: subjectKey      // Kod Subjek (e.g., 'CPP' atau 'db')
                 })
             })
-            .then(res => res.text())
+            .then(res => res.text()) // Tukar respons dari PHP kepada teks
             .then(msg => { 
-                alert(msg); 
-                window.location.href='dashboard.php'; 
+                alert(msg); // Paparkan mesej "Tahniah! Markah anda..."
+                window.location.href = 'ChapterStudent.php';
+            })
+            .catch(error => {
+                console.error('Ralat:', error);
+                alert('Gagal menghantar kuiz.');
             });
         }
     }

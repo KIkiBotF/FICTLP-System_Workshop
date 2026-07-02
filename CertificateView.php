@@ -1,295 +1,308 @@
 <?php
-// 1. Mulakan sesi
 session_start();
 
-// Semak jika pelajar sudah login
-if (!isset($_SESSION['userID'])) { // Mengikut nama ruangan 'userID' anda
+if (!isset($_SESSION['userID'])) {
     header("Location: index.php");
     exit();
 }
+
 $current_user = $_SESSION['userID'];
+$studentName = isset($_SESSION['name']) ? $_SESSION['name'] : 'Student';
 
-// Ambil Kod Subjek daripada URL (Contoh: certificate-view.php?subject_code=BIT2113)
-if (!isset($_GET['subject_code'])) {
-    die("Ralat: Kod Subjek tidak dinyatakan.");
-}
-$subject_code = $_GET['subject_code']; 
-
-// 2. Sambungan ke Database
 $host = "100.81.48.34";
-$port = "3307";          
-$dbname = "fictlp db";  
-$username = "bubustailo"; 
+$port = "3307";
+$dbname = "fictlp db";
+$username = "bubustailo";
 $password = "Student@123";
 
 $conn = new mysqli($host, $username, $password, $dbname, $port);
 
 if ($conn->connect_error) {
-    die("Sambungan database gagal: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// 3. LOGIK SEMAKAN: Semak jika rekod pencapaian wujud dalam table achievement
-$sql_check = "SELECT Date_Issued FROM achievement WHERE userID = ? AND Subject_Code = ?";
-$stmt = $conn->prepare($sql_check);
-$stmt->bind_param("ss", $current_user, $subject_code);
+// Senarai subjek yang dibenarkan (mengelak sebarang input sewenang-wenangnya)
+$subjectDisplayNames = [
+    'DITP1113' => 'C++ Programming',
+    'DITS1133' => 'Computer Organization and Architecture',
+    'DITP2913'  => 'Database',
+];
+
+$subjectCode = isset($_GET['subject_code']) ? trim($_GET['subject_code']) : '';
+
+if (!array_key_exists($subjectCode, $subjectDisplayNames)) {
+    die("Sijil tidak sah.");
+}
+
+// SAHKAN student ini MEMANG telah unlock achievement untuk subjek ini
+// (elak sesiapa buka terus guna URL certificate-view.php?subject_code=XXX
+// tanpa pernah lulus semua chapter subjek berkenaan)
+$stmt = $conn->prepare("SELECT * FROM achievement WHERE userID = ? AND Subject_Code = ?");
+$stmt->bind_param("ss", $current_user, $subjectCode);
 $stmt->execute();
 $result = $stmt->get_result();
 
-// Jika tiada rekod dalam table achievement, bermakna mereka belum layak dapat sijil
 if ($result->num_rows === 0) {
-    echo "<script>
-            alert('Maaf! Anda belum menamatkan subjek ini atau belum layak menerima sijil.');
-            window.location.href = 'AchievementStudent.php';
-          </script>";
+    // Belum unlock - halang akses, pulangkan ke halaman Achievement
+    header("Location: AchievementStudent.php");
     exit();
 }
 
-// Ambil tarikh asal sijil dikeluarkan daripada database
-$achievement_data = $result->fetch_assoc();
-$date_issued = date('d M Y', strtotime($achievement_data['Date_Issued']));
+$achievementRow = $result->fetch_assoc();
+$stmt->close();
 
-// 4. Ambil Nama Pelajar & Nama Subjek secara dinamik daripada table pelajar & subjek masing-masing
-// (Sila sesuaikan nama table 'user' dan 'subject' mengikut database anda)
-$nama_pelajar = "Noor Iman Nabil"; // Default jika tiada query, digalakkan ambil dari session/table user
-$nama_subjek = $subject_code;     // Default guna kod subjek
-
-// Contoh Query Tambahan (Optional jika anda mahu tarik nama penuh dari table lain):
-
-$sql_details = "SELECT u.fullname, s.subject_name FROM users u, subjects s WHERE u.userID = ? AND s.Subject_Code = ?";
-$stmt_d = $conn->prepare($sql_details);
-$stmt_d->bind_param("ss", $current_user, $subject_code);
-$stmt_d->execute();
-$res_d = $stmt_d->get_result()->fetch_assoc();
-if($res_d) {
-    $nama_pelajar = $res_d['fullname'];
-    $nama_subjek = $res_d['subject_name'];
+// Cuba dapatkan tarikh completion jika column berkenaan wujud dalam table
+// (contoh: Date_Unlocked / Completed_At / created_at) - jika tiada, guna hari ini
+$completionDate = null;
+// Tambah 'Date_Issued' ke dalam senarai supaya ia dikesan
+foreach (['Date_Issued', 'Date_Unlocked', 'Completed_At', 'created_at', 'CompletedAt', 'Date'] as $possibleCol) {
+    if (isset($achievementRow[$possibleCol]) && !empty($achievementRow[$possibleCol])) {
+        $completionDate = date("d F Y", strtotime($achievementRow[$possibleCol]));
+        break;
+    }
+}
+if (!$completionDate) {
+    $completionDate = date("d F Y");
 }
 
-
-$stmt->close();
+$subjectFullName = $subjectDisplayNames[$subjectCode];
 $conn->close();
 ?>
-
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sijil Penghargaan - LMS</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
+    <title>Certificate - <?php echo htmlspecialchars($subjectFullName); ?></title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #fcf0f0;
-            --primary-color: #5c6bcb;
-            --dark: #2d3748;
+            --gold: #d4af37;
+            --navy: #0d47a1;
+            --text-dark: #222;
+            --text-muted: #555;
+            --bg: #fcf0f0;
         }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
-            margin: 0;
-            padding: 0;
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
+            background: var(--bg);
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            padding: 40px 20px;
         }
 
-        .action-container {
-            margin-bottom: 20px;
+        .toolbar {
+            width: 100%;
+            max-width: 900px;
             display: flex;
-            gap: 15px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
         }
 
         .btn {
-            padding: 12px 25px;
+            font-family: 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 600;
+            padding: 10px 22px;
+            border-radius: 30px;
             border: none;
-            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s ease;
             text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
         }
 
-        .btn-download {
-            background-color: var(--primary-color);
-            color: white;
-            box-shadow: 0 4px 12px rgba(92, 107, 203, 0.3);
-        }
-
-        .btn-download:hover {
-            background-color: #4a57a9;
-            transform: translateY(-2px);
-        }
+        .btn:hover { transform: translateY(-2px); }
 
         .btn-back {
-            background-color: #718096;
-            color: white;
+            background: #fff;
+            color: var(--text-dark);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
-        .btn-back:hover {
-            background-color: #4a5568;
+        .btn-print {
+            background: var(--navy);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(13,71,161,0.3);
         }
 
-        /* ── Reka Bentuk Sijil A4 Landskap ── */
-        .certificate-container {
-            width: 842px;  
-            height: 595px; 
-            background: #ffffff;
-            padding: 40px;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            box-sizing: border-box;
-        }
-
-        .cert-border {
-            border: 4px double #d4af37; 
-            height: 100%;
+        /* ── Sijil ── */
+        .certificate {
+            background: #fff;
             width: 100%;
-            padding: 30px;
-            box-sizing: border-box;
+            max-width: 900px;
+            aspect-ratio: 1.414 / 1; /* nisbah A4 landscape */
+            padding: 50px 60px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
+            justify-content: center;
             text-align: center;
-            position: relative;
         }
 
-        .corner-deco {
+        .certificate::before {
+            content: "";
             position: absolute;
-            width: 40px;
-            height: 40px;
-            border: 4px solid #0d47a1;
+            inset: 18px;
+            border: 3px solid var(--gold);
+            border-radius: 6px;
+            pointer-events: none;
         }
-        .top-left { top: 10px; left: 10px; border-right: none; border-bottom: none; }
-        .top-right { top: 10px; right: 10px; border-left: none; border-bottom: none; }
-        .bottom-left { bottom: 10px; left: 10px; border-right: none; border-top: none; }
-        .bottom-right { bottom: 10px; right: 10px; border-left: none; border-top: none; }
 
-        .cert-header {
+        .corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: var(--navy);
+        }
+        .corner.tl { top: 0; left: 0; clip-path: polygon(0 0, 100% 0, 0 100%); }
+        .corner.tr { top: 0; right: 0; clip-path: polygon(100% 0, 100% 100%, 0 0); }
+        .corner.bl { bottom: 0; left: 0; clip-path: polygon(0 100%, 0 0, 100% 100%); }
+        .corner.br { bottom: 0; right: 0; clip-path: polygon(100% 100%, 0 100%, 100% 0); }
+
+        .cert-heading {
             font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            letter-spacing: 2px;
-            color: #1a202c;
-            margin-top: 20px;
+            font-size: 18px;
+            letter-spacing: 3px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 6px;
         }
 
-        .cert-sub {
-            font-size: 14px;
+        .cert-subheading {
+            font-size: 13px;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 36px;
+        }
+
+        .cert-presented-to {
+            font-size: 13px;
+            color: var(--text-muted);
             font-style: italic;
-            color: #718096;
-            margin-top: 5px;
+            margin-bottom: 10px;
         }
 
         .student-name {
-            font-family: 'Great Vibes', cursive;
-            font-size: 48px;
-            color: #0d47a1;
-            margin: 20px 0;
+            font-family: 'Playfair Display', serif;
+            font-size: 42px;
+            font-weight: 900;
+            color: var(--navy);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 14px;
+            display: inline-block;
         }
 
-        .cert-text {
+        .cert-body-text {
             font-size: 14px;
-            color: #4a5568;
-            max-width: 550px;
+            color: var(--text-muted);
+            max-width: 520px;
             line-height: 1.6;
+            margin-bottom: 6px;
         }
 
-        .course-title {
+        .subject-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
             font-weight: 700;
-            color: var(--primary-color);
-            font-size: 18px;
-            display: block;
-            margin-top: 5px;
+            color: #5c6bcb;
+            margin: 14px 0 30px;
         }
 
         .cert-footer {
+            display: flex;
+            justify-content: space-between;
             width: 100%;
-            display: flex;
-            justify-content: space-around;
-            align-items: flex-end;
-            margin-bottom: 20px;
+            max-width: 560px;
+            margin-top: auto;
         }
 
-        .signature-area {
-            border-top: 1px solid #cbd5e0;
-            width: 180px;
-            font-size: 12px;
-            color: #718096;
-            padding-top: 8px;
+        .cert-footer-item {
+            text-align: center;
         }
 
-        .badge-area {
-            width: 70px;
-            height: 70px;
-            background: #d4af37;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-            box-shadow: 0 0 0 4px #fff, 0 0 0 6px #d4af37;
+        .cert-footer-item .line {
+            width: 160px;
+            border-top: 1.5px solid #999;
+            margin-bottom: 6px;
+        }
+
+        .cert-footer-item .label {
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cert-footer-item .value {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        @media print {
+            body { background: #fff; padding: 0; }
+            .toolbar { display: none; }
+            .certificate { box-shadow: none; max-width: 100%; }
+        }
+
+        @media (max-width: 600px) {
+            .student-name { font-size: 28px; }
+            .certificate { aspect-ratio: auto; padding: 30px 24px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="action-container">
-        <a href="AchievementStudent.php" class="btn btn-back">Kembali</a>
-        <button onclick="downloadPDF()" class="btn btn-download">Download PDF</button>
+    <div class="toolbar">
+        <a href="AchievementStudent.php" class="btn btn-back">← Kembali</a>
+        <button class="btn btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
     </div>
 
-    <div id="certificate" class="certificate-container">
-        <div class="cert-border">
-            <div class="corner-deco top-left"></div>
-            <div class="corner-deco top-right"></div>
-            <div class="corner-deco bottom-left"></div>
-            <div class="corner-deco bottom-right"></div>
+    <div class="certificate">
+        <div class="corner tl"></div>
+        <div class="corner tr"></div>
+        <div class="corner bl"></div>
+        <div class="corner br"></div>
 
-            <div class="cert-header">CERTIFICATE OF COMPLETION</div>
-            <div class="cert-sub">This is proudly presented to</div>
-            
-            <div class="student-name"><?php echo htmlspecialchars($nama_pelajar); ?></div>
-            
-            <div class="cert-text">
-                has successfully completed 100% of the chapters and passed all required assessment modules for the course
-                <span class="course-title"><?php echo htmlspecialchars($nama_subjek); ?></span>
+        <div class="cert-heading">CERTIFICATE OF COMPLETION</div>
+        <div class="cert-subheading">Student Learning Management System</div>
+
+        <div class="cert-presented-to">This certificate is proudly presented to</div>
+        <div class="student-name"><?php echo htmlspecialchars($studentName); ?></div>
+
+        <div class="cert-body-text">
+            for successfully completing all chapters and passing every quiz assessment in
+        </div>
+        <div class="subject-name"><?php echo htmlspecialchars($subjectFullName); ?></div>
+
+        <div class="cert-footer">
+            <div class="cert-footer-item">
+                <div class="line"></div>
+                <div class="value"><?php echo htmlspecialchars($completionDate); ?></div>
+                <div class="label">Date Completed</div>
             </div>
-
-            <div class="cert-footer">
-                <div class="signature-area">
-                    <p><strong>LMS Administrator</strong></p>
-                    <p>Sistem ULearn</p>
-                </div>
-                <div class="badge-area">PASSED</div>
-                <div class="signature-area">
-                    <p><strong><?php echo $date_issued; ?></strong></p>
-                    <p>Date Issued</p>
-                </div>
+            <div class="cert-footer-item">
+                <div class="line"></div>
+                <div class="value"><?php echo htmlspecialchars($current_user); ?></div>
+                <div class="label">Student ID</div>
             </div>
         </div>
     </div>
 
-    <script>
-        function downloadPDF() {
-            const element = document.getElementById('certificate');
-            const opt = {
-                margin:       0,
-                filename:     'Sijil_<?php echo str_replace(' ', '_', $nama_subjek); ?>.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
-            };
-            html2pdf().set(opt).from(element).save();
-        }
-    </script>
 </body>
 </html>

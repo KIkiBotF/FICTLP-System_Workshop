@@ -27,11 +27,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['loginBtn'])) {
         $user = $result->fetch_assoc();
         
         // Store user details into session variables
-        $_SESSION['userID'] = $user['userID'];
+       $_SESSION['userID'] = $user['userID'];
         $_SESSION['role'] = $user['Role'];
         $_SESSION['name'] = $user['Name'];
+        $_SESSION['email'] = $user['Email'];
 
         $role = $user['Role'];
+
 
         // MULTI-ROLE REDIRECTION LOGIC
         if ($role === 'Student') {
@@ -64,6 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['loginBtn'])) {
         $error_message = "Invalid Email or Password!";
     }
 }
+
+
 
 ?>
 

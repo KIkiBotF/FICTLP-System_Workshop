@@ -38,3 +38,45 @@ body { background-color: #EBE6EB; min-height: 100vh; padding: 20px; }
 .btn-clear, .btn-next { padding: 12px 35px; border-radius: 25px; border: none; font-size: 14px; font-weight: bold; color: #fff; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 .btn-clear { background: #5346ed; }
 .btn-next { background: #5346ed; }
+
+.nav-item-border {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    background: #ffffff;      /* Warna dalam kad */
+    border-radius: 20px;     /* Bucu bulat */
+    
+    /* Border putih tebal */
+    border: 4px solid #ffffff; 
+    
+    /* Shadow untuk kesan timbul */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+
+.status-circle {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    
+    /* Border putih tebal */
+    border: 4px solid #ffffff; 
+    
+    background: #f0f0f0; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.status-circle.correct {
+    background-color: #44f22d; /* Warna latar belakang */
+    color: white;
+    border: 2px solid #48ec6e;
+}
