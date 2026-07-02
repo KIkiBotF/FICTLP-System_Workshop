@@ -75,28 +75,43 @@
     }
 
     function renderChapters() {
-      const container = document.getElementById("chapterListContainer");
-      container.innerHTML = ""; if (!currentCourse) return;
-      currentCourse.chapters.forEach((chapterName, index) => {
-        const displayNum = String(index + 1).padStart(2, '0');
-        const isDone = completedChapters.includes(index);
-        const quizScore = quizScores[index];
-        const card = document.createElement("a");
-        card.className = "chapter-card";
-        if (isDone) card.classList.add("completed");
-        if (!isEnrolled) {
-          card.classList.add("locked"); card.removeAttribute("href");
-          card.onclick = function(e) { e.preventDefault(); alert("🔒 Access Denied! Please click the 'Start Module' button above to unlock."); };
-        } else {
-          card.setAttribute("href", `ChapterStudent.html?subject=${currentSubjectKey}&chapter=${index + 1}`);
-          card.onclick = function() { localStorage.setItem("current_reading_chapter_idx", index); localStorage.setItem("current_reading_chapter_name", chapterName); };
-        }
-        let statusIcon = isDone ? '<span class="chapter-status done">✓</span>' : (isEnrolled ? '<span class="chapter-status pending">○</span>' : '<span class="chapter-status locked">🔒</span>');
-        let scoreBadge = (quizScore !== undefined && isDone) ? `<span class="score-badge">${quizScore}/10</span>` : '';
-        card.innerHTML = `<span class="chapter-num">${displayNum}</span><span class="chapter-name">${chapterName}</span>${scoreBadge}${statusIcon}`;
-        container.appendChild(card);
-      });
+  const container = document.getElementById("chapterListContainer");
+  container.innerHTML = ""; 
+  if (!currentCourse) return;
+
+  currentCourse.chapters.forEach((chapterName, index) => {
+    const displayNum = String(index + 1).padStart(2, '0');
+    const isDone = completedChapters.includes(index);
+    const quizScore = quizScores[index];
+    const card = document.createElement("a");
+    card.className = "chapter-card";
+    
+    if (isDone) card.classList.add("completed");
+
+    if (!isEnrolled) {
+      card.classList.add("locked"); 
+      card.removeAttribute("href");
+      card.onclick = function(e) { 
+        e.preventDefault(); 
+        alert("🔒 Access Denied! Please click the 'Start Module' button above to unlock."); 
+      };
+    } else {
+      // PERUBAHAN DI SINI: Pastikan ia menghala ke ChapterStudent.php
+      // Ganti baris card.setAttribute ini:
+card.setAttribute("href", `ChapterStudent.php?subject=${currentSubjectKey}&chapter=${index + 1}&chapterName=${encodeURIComponent(chapterName)}`);
+      card.onclick = function() { 
+        localStorage.setItem("current_reading_chapter_idx", index); 
+        localStorage.setItem("current_reading_chapter_name", chapterName); 
+      };
     }
+
+    let statusIcon = isDone ? '<span class="chapter-status done">✓</span>' : (isEnrolled ? '<span class="chapter-status pending">○</span>' : '<span class="chapter-status locked">🔒</span>');
+    let scoreBadge = (quizScore !== undefined && isDone) ? `<span class="score-badge">${quizScore}/10</span>` : '';
+    
+    card.innerHTML = `<span class="chapter-num">${displayNum}</span><span class="chapter-name">${chapterName}</span>${scoreBadge}${statusIcon}`;
+    container.appendChild(card);
+  });
+}
 
     function calculateProgress() {
       if (!currentCourse) return;

@@ -1,3 +1,31 @@
+<?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// Sambungan database (contoh)
+$host = "100.81.48.34";
+$port = "3307";          
+$dbname = "fictlp db";  
+$username = "bubustailo"; 
+$password = "Student@123";
+
+$conn = new mysqli($host, $username, $password, $dbname, $port);
+
+$sql = "SELECT * FROM `content` WHERE `Subject_Code` = 'DITP2913' AND `Chapter_Name` = '1'";
+$result = $conn->query($sql);
+
+
+
+$contents = [];
+while($row = $result->fetch_assoc()) {
+    $contents[] = $row;
+}
+
+?>
+
+<?php include 'sidebarStudent.php'; ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +37,6 @@
 </head>
 <body>
 
-<?php include 'sidebarStudent.php'; ?>
 
   <main class="main">
 
@@ -18,42 +45,59 @@
     </div>
 
     <div class="content-grid">
-
-      <div class="section-col">
+    <div class="section-col">
         <div class="section-label">Slide</div>
-        <div class="media-card" onclick="openSlide()">
-          <svg viewBox="0 0 24 24">
-            <rect x="3" y="3" width="18" height="18" rx="2"/>
-            <circle cx="8.5" cy="8.5" r="1.5"/>
-            <polyline points="21 15 16 10 5 21"/>
-          </svg>
-        </div>
-      </div>
+        <?php foreach($contents as $item): ?>
+            <?php if(strtolower($item['File_Type']) == 'slide'): ?>
+                <div class="media-card" onclick="window.open('<?php echo $item['file_path']; ?>', '_blank')">
+                    <p><?php echo htmlspecialchars($item['Name']); ?></p>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
 
-      <div class="section-col video-col">
+    <div class="section-col video-col">
         <div class="section-label">Video</div>
-        <div class="media-card" onclick="openVideo(1)">
-          <svg viewBox="0 0 24 24">
-            <rect x="2" y="5" width="15" height="14" rx="2"/>
-            <polygon points="22 7 17 12 22 17 22 7"/>
-          </svg>
-        </div>
-        <div class="media-card" onclick="openVideo(2)">
-          <svg viewBox="0 0 24 24">
-            <rect x="2" y="5" width="15" height="14" rx="2"/>
-            <polygon points="22 7 17 12 22 17 22 7"/>
-          </svg>
-        </div>
-      </div>
+        <?php foreach($contents as $item): ?>
+            <?php if(strtolower($item['File_Type']) == 'video'): ?>
+                <?php 
+                    $ytUrl = $item['file_path'];
+                    $videoId = '';
+                    
+                    // Logic to extract the exact YouTube Video ID from the URL
+                    if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $ytUrl, $match)) {
+                        $videoId = $match[1];
+                    }
+                    
+                    // Ensure it is treated as a valid web URL
+                    if (strpos($ytUrl, 'http') !== 0 && $ytUrl != '') {
+                        $ytUrl = 'https://' . $ytUrl;
+                    }
+                ?>
+                
+                <div class="media-card" style="padding: 10px; cursor: pointer; text-align: center; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.2s;" onclick="window.open('<?php echo $ytUrl; ?>', '_blank')" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    
+                    <?php if ($videoId): ?>
+                        <img src="https://img.youtube.com/vi/<?php echo $videoId; ?>/hqdefault.jpg" alt="Video Thumbnail" style="width: 100%; border-radius: 8px; margin-bottom: 10px;">
+                    <?php else: ?>
+                        <div style="width: 100%; height: 120px; background: #e0e0e0; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center;">▶️ Video</div>
+                    <?php endif; ?>
+                    
+                    <p style="font-weight: bold; font-size: 14px; margin: 0; color: #333;"><?php echo htmlspecialchars($item['Name']); ?></p>
+                
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
 
-      <div class="section-col quiz-col">
+    <div class="section-col quiz-col">
         <div class="section-label">Quiz</div>
         <div class="quiz-box">
-          <div class="quiz-questions">10 QUESTIONS</div>
-          <button class="btn-quiz" onclick="startQuiz()">Start Quiz</button>
+            <div class="quiz-questions">10 QUESTIONS</div>
+            <button class="btn-quiz" onclick="startQuiz()">Start Quiz</button>
         </div>
-      </div>
-
+    </div>
+</div>
     </div>
   </main>
 
@@ -62,44 +106,33 @@
     let activeSubject = "db"; 
 
     document.addEventListener("DOMContentLoaded", function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const subjectParam = urlParams.get('subject');  
-        const chapterParam = urlParams.get('chapter');  
+    const urlParams = new URLSearchParams(window.location.search);
+    const subjectParam = urlParams.get('subject');  
+    const chapterParam = urlParams.get('chapter');  
 
-        if (subjectParam) {
-          activeSubject = subjectParam;
-        } else {
-          activeSubject = localStorage.getItem('selectedQuizSubject') || 'db';
-        }
+    // Jika subject ada dalam URL, gunakan itu. Jika tiada, baru guna localStorage.
+    if (subjectParam) {
+        activeSubject = subjectParam;
+    } else {
+        activeSubject = localStorage.getItem('selectedQuizSubject') || 'db';
+    }
 
-        if (chapterParam) {
-          currentChapterIdx = parseInt(chapterParam) - 1; 
-        } else {
-          currentChapterIdx = parseInt(localStorage.getItem("current_reading_chapter_idx")) || 0;
-        }
-
+    if (chapterParam) {
+        currentChapterIdx = parseInt(chapterParam) - 1; 
+    } else {
+        currentChapterIdx = parseInt(localStorage.getItem("current_reading_chapter_idx")) || 0;
+    }
         const chapterName = localStorage.getItem("current_reading_chapter_name") || "Chapter Module";
         document.getElementById("chapterTitleDisplay").innerText = `Chapter ${currentChapterIdx + 1}: ${chapterName}`;
     });
 
     function startQuiz() {
-        const chapterNumber = currentChapterIdx + 1;
-        let targetSubject = activeSubject;
-        if (activeSubject === "db") {
-          targetSubject = "database";
-        }
-        window.location.href = `quizStudent.html?subject=${targetSubject}&chapter=${chapterNumber}`; 
-    }
-    
-    function openSlide() {
-        const chapterNumber = currentChapterIdx + 1;
-        window.location.href = `slides/${activeSubject}_chapter${chapterNumber}.pdf`;
-    }
+    const chapterNumber = currentChapterIdx + 1; // Contoh: 1, 2, 3
+    // Hantar parameter 'subject' dan 'chapter' ke fail php baharu
+    window.location.href = `quizStudent.php?subject=${activeSubject}&chapter=${chapterNumber}`; 
+}
 
-    function openVideo(videoNum) {
-        const chapterNumber = currentChapterIdx + 1;
-        window.location.href = `videos/${activeSubject}_chapter${chapterNumber}_video${videoNum}.mp4`;
-    }
+    
   </script>
 </body>
 </html>

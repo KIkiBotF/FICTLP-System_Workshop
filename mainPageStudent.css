@@ -90,6 +90,13 @@ body::before {
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); 
     z-index: 1;
     overflow: hidden; 
+
+    /* ── 🆕 ACTION ANIMASI BERGERAK NAIK + DELAY SEBAIK DIBUKA ── */
+    opacity: 0;
+    transform: translateY(40px); /* Letak kedudukan asal ke bawah sikit */
+    
+    /* Durasi pergerakan 1.2 saat, DELAY 0.15 saat sebelum naik */
+    animation: paparkanKotakNaik 1.2s ease-out 0.15s forwards;
 }
 
 /* ==========================================
@@ -152,4 +159,15 @@ body::before {
 
 .btn-subject:active {
     transform: translateY(0);
+}
+
+@keyframes paparkanKotakNaik {
+    0% {
+        opacity: 0;
+        transform: translateY(40px); /* Bermula halimun dari bawah */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0); /* Meluncur naik tepat ke posisi asal */
+    }
 }

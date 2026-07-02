@@ -19,7 +19,7 @@
     function logout() {
         // Hapus session/localStorage jika ada
         // localStorage.removeItem('user');
-        window.location.href = 'logIn.html';
+        window.location.href = 'index.html';
     }
 </script>
 
