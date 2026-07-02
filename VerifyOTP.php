@@ -43,7 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($result && $result->num_rows > 0) {
             $_SESSION['otp_verified'] = true; 
-            header("Location: ResetPassword.php");
+            header("Location: ResetPasswordOTP.php");
             exit();
         } else {
             $message = "<div style='color: #ef4444; margin-bottom: 15px;'>Kod OTP salah atau telah tamat tempoh!</div>";
