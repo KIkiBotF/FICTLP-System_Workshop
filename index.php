@@ -1,28 +1,70 @@
 <?php
-// Handle form submission
+//Pass the user's email to the reset page securely
+session_start();
+
+$host = "100.81.48.34";
+$port = "3307";
+$dbname = "fictlp db";
+$username = "bubustailo";
+$password = "Student@123";
+
+$conn = new mysqli($host, $username, $password, $dbname, $port); 
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error); 
+}
+
 $error_message = '';
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Check hardcoded credentials
     if (isset($_POST['loginBtn'])) {
-        if ($email === 'lecturer123@gmail.com' && $password === 'abc123') {
-            header("Location: mainPageLecturer.php");
-            exit();
-        } else if ($email == 'admin123@gmail.com' && $password == 'abc123') {
-            // SEBELUM: header("mainPageAdmin.php");
-            header("Location: mainPageAdmin.php"); // TAMBAH Location:
-            exit();
-        } else if ($email == 'student123@gmail.com' && $password == 'abc123') {
-            // SEBELUM: header("mainPageStudent.php");
-            header("Location: mainPageStudent.php"); // TAMBAH Location:
-            exit();
+        $stmt = $conn->prepare("SELECT Password, Name, Role, userID FROM user WHERE Email = ?");
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) { 
+            $row = $result->fetch_assoc();
+            
+            // Verify the password
+            if ($password === $row['Password']) {
+                $_SESSION['user_id'] = $row['userID'];
+                $_SESSION['username'] = $row['Name'];
+                
+                if ($password === '123456') {
+                    $_SESSION['reset_email'] = $email;
+                    header("Location: resetPassword.php");
+                    exit();
+                }
+                
+                switch ($row['Role']) { 
+                    case 'Lecturer':
+                        header("Location: mainPageLecturer.php");
+                        exit();
+                    case 'Admin':
+                        header("Location: mainPageAdmin.php");
+                        exit();
+                    case 'Student':
+                        header("Location: mainPageStudent.php");
+                        exit();
+                    default:
+                        $error_message = "Invalid user role configuration.";
+                        break;
+                }
+            } else {
+                $error_message = "Invalid email or password!";
+            }
         } else {
             $error_message = "Invalid email or password!";
         }
+        $stmt->close();
     }
 }
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -47,12 +89,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
 
         <div class="logInForm-container">
+            <?php if (!empty($error_message)): ?>
+                <div class="error-msg" style="color: red; margin-bottom: 15px; font-weight: bold;">
+                    <?php echo $error_message; ?>
+                </div>
+            <?php endif; ?>
+
             <form id="details-container" action="" method="POST">
                 <div class="input-group">
                     <label for="email">Email</label>
                     <input type="email" id="email" name="email" required>
                 </div>
-
 
                 <div class="input-group">
                     <div class="label-row">

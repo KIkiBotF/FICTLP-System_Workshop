@@ -41,15 +41,16 @@ if (file_exists('announcement_data.php')) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Main Page</title>
-    <link rel="stylesheet" href="mainPageLecturer.css">
+    <title>FICTLP-System</title>
+    <link rel="stylesheet" href="mainPageAdmin.css">
 </head>
 <body>
-     <div class="logout-wrapper">
+
+    <div class="logout-wrapper">
         <a href="index.php" class="logout-action">
             <img src="Aset/logOutBtn.svg" alt="Logout" class="icon-exit">
             <span class="logout-text">Log Out</span>
@@ -65,7 +66,7 @@ if (file_exists('announcement_data.php')) {
         <h2 class="msg-welcome">Welcome Back!</h2>
         <p class="msg-user"><?php echo htmlspecialchars($_SESSION['username']); ?></p>
 
-        <a href="manageSubjectLecturer.php" class="btn-subject">Subject</a>
+        <a href="dashboardAdmin.php" class="btn-subject">Dashboard</a>
 
     </div>
 

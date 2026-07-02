@@ -1,6 +1,3 @@
-/* ==========================================
-   1. RESET BROWSER
-   ========================================== */
 * {
     margin: 0;
     padding: 0;
@@ -18,7 +15,6 @@ body {
     overflow-x: hidden;
 }
 
-/* Gambar latar belakang */
 body::before {
     content: "";
     position: absolute;
@@ -53,7 +49,6 @@ body::before {
     height: 24px;
     margin-bottom: 4px;
     stroke: #ffffff;
-    transition: stroke 0.2s;
 }
 
 .logout-action:hover .icon-exit {
@@ -72,7 +67,6 @@ body::before {
     color: #38bdf8;
 }
 
-
 .center-content {
     text-align: center;
     width: 100%;
@@ -87,8 +81,6 @@ body::before {
     z-index: 1;
     overflow: hidden;
 }
-
-
 
 .grey-banner {
     background: linear-gradient(135deg, #4f46e5, #7c3aed);
@@ -106,7 +98,7 @@ body::before {
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-/* username */
+
 .msg-welcome {
     font-size: 32px;
     font-weight: bold;
@@ -119,7 +111,6 @@ body::before {
     color: #94a3b8;
     margin-bottom: 40px;
 }
-
 
 .btn-subject {
     display: inline-block;
