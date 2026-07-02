@@ -1,4 +1,10 @@
-<?php 
+<?php
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header("Location: index.php");
+    exit();
+}
 if (file_exists('announcement_data.php')) {
     include('announcement_data.php');
     if (!empty($currentAnnouncement)) {
@@ -58,7 +64,7 @@ if (file_exists('announcement_data.php')) {
         </div>
 
         <h2 class="msg-welcome">Welcome Back!</h2>
-        <p class="msg-user">username....</p>
+        <p class="msg-user"><?php echo htmlspecialchars($_SESSION['username']); ?></p>
 
         <a href="dashboardAdmin.php" class="btn-subject">Dashboard</a>
 

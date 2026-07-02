@@ -65,6 +65,7 @@ body {
     margin-bottom: 10px;
 }
 
+
 /* --- Content Items (Media Boxes) --- */
 .content-item {
     width: 100%;
@@ -159,4 +160,8 @@ body {
 
 .add-box:hover svg stroke {
     stroke: #0984e3; /* Icon turns blue on hover */
+}
+#manageSubjectIcon{
+    width: 50px;
+    height: 50px;
 }

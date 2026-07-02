@@ -1,16 +1,18 @@
 <?php
-// 1. Database Connection Configuration
+//Pass the user's email to the reset page securely
+session_start();
+
 $host = "100.81.48.34";
-$port = "3307";          
-$dbname = "fictlp db";  
-$username = "bubustailo"; 
+$port = "3307";
+$dbname = "fictlp db";
+$username = "bubustailo";
 $password = "Student@123";
 
-$conn = new mysqli($host, $username, $password, $dbname, $port);
+$conn = new mysqli($host, $username, $password, $dbname, $port); 
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    die("Connection failed: " . $conn->connect_error); 
 }
 
 $error_message = '';
@@ -20,20 +22,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     if (isset($_POST['loginBtn'])) {
-        // 2. Prepare SQL statement to prevent SQL injection
-        $stmt = $conn->prepare("SELECT Password, Role FROM user WHERE Email = ?");
+        $stmt = $conn->prepare("SELECT Password, Name, Role, userID FROM user WHERE Email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $result = $stmt->get_result();
 
-        if ($result->num_rows > 0) {
+        if ($result->num_rows > 0) { 
             $row = $result->fetch_assoc();
             
-            // 3. Verify the password (matching plaintext as shown in your phpMyAdmin)
+            // Verify the password
             if ($password === $row['Password']) {
+                $_SESSION['user_id'] = $row['userID'];
+                $_SESSION['username'] = $row['Name'];
                 
-                // 4. Redirect based on the 'Role' column from the database
-                switch ($row['Role']) {
+                if ($password === '123456') {
+                    $_SESSION['reset_email'] = $email;
+                    header("Location: resetPassword.php");
+                    exit();
+                }
+                
+                switch ($row['Role']) { 
                     case 'Lecturer':
                         header("Location: mainPageLecturer.php");
                         exit();

@@ -63,6 +63,10 @@ body {
     max-width: 550px;
     padding-bottom: 50px;
 }
+#manageSubjectIcon{
+    width: 50px;
+    height: 50px;
+}
 
 .chapter-btn {
     display: block;

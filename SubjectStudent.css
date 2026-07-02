@@ -1,0 +1,144 @@
+*, *::before, *::after { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+
+:root {
+    /* Ditukar kepada warna pastel pink lembut sepadan dengan Manage Subject */
+    --bg: #f9eff0; 
+    --sidebar-bg: #fff;
+    --sidebar-w: 150px; /* Diselaraskan mengikut lebar fail sidebarStudent.php anda */
+    
+    /* Warna pengepala kad biru lembut seperti di halaman Manage Subject */
+    --card-header-bg: #abd9e9; 
+    
+    --text-dark: #000000;
+    --text-mid: #333333;
+    --card-radius: 16px;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+}
+
+body {
+    font-family: Arial, sans-serif; /* Menggunakan font asas yang bersih */
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+}
+
+
+/* ── Main ── */
+.main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    padding: 42px 48px 56px;
+    max-width: 860px;
+}
+
+.page-title {
+    font-family: Arial, sans-serif; /* Menggunakan font asas yang bersih */
+    font-size: 42px;
+    color: var(--text-dark);
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+
+.page-subtitle {
+    font-size: 14px;
+    color: var(--text-light);
+    font-weight: 500;
+    margin-bottom: 32px;
+}
+
+/* ── Cards ── */
+.card {
+    background: #fff;
+    border-radius: var(--card-radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 28px;
+    overflow: hidden;
+    transition: transform 0.18s, box-shadow 0.18s;
+    cursor: pointer;
+    display: block; 
+    text-decoration: none;
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Border nipis luaran */
+}
+
+/* Memastikan semua pengepala kad menggunakan warna biru seragam yang sama */
+.card-header {
+    padding: 16px 28px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    background: var(--card-header-bg) !important; /* Paksa guna warna biru Manage Subject */
+}
+
+.card-header h2 {
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    color: var(--text-dark);
+    font-weight: bold;
+}
+
+.card-header .lecturer {
+    font-size: 14px;
+    color: #555555;
+    font-style: italic;
+    font-weight: normal;
+    margin-left: 5px;
+}
+
+.card.teal .card-header  { background: var(--teal-header); }
+.card.blue .card-header  { background: var(--blue-header); }
+.card.green .card-header { background: var(--green-header); }
+
+.card-body {
+    padding: 24px 32px;
+    background: #fff;
+}
+
+/* Mengekalkan susunan grid jika mahu, atau tukar ke 1fr jika mahu sebaris ke bawah */
+.topics {
+    display: grid;
+    grid-template-columns: 1fr; /* Ditukar ke 1 ruangan supaya list turun ke bawah seperti Manage Subject */
+    gap: 8px;
+}
+.topics.single-col {
+    grid-template-columns: 1fr;
+}
+
+.topic-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    color: var(--text-mid);
+    padding: 4px 0;
+    font-weight: normal;
+}
+
+/* Mengubah suai elemen bulatan menjadi hitam kecil klasik (Unaltered List Look) */
+.topic-item::before {
+    content: '';
+    display: inline-block;
+    width: 5px; 
+    height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: #000000 !important; /* Diwajibkan warna hitam tulen */
+}
+
+.card.teal .topic-item::before  { background: var(--teal-header); }
+.card.blue .topic-item::before  { background: var(--blue-header); }
+.card.green .topic-item::before { background: var(--green-header); }
+
+/* Animations */
+.card { animation: fadeUp 0.45s both; }
+.card:nth-child(1) { animation-delay: 0.05s; }
+.card:nth-child(2) { animation-delay: 0.15s; }
+.card:nth-child(3) { animation-delay: 0.25s; }
+
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}

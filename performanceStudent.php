@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Metrics - Student LMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;600;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="performanceStudent.css">
+</head>
+<body>
+
+<?php include 'sidebarStudent.php'; ?>
+    <main class="main-content">
+        <header class="content-header">
+            <h1>Performance</h1>
+        </header>
+
+        <div class="metrics-card">
+            <div class="selector-wrapper">
+                <label for="subject-select">Subject:</label>
+                <select id="subject-select" class="custom-select" onchange="updatePerformanceView()">
+                    <option value="cpp">C++ Programming</option>
+                    <option value="db">Database</option>
+                    <option value="coa">Computer Organization and Architecture</option>
+                </select>
+            </div>
+
+            <div class="chart-container">
+                <div class="topic-row" id="row-topic1">
+                    <span class="topic-title" id="title-topic1">Topic 01: Basics & Data Types</span>
+                    <div class="progress-bar-wrapper">
+                        <div class="bar-fill" id="fill-topic1" style="width: 0%;"></div>
+                    </div>
+                    <span class="percentage-value" id="text-topic1">0%</span>
+                </div>
+
+                <div class="topic-row" id="row-topic2">
+                    <span class="topic-title" id="title-topic2">Topic 02: Control Structures</span>
+                    <div class="progress-bar-wrapper">
+                        <div class="bar-fill" id="fill-topic2" style="width: 0%;"></div>
+                    </div>
+                    <span class="percentage-value" id="text-topic2">0%</span>
+                </div>
+
+                <div class="topic-row" id="row-topic3">
+                    <span class="topic-title" id="title-topic3">Topic 03: Functions</span>
+                    <div class="progress-bar-wrapper">
+                        <div class="bar-fill" id="fill-topic3" style="width: 0%;"></div>
+                    </div>
+                    <span class="percentage-value" id="text-topic3">0%</span>
+                </div>
+
+                <div class="topic-row" id="row-topic4">
+                    <span class="topic-title" id="title-topic4">Topic 04: Arrays & Pointers</span>
+                    <div class="progress-bar-wrapper">
+                        <div class="bar-fill" id="fill-topic4" style="width: 0%;"></div>
+                    </div>
+                    <span class="percentage-value" id="text-topic4">0%</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const topicMapping = {
+            "Basics & Data Types": "topic1",
+            "Control Structures": "topic2",
+            "Functions": "topic3",
+            "Arrays & Pointers": "topic4"
+        };
+
+        function updatePerformanceView() {
+            const selectedSubject = document.getElementById('subject-select').value;
+            const performanceData = JSON.parse(localStorage.getItem('quizPerformanceData'));
+
+            if (selectedSubject === 'cpp' && performanceData) {
+                for (const [topicName, scoreInfo] of Object.entries(performanceData)) {
+                    const elementKey = topicMapping[topicName];
+                    
+                    if (elementKey) {
+                        let percentage = Math.round((scoreInfo.correct / scoreInfo.total) * 100);
+                        document.getElementById(`title-${elementKey}`).innerText = `Topic: ${topicName} (${scoreInfo.correct}/${scoreInfo.total})`;
+                        document.getElementById(`fill-${elementKey}`).style.width = `${percentage}%`;
+                        document.getElementById(`text-${elementKey}`).innerText = `${percentage}%`;
+                    }
+                }
+            } else {
+                resetToDefaultValues();
+            }
+        }
+
+        function resetToDefaultValues() {
+            const defaultTopics = [
+                { id: "topic1", name: "Topic 01: Basics & Data Types" },
+                { id: "topic2", name: "Topic 02: Control Structures" },
+                { id: "topic3", name: "Topic 03: Functions" },
+                { id: "topic4", name: "Topic 04: Arrays & Pointers" }
+            ];
+
+            defaultTopics.forEach(topic => {
+                document.getElementById(`title-${topic.id}`).innerText = topic.name;
+                document.getElementById(`fill-${topic.id}`).style.width = "0%";
+                document.getElementById('text-' + topic.id).innerText = "0%";
+            });
+        }
+
+        window.onload = function() {
+            updatePerformanceView();
+        };
+    </script>
+</body>
+</html>
