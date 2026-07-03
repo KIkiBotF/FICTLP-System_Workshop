@@ -52,7 +52,8 @@ if (file_exists('announcement_data.php')) {
 <body>
 
     <div class="logout-wrapper">
-        <a href="index.php" class="logout-action">
+        <!-- FIXED LOGOUT ROUTING -->
+        <a href="login.html" class="logout-action" onclick="return confirm('Are you sure you want to log out?');">
             <img src="Aset/logOutBtn.svg" alt="Logout" class="icon-exit">
             <span class="logout-text">Log Out</span>
         </a>

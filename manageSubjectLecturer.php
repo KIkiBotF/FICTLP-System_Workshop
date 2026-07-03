@@ -16,7 +16,7 @@ if ($conn->connect_error) {
 // 3. Query the database to find subjects linked ONLY to this specific lecturer
 // We join the 'subject' table with the 'lecture_subject' table
 $query = "SELECT s.Subject_Code, s.Title, s.Description 
-        FROM subject s 
+        FROM subject s
         JOIN lecture_subject ls ON s.Subject_Code = ls.Subject_Code 
         WHERE ls.userID = ?";
 
@@ -27,6 +27,7 @@ $result = $stmt->get_result();
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,27 +35,29 @@ $result = $stmt->get_result();
     <link rel="stylesheet" href="sidebar.css">
     <link rel="stylesheet" href="manageSubject.css">
 </head>
+
 <body>
-    
+
     <?php include("sidebar.php"); ?>
 
     <main class="main-content">
         <div class="header-container">
             <h1>Manage Subject</h1>
         </div>
-        
+
         <div class="card-container">
-            <?php 
+            <?php
             // 4. Check if the lecturer has any subjects assigned
             if ($result->num_rows > 0) {
                 // 5. Loop through each subject and create a card
+                // 5. Loop through each subject and create a card
                 while ($row = $result->fetch_assoc()) {
                     $title = htmlspecialchars($row['Title']);
-                    $code = htmlspecialchars($row['Subject_Code']);
-                    $desc = htmlspecialchars($row['Description']);
+                    $code  = htmlspecialchars($row['Subject_Code']);
+                    $desc  = htmlspecialchars($row['Description']);
             ?>
-                    
-                    <div class="subject-card">
+                    <!-- The entire card is now clickable -->
+                    <div class="subject-card" onclick="window.location.href='editSubject.php?subject=<?php echo urlencode($code); ?>'" style="cursor: pointer;" title="Click to manage chapters">
                         <div class="card-header">
                             <h2><?php echo $title; ?></h2>
                         </div>
@@ -63,24 +66,18 @@ $result = $stmt->get_result();
                                 <li><strong>Code:</strong> <?php echo $code; ?></li>
                                 <li><?php echo $desc; ?></li>
                             </ul>
-                            
-                            <div class="card-actions">
-                                <button class="action-btn" onclick="window.location.href='editSubject.php?subject=<?php echo urlencode($code); ?>'">
-                                    <img src="Aset/editBtn.svg" alt="Edit" class="icon-placeholder">
-                                    <span>Edit</span>
-                                </button>
-                            </div>
+                            <!-- The card-actions div and pencil icon have been completely removed -->
                         </div>
                     </div>
-
-            <?php 
+            <?php
                 } // End while loop
-            } else { 
+            } else {
                 // Display a friendly message if they have no subjects assigned yet
                 echo "<p style='text-align: center; color: #555; font-size: 1.2rem;'>You have not been assigned any subjects yet.</p>";
-            } 
+            }
             ?>
         </div>
     </main>
 </body>
+
 </html>

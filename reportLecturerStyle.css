@@ -136,3 +136,60 @@ h1 {
 .card-total { border-top: 5px solid #a8ddec; } /* Soft Blue */
 .card-pass { border-top: 5px solid #8fe0a4; }  /* Soft Green */
 .card-fail { border-top: 5px solid #fc9a9a; }  /* Soft Red */
+
+
+/* --- Student Table Styling --- */
+.student-table-container {
+    margin-top: 40px;
+    border-top: 1px solid #eee;
+    padding-top: 30px;
+}
+
+.student-table-container h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+.student-table th, .student-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.student-table th {
+    background-color: #f9f9f9;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.student-table tr:hover {
+    background-color: #f4f7f9;
+}
+
+.status-pass {
+    color: #2e7d32;
+    background-color: #e8f5e9;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.status-fail {
+    color: #c62828;
+    background-color: #ffebee;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.85rem;
+}

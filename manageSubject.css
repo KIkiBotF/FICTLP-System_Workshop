@@ -39,10 +39,16 @@ body {
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease; 
+}
+
+.subject-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
 }
 
 .card-header {
-    background-color: #a8ddec;
+    background: linear-gradient(135deg, #a8ddec, #8bc3d6);
     padding: 15px 25px;
 }
 

@@ -133,9 +133,9 @@ body {
 
 /* ── Section Columns ── */
 .section-col {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .section-label {
@@ -148,23 +148,24 @@ body {
 }
 
 /* ── Media Cards ── */
+/* Update bahagian ini dalam CSS awak */
 .media-card {
-  background: var(--card-bg);
-  border-radius: var(--radius-card);
-  aspect-ratio: 4/3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
-  border: 1px solid #e2e8f0;
+    min-height: 80px; 
+    border: 1px solid #ccc; /* Border kelabu nipis nampak lebih bersih */
+    padding: 15px;
+    margin-bottom: 10px; /* Tukar margin kepada margin-bottom sahaja */
+    cursor: pointer;
+    background-color: #e0e0e0; /* Warna kelabu seperti dalam gambar */
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
 }
 
 .media-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-  border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
 }
 
 .media-card svg {
