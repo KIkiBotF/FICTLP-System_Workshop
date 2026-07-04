@@ -79,9 +79,9 @@
             <span>Home</span>
         </a>
 
-<a href="performanceStudent.php" class="nav-item" id="performanceBox">
+<a href="performanceStudent.php" class="nav-item">
     <!-- Removed inline style="width: 50px; height: 50px;" -->
-    <img id="performanceIcon" src="Aset/performanceBtn.svg" alt="Performance" class="icon-placeholder">
+    <img src="Aset/performanceBtn.svg" alt="Performance" class="icon-placeholder">
     <span>Performance</span>
 </a>
 

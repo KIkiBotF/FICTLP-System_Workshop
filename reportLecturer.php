@@ -71,6 +71,25 @@ if ($selected_subject !== '') {
         $fail_count = $fail_row['fail_count'];
     }
     $fail_stmt->close();
+
+    $student_details = [];
+    $details_stmt = $conn->prepare("
+    SELECT u.Name, u.userID, q.Quiz_title, s.Grade, q.Passing_Mark
+    FROM user u
+    JOIN enrollment e ON u.userID = e.userID
+    JOIN score s ON u.userID = s.userID
+    JOIN quiz q ON s.Quiz_ID = q.Quiz_ID
+    WHERE e.Subject_Code = ? AND q.Subject_Code = ?
+    ORDER BY u.Name ASC, q.Quiz_ID ASC
+");
+    $details_stmt->bind_param("ss", $selected_subject, $selected_subject);
+    $details_stmt->execute();
+    $details_result = $details_stmt->get_result();
+
+    while ($detail_row = $details_result->fetch_assoc()) {
+        $student_details[] = $detail_row;
+    }
+    $details_stmt->close();
 }
 ?>
 
@@ -139,9 +158,79 @@ if ($selected_subject !== '') {
                     </div>
                 </div>
 
+                <?php if ($selected_subject !== '' && !empty($student_details)): ?>
+
+                    <div class="student-table-container">
+                        <h2>Detailed Student Performance</h2>
+                        <div class="search-container" style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+                            <input type="text" id="studentSearch" onkeyup="filterStudentTable()" placeholder="Search by Name or ID..." style="padding: 10px 15px; width: 250px; border-radius: 8px; border: 1px solid #d1d1d1; font-size: 1rem;">
+                        </div>
+                        <table class="student-table">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Student ID</th>
+                                    <th>Quiz Title</th>
+                                    <th>Grade</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($student_details as $student): ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($student['Name']); ?></td>
+                                        <td><?php echo htmlspecialchars($student['userID']); ?></td>
+                                        <td><?php echo htmlspecialchars($student['Quiz_title']); ?></td>
+                                        <td><?php echo htmlspecialchars($student['Grade']); ?></td>
+                                        <td>
+                                            <?php if ($student['Grade'] >= $student['Passing_Mark']): ?>
+                                                <span class="status-pass">Pass</span>
+                                            <?php else: ?>
+                                                <span class="status-fail">Fail</span>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php elseif ($selected_subject !== ''): ?>
+                    <p style="text-align: center; margin-top: 30px; color: #777;">No student records found for this subject.</p>
+                <?php endif; ?>
             </div>
+
+        </div>
         </div>
     </main>
+    <script>
+        function filterStudentTable() {
+            // Grab the search input value and convert to uppercase for case-insensitive matching
+            const input = document.getElementById("studentSearch");
+            const filter = input.value.toUpperCase();
+
+            // Target the table body and its rows
+            const table = document.querySelector(".student-table tbody");
+            const tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, hiding those that don't match the search query
+            for (let i = 0; i < tr.length; i++) {
+                let tdName = tr[i].getElementsByTagName("td")[0]; // Column 0: Student Name
+                let tdID = tr[i].getElementsByTagName("td")[1]; // Column 1: Student ID
+
+                if (tdName || tdID) {
+                    let txtValueName = tdName.textContent || tdName.innerText;
+                    let txtValueID = tdID.textContent || tdID.innerText;
+
+                    // Check if the search string exists in either the Name or ID
+                    if (txtValueName.toUpperCase().indexOf(filter) > -1 || txtValueID.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = ""; // Show row
+                    } else {
+                        tr[i].style.display = "none"; // Hide row
+                    }
+                }
+            }
+        }
+    </script>
 </body>
 
 </html>
