@@ -10,16 +10,24 @@ $chapters = []; // Initialize the array here
 if ($conn->connect_error == false) {
     // 1. Fetch Subject Title
     $stmt = $conn->prepare("SELECT Title FROM subject WHERE Subject_Code = ?");
-    $stmt->bind_param("s", $subject_code);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($row = $result->fetch_assoc()) {
-        $subject_title = $row['Title'];
+    if ($stmt) {
+        $stmt->bind_param("s", $subject_code);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $subject_title = $row['Title'];
+        }
+        $stmt->close();
     }
-    $stmt->close();
 
-    // 2. Fetch Distinct Chapters for this Subject
-    $chapter_stmt = $conn->prepare("SELECT DISTINCT Chapter_Name FROM content WHERE Subject_Code = ? ORDER BY CAST(Chapter_Name AS UNSIGNED) ASC");
+// 2. Fetch Distinct Chapters for this Subject
+    // FIXED: Changed the target table from 'content' to 'chapter'
+    $chapter_stmt = $conn->prepare("SELECT DISTINCT Chapter_Name FROM chapter WHERE Subject_Code = ? ORDER BY CAST(Chapter_Name AS UNSIGNED) ASC");
+    
+    if (!$chapter_stmt) {
+        die("SQL Prepare Error (Chapters): " . $conn->error);
+    }
+
     $chapter_stmt->bind_param("s", $subject_code);
     $chapter_stmt->execute();
     $chapter_result = $chapter_stmt->get_result();
@@ -35,14 +43,13 @@ if ($conn->connect_error == false) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Subject - CoreKnowledge</title>
+    <title>Edit Subject CoreKnowledge</title>
     <link rel="stylesheet" href="sidebar.css">
     <link rel="stylesheet" href="editSubjectStyle.css">
 </head>
 <body>
     <?php include("sidebar.php"); ?>
     <main class="main-content">
-        
         <div class="header-container">
             <h1><?php echo htmlspecialchars($subject_title); ?></h1>
         </div>
@@ -54,7 +61,6 @@ if ($conn->connect_error == false) {
             <a href="editSubjectContent.php?subject=<?php echo urlencode($subject_code); ?>&chapter=4" class="chapter-btn">CHAPTER 4</a>
             <a href="editSubjectContent.php?subject=<?php echo urlencode($subject_code); ?>&chapter=5" class="chapter-btn">CHAPTER 5</a>
         </div>
-        
     </main>
 </body>
 </html>
