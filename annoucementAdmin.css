@@ -1,0 +1,203 @@
+/* Reset and Full Screen Layout Base */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Add this line */
+}
+
+body {
+    background-color: #ffffff;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+}
+
+/* App container takes up 100% of the screen space */
+.window-frame {
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    display: flex;
+    overflow: hidden;
+}
+
+
+/* --- MAIN DASHBOARD CONTENT --- */
+.main-content {
+    flex: 1;
+    background-color: #fdf8f5;
+    padding: 40px 60px;
+    margin-left: 105px;
+    /* Offsets the fixed sidebar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Centers the content */
+    overflow: hidden;
+    height: 100vh;
+}
+
+.main-content h1 {
+    font-size: 42px;
+    font-weight: bold;
+    /* Georgia removed */
+    color: #1a253c;
+    margin-bottom: 4px;
+    text-align: center;
+}
+
+.main-content .subtitle {
+    font-size: 14px;
+    color: #d88267;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 680px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #c3e6cb;
+}
+
+/* --- ANNOUNCEMENT CONTAINER MODULE --- */
+.announcement-box {
+    background-color: #e9ecef;
+    width: 100%;
+    max-width: 850px;
+    /* Increased from 680px */
+    height: 450px;
+    /* Increased from 310px */
+    border-radius: 16px;
+    padding: 30px;
+    /* Increased padding for breathing room */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08),
+        0 4px 14px rgba(0, 0, 0, 0.04);
+    border: 1px solid #ced4da;
+}
+
+.announcement-box:focus-within {
+    border-color: #adb5bd;
+    background-color: #e2e6ea;
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.1),
+        0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.input-container {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 10px;
+    padding: 20px;
+    height: 320px;
+    /* Increased from 190px */
+    width: 100%;
+}
+
+.announcement-input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    resize: none;
+    color: #212529;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.announcement-input::placeholder {
+    color: #868e96;
+    font-weight: 400;
+}
+
+.action-row {
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 12px;
+}
+
+.btn-send {
+    background-color: #cbe3cc;
+    color: #234e25;
+    font-family: inherit;
+    font-size: 16px;
+    /* Increased from 13px */
+    font-weight: bold;
+    border: none;
+    padding: 14px 32px;
+    /* Increased padding for a larger button */
+    border-radius: 8px;
+    /* Added border-radius to match modern UI */
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    /* Slightly increased gap for the icon */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s ease, transform 0.1s, box-shadow 0.2s;
+}
+
+.btn-send:hover {
+    background-color: #b9d7ba;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.btn-send:active {
+    transform: scale(0.97);
+}
+
+.icon-send-arrow {
+    font-size: 11px;
+    transform: rotate(-15deg);
+    display: inline-block;
+}
+
+@media (max-width: 768px) {
+    body {
+        overflow-y: auto;
+    }
+
+    .window-frame {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+    }
+
+
+
+    .main-content {
+        padding: 30px 20px;
+        height: auto;
+    }
+
+    .main-content h1 {
+        font-size: 32px;
+    }
+
+    .announcement-box {
+        height: 270px;
+        padding: 16px;
+    }
+
+    .input-container {
+        height: 160px;
+    }
+
+    .announcement-input {
+        font-size: 14px;
+    }
+}

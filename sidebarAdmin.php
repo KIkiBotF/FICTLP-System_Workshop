@@ -7,19 +7,16 @@
 
     <style>
 
-/* ==========================================================================
-   1. LAYOUT SIDEBAR (DESKTOP) - DIKECILKAN KELEBARAN
-   ========================================================================== */
 .sidebar {
     display: flex;
     flex-direction: column;
-    width: 105px; /* 🛠️ Ditukar dari 150px ke 105px supaya lebih ramping/kecil */
+    width: 140px;
     background-color: #ffffff;
     padding-top: 40px;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
     z-index: 10;
     height: 100vh;
-    position: fixed; 
+    position: fixed;
     top: 0;
     left: 0;
     font-family: 'Inter', sans-serif;
@@ -43,7 +40,7 @@
 
 /* Tulisan teks menu */
 .nav-item span {
-    font-size: 11px; /* 🛠️ Dikecilkan sedikit tulisan (cth: 11px atau 0.75rem) supaya tidak pecah baris */
+    font-size: 14px;
     font-weight: bold;
 }
 
@@ -74,29 +71,21 @@
             <span>Log Out</span>
         </a>
 
-        <a href="mainPageStudent.php" class="nav-item">
+        <a href="mainPageAdmin.php" class="nav-item">
             <img src="Aset/homeBtn.svg" alt="Home" class="icon-placeholder" id="homeIcon">
             <span>Home</span>
         </a>
-
-<a href="performanceStudent.php" class="nav-item">
+                <a href="dashboardAdmin.php" class="nav-item" id="performanceBox">
     <!-- Removed inline style="width: 50px; height: 50px;" -->
-    <img src="Aset/performanceBtn.svg" alt="Performance" class="icon-placeholder">
-    <span>Performance</span>
+    <img id="performanceIcon" src="Aset/summaryBtn.svg" alt="Performance" class="icon-placeholder">
+    <span>Summary</span>
 </a>
 
-        <a href="SubjectStudent.php" class="nav-item">
-            <img src="Aset/subjectBtn.svg" alt="Report" class="icon-placeholder">
-            <span>Subjects</span>
+
+        <a href="announcementAdmin.php" class="nav-item">
+            <img src="Aset/annoucment.svg" alt="Report" class="icon-placeholder">
+            <span>Announcement</span>
         </a>
-
-<a href="AchievementStudent.php" class="nav-item">
-    <!-- Removed inline style="width: 40px; height: 40px;" -->
-    <img src="Aset/archievementBtn.svg" alt="Archive" class="icon-placeholder">
-    <span>Archivement</span>
-</a>
-
-
     </aside>
 </body>
 </html>

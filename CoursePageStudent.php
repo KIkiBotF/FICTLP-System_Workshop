@@ -1,3 +1,16 @@
+<?php
+//Pass the user's email to the reset page securely
+session_start();
+
+$host = "100.81.48.34";
+$port = "3307";
+$dbname = "fictlp db";
+$username = "bubustailo";
+$password = "Student@123";
+
+$conn = new mysqli($host, $username, $password, $dbname, $port); 
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,11 +46,10 @@
   </main>
 
   <script>
-    // --- KEKALKAN SEGALA LOGIK JAVASCRIPT ASAL KAU DEKAT SINI ---
     const courseData = {
-      cpp: { name: "C++ Programming", chapters: ["Basic Syntax & I/O", "Control Structures & Loops", "Functions & Scope", "Arrays & Strings", "Pointers & References"] },
-      db: { name: "Database Systems", chapters: ["Introduction to Databases & DBMS", "Entity-Relationship (ER) Modeling", "Relational Model & Constraints", "Relational Database Normalization", "Structured Query Language (SQL)"] },
-      coa: { name: "Computer Organization and Architecture", chapters: ["Introduction & Von Neumann Architecture", "Computer Evolution & Performance Metrics", "Memory Hierarchy & Cache Memory", "Input/Output Organization & Interfacing", "Pipeline Architecture & Instruction Sets"] }
+      cpp: { name: "C++ Programming", chapters: ["Basic Syntax & I/O", "Control Structures & Loops", "Functions & Scope"] },
+      db: { name: "Database Systems", chapters: ["Introduction to Databases & DBMS", "Entity-Relationship (ER) Modeling", "Structured Query Language (SQL)"] },
+      coa: { name: "Computer Organization and Architecture", chapters: ["Introduction & Von Neumann Architecture", "Computer Evolution & Performance Metrics", "Pipeline Architecture & Instruction Sets"] }
     };
     const currentSubjectKey = localStorage.getItem('selectedQuizSubject') || 'db';
     const currentCourse = courseData[currentSubjectKey];
@@ -76,23 +88,37 @@
 
     function renderChapters() {
       const container = document.getElementById("chapterListContainer");
-      container.innerHTML = ""; if (!currentCourse) return;
+      container.innerHTML = ""; 
+      if (!currentCourse) return;
+
       currentCourse.chapters.forEach((chapterName, index) => {
         const displayNum = String(index + 1).padStart(2, '0');
         const isDone = completedChapters.includes(index);
         const quizScore = quizScores[index];
         const card = document.createElement("a");
         card.className = "chapter-card";
+        
         if (isDone) card.classList.add("completed");
+
         if (!isEnrolled) {
-          card.classList.add("locked"); card.removeAttribute("href");
-          card.onclick = function(e) { e.preventDefault(); alert("🔒 Access Denied! Please click the 'Start Module' button above to unlock."); };
+          card.classList.add("locked"); 
+          card.removeAttribute("href");
+          card.onclick = function(e) { 
+            e.preventDefault(); 
+            alert("🔒 Access Denied! Please click the 'Start Module' button above to unlock."); 
+          };
         } else {
-          card.setAttribute("href", `ChapterStudent.html?subject=${currentSubjectKey}&chapter=${index + 1}`);
-          card.onclick = function() { localStorage.setItem("current_reading_chapter_idx", index); localStorage.setItem("current_reading_chapter_name", chapterName); };
+          // FIXED ROUTING URL
+          card.setAttribute("href", `ChapterStudent.php?subject=${currentSubjectKey}&chapter=${index + 1}`);
+          card.onclick = function() { 
+            localStorage.setItem("current_reading_chapter_idx", index); 
+            localStorage.setItem("current_reading_chapter_name", chapterName); 
+          };
         }
+
         let statusIcon = isDone ? '<span class="chapter-status done">✓</span>' : (isEnrolled ? '<span class="chapter-status pending">○</span>' : '<span class="chapter-status locked">🔒</span>');
         let scoreBadge = (quizScore !== undefined && isDone) ? `<span class="score-badge">${quizScore}/10</span>` : '';
+        
         card.innerHTML = `<span class="chapter-num">${displayNum}</span><span class="chapter-name">${chapterName}</span>${scoreBadge}${statusIcon}`;
         container.appendChild(card);
       });
