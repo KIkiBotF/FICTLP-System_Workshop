@@ -1,0 +1,183 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #fcf0f0; /* Softer pinkish background matching Edit Quiz */
+    --card-bg: #ffffff;
+    --accent: #9acbd0; /* Soft cyan/blue from the 'Load Quiz' button */
+    --text-dark: #2d3748;
+    --text-muted: #718096;
+    --border-light: #e2e8f0;
+    --sidebar-w: 105px;
+}
+
+body {
+    font-family:segoe UI, Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg);
+    color: var(--text-dark);
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ── MAIN CONTENT AREA ── */
+.main-content {
+    margin-left: var(--sidebar-w);
+    padding: 50px 40px; 
+    width: calc(100% - var(--sidebar-w));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content-header {
+    margin-bottom: 30px;
+    text-align: center;
+    width: 100%;
+
+    opacity: 0;
+    transform: translateY(40px);
+    animation: paparkanKotakNaik 0.8s ease-out 0.1s forwards;
+}
+
+.content-header h1 {
+    font-size: 32px;
+    color: var(--text-dark);
+    text-align: center; /* Centered to match Edit Quiz */
+}
+
+/* ── NEW CARD DESIGN (Separated & Rounded) ── */
+.metrics-card {
+    width: 100%;
+    max-width: 850px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px; /* Creates the space between top control and bottom content */
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.selector-wrapper {
+    background-color: var(--card-bg);
+    padding: 24px;
+    display: flex;
+    justify-content: center; /* Centers the select input */
+    align-items: center;
+    gap: 16px;
+    border-radius: 20px; /* Deeply rounded corners */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); /* Soft, elegant shadow */
+
+    /* ── 🆕 TAMBAHAN ANIMASI UNTUK KOTAK SUBJEK (MUNCUL DULUAN) ── */
+    opacity: 0;
+    transform: translateY(40px);
+    /* Durasi 1.2 detik, DELAY 0.1 detik (lebih cepat muncul) */
+    animation: paparkanKotakNaik 1.2s ease-out 0.1s forwards;
+}
+
+.selector-wrapper label {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.custom-select {
+    background-color: #ffffff;
+    border: 1px solid var(--border-light);
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    border-radius: 30px;
+    color: var(--text-dark);
+    width: 360px; /* Dipanjangkan dari 250px ke 360px */
+}
+
+.chart-container {
+    background-color: var(--card-bg);
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    border-radius: 20px; /* Bucu melengkung */
+    border: 2px solid var(--border-light); /* Kekalkan border asal yang kemas */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+
+    /* ── ANIMASI KOTAK GRAF (MUNCUL KEDUA/MENYUSUL) ── */
+    opacity: 0; 
+    transform: translateY(40px); 
+    
+    /* Durasi 0.8 detik, DELAY 0.35 detik (menyusul setelah selector naik) */
+    animation: paparkanKotakNaik 0.8s ease-out 0.35s forwards;
+}
+
+/* ── LOGIK ANIMASI JALURAN DARI BAWAH KE ATAS (DIGUNAKAN BERSAMA) ── */
+@keyframes paparkanKotakNaik {
+    0% {
+        opacity: 0;
+        transform: translateY(40px); /* Bermula dari bawah */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0); /* Bergerak naik tepat ke posisi asal */
+    }
+}
+
+
+/* ── PROGRESS BARS ── */
+.topic-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.topic-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-dark);
+    width: 380px; /* Ditambah panjang kotak tajuk supaya muat perkataan penuh */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip; /* Memastikan teks tidak dipotong dengan tanda ... */
+}
+
+.progress-bar-wrapper {
+    flex: 1;
+    height: 18px;
+    background-color: #f1f5f9;
+    border-radius: 20px; /* Pill shape */
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    background-color: var(--accent); /* Uses the soft cyan/blue */
+    border-radius: 20px;
+    transition: width 0.4s ease-out;
+}
+
+.percentage-value {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    width: 50px;
+    text-align: right;
+}
+/* ── RESPONSIVE COMPATIBILITY ── */
+@media (max-width: 768px) {
+    .main-content { padding: 24px; }
+    .topic-row { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .topic-title { width: 100%; }
+    .progress-bar-wrapper { width: 100%; }
+    .percentage-value { text-align: left; }
+}
+
+@media (max-width: 576px) {
+    .main-content { margin-left: 0; padding-bottom: 100px; width: 100%; }
+    .sidebar { width: 100%; height: auto; position: fixed; bottom: 0; top: auto; border-right: none; border-top: 1px solid #e2e8f0; padding: 10px 0; }
+    .nav-container { flex-direction: row; justify-content: space-around; }
+    .nav-item { padding: 6px; width: auto; }
+}

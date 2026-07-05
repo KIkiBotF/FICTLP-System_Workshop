@@ -1,0 +1,143 @@
+/* ── Global Styles ── */
+:root {
+    --sidebar-w: 105px;
+    --bg: #fcf0f0; /* Matches the soft Edit Quiz background */
+    --card-bg: #ffffff;
+    --text-dark: #2d3748;
+    --text-muted: #718096;
+    --accent: #9acbd0;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif; /* Unified font */
+    background-color: var(--bg);
+    color: var(--text-dark);
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ── Main Content ── */
+.main-content {
+    margin-left: var(--sidebar-w);
+    padding: 50px 40px;
+    width: calc(100% - var(--sidebar-w));
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers the whole page perfectly */
+}
+
+.content-header {
+    margin-bottom: 40px;
+    text-align: center;
+    width: 100%;
+    
+    /* ── 🆕 ANIMASI HEADER (MUNCUL PALING AWAL) ── */
+    opacity: 0;
+    transform: translateY(40px);
+    animation: paparkanKotakNaik 1.2s ease-out 0.1s forwards;
+}
+
+.content-header h1 {
+    font-size: 32px;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.congrats-msg {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+/* ── Grid & Certificates ── */
+.certificates-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px 30px;
+    max-width: 850px;
+    width: 100%;
+}
+
+.cert-card-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    
+    /* ── 🆕 SET ASAL UNTUK ELEMEN KAD SEBELUM ANIMASI BERMULA ── */
+    opacity: 0;
+    transform: translateY(40px);
+}
+
+/* ── 🆕 SUSUNAN DELAY BERPERINGKAT UNTUK SETIAP KAD SIJIL ── */
+.cert-card-wrapper:nth-child(1) {
+    animation: paparkanKotakNaik 1.2s ease-out 0.3s forwards; /* Kad 1 naik dulu */
+}
+
+.cert-card-wrapper:nth-child(2) {
+    animation: paparkanKotakNaik 1.2s ease-out 0.45s forwards; /* Kad 2 menyusul kemudian */
+}
+
+.cert-card-wrapper:nth-child(3) {
+    animation: paparkanKotakNaik 1.2s ease-out 0.6s forwards; /* Kad 3 (jika ada) */
+}
+
+.cert-thumbnail-link {
+    text-decoration: none;
+    width: 100%;
+    display: block;
+}
+
+/* ── The Floating Card Frame ── */
+.cert-frame {
+    background-color: var(--card-bg); /* Clean white card */
+    padding: 25px;
+    border-radius: 20px; /* Deep soft UI rounding */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03); /* Soft, elegant shadow */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+}
+
+.cert-frame:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06); 
+}
+
+.cert-frame img {
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    border-radius: 8px; /* Softens the image corners */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+}
+
+.cert-title {
+    margin-top: 20px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    text-align: center;
+    max-width: 280px;
+    line-height: 1.4;
+}
+
+/* ── 🆕 LOGIK ANIMASI JALURAN DARI BAWAH KE ATAS (SERAGAM) ── */
+@keyframes paparkanKotakNaik {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
