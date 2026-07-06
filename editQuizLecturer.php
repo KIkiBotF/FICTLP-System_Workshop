@@ -121,7 +121,6 @@ if ($selected_chapter != '' && $selected_subject != '') {
         </div>
 
         <?php
-        echo "<h3>DEBUG QUIZ ID: " . $quiz_id . "</h3>";
         echo '<input type="hidden" name="quiz_id" value="' . htmlspecialchars($quiz_id) . '">';
 
         if ($questions !== null && $questions->num_rows > 0) {
