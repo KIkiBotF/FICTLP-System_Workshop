@@ -24,7 +24,7 @@ $subject_code = isset($_GET['subject']) ? htmlspecialchars($_GET['subject']) : '
 <body>
 
     <div class="upload-container">
-        <h2>Add Video for Chapter <?php echo $chapter_id; ?></h2>
+        <h2>Add Video</h2>
         
         <form action="processVideo.php" method="POST">
             

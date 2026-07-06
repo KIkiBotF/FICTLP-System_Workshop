@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['userID'])) {
     header("Location: index.php");
     exit();
 }
@@ -63,7 +63,7 @@ if (file_exists('announcement_data.php')) {
         </div>
 
         <h2 class="msg-welcome">Welcome Back!</h2>
-        <p class="msg-user"><?php echo htmlspecialchars($_SESSION['username']); ?></p>
+        <p class="msg-user"><?php echo htmlspecialchars($_SESSION['name']); ?></p>
 
         <a href="manageSubjectLecturer.php" class="btn-subject">Subject</a>
 

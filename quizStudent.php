@@ -61,21 +61,33 @@ $conn->close();
 </head>
 <body>
 
-<header class="quiz-header">
-    <h1>Quiz: <?php echo htmlspecialchars($displaySubject); ?></h1>
-</header>
+<main class="main">
+        
+        <header class="quiz-header" style="display: flex; align-items: center; margin-bottom: 30px;">
+            <a href="ChapterStudent.php?subject=<?php echo urlencode($subjectShort); ?>&chapter=<?php echo $chapterNum; ?>" class="back-btn">
+                <img src="Aset/returnPage.svg" alt="Return" style="width: 32px; height: 32px; display: block;">
+            </a>
+            <h1 style="margin-left: 15px; font-weight: 900; color: #1e293b; font-size: 28px;">
+                Quiz: <?php echo htmlspecialchars($displaySubject); ?>
+            </h1>
+        </header>
 
-<main class="quiz-container">
-    <aside class="question-nav" id="questionNavContainer"></aside>
-    <section class="question-box">
-        <h2 id="qNumberAndText">Memuatkan soalan...</h2>
-        <div class="options-container" id="optionsContainer"></div>
-        <footer class="action-footer">
-            <button class="btn-clear" onclick="clearSelection()">Clear</button>
-            <button class="btn-next" id="actionBtn" onclick="handleAction()">Next</button>
-        </footer>
-    </section>
-</main>
+        <!-- Changed from <main> to <div> since it's already inside a <main> tag -->
+        <div class="quiz-container">
+            <aside class="question-nav" id="questionNavContainer"></aside>
+            
+            <section class="question-box">
+                <h2 id="qNumberAndText" style="margin-bottom: 30px;">Memuatkan soalan...</h2>
+                <div class="options-container" id="optionsContainer"></div>
+                
+                <footer class="action-footer">
+                    <button class="btn-clear" onclick="clearSelection()">Clear</button>
+                    <button class="btn-next" id="actionBtn" onclick="handleAction()">Next</button>
+                </footer>
+            </section>
+        </div>
+
+    </main>
 
 <script>
     let questions = [];
@@ -179,9 +191,6 @@ $conn->close();
         if (currentIdx < questions.length - 1) {
             loadQuestion(currentIdx + 1);
         } else {
-            // NOTA: key 'quiz_id' di sini bermaksud NOMBOR CHAPTER (1,2,3),
-            // bukan Quiz_ID sebenar - SubmitQuiz.php akan resolve Quiz_ID
-            // sebenar sendiri melalui subject + chapter number ini.
             fetch('SubmitQuiz.php', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -194,7 +203,8 @@ $conn->close();
             .then(res => res.text())
             .then(msg => {
                 alert(msg);
-                window.location.href = `ChapterStudent.php?subject=${subjectKey}&chapter=${chapterNum}`;
+                const timestamp = new Date().getTime();
+                window.location.href = `ChapterStudent.php?subject=${subjectKey}&chapter=${chapterNum}&t=${timestamp}`;
             })
             .catch(error => {
                 console.error('Error:', error);

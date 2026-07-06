@@ -14,9 +14,10 @@ if ($conn->connect_error) {
 $quiz_id = isset($_GET['quiz_id']) ? intval($_GET['quiz_id']) : 1;
 
 // Guna prepared statement - lebih selamat dari string interpolation terus
-$stmt = $conn->prepare("SELECT Question_ID, Question_Text, OptA, OptB, OptC, OptD 
-                        FROM quiz_question 
-                        WHERE Quiz_ID = ?");
+$stmt = $conn->prepare("SELECT Question_ID, Question_Text, OptA, OptB, OptC, OptD
+                        FROM quiz_question
+                        WHERE Quiz_ID = ?
+                        ORDER BY RAND() LIMIT 10");
 $stmt->bind_param("i", $quiz_id);
 $stmt->execute();
 $result = $stmt->get_result();

@@ -33,6 +33,7 @@ body {
     flex: 1;
     padding: 42px 48px 56px;
     max-width: 860px;
+    margin: 0 auto;
 }
 
 .page-title {
@@ -41,6 +42,7 @@ body {
     color: var(--text-dark);
     line-height: 1.1;
     margin-bottom: 4px;
+    text-align: center;
 
     /* ── 🆕 ANIMASI TAJUK UTAMA (MUNCUL PALING AWAL) ── */
     opacity: 0;
@@ -53,6 +55,7 @@ body {
     color: var(--text-light);
     font-weight: 500;
     margin-bottom: 32px;
+    text-align: center;
 
     /* ── 🆕 ANIMASI TAJUK UTAMA (MUNCUL PALING AWAL) ── */
     opacity: 0;

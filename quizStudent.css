@@ -1,121 +1,103 @@
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+    --bg: #fdf5f3;
+    --sidebar-w: 95px;
+    --accent: #5b6cee;
 }
 
 body {
-    background-color: #EBE6EB;
+    background-color: var(--bg);
     min-height: 100vh;
-    padding: 20px;
-}
-
-/* Header */
-.quiz-header {
     display: flex;
-    align-items: center;
-    padding: 20px 40px;
-    margin-bottom: 20px;
 }
 
-.back-btn {
-    font-size: 30px;
-    color: black;
-    text-decoration: none;
-    margin-right: 20px;
-    transform: scaleX(-1);
+/* Sidebar Spacer Layout */
+.main {
+    flex: 1;
+    margin-left: var(--sidebar-w);
+    padding: 40px;
 }
 
-.quiz-header h1 {
-    font-size: 24px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-/* Layout Utama */
+/* Main Grid Layout */
 .quiz-container {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 320px 1fr;
+    grid-template-columns: 300px 1fr;
     gap: 30px;
+    align-items: start;
 }
 
-/* Sidebar */
-.sidebar {
-    background: #fff;
-    border-radius: 30px;
-    padding: 20px 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+/* Left Sidebar Navigation */
+.question-nav {
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .nav-item-border {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 25px;
-    margin-bottom: 5px;
-    border-radius: 15px;
+    padding: 16px 24px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
 }
 
-.nav-row:hover {
-    background-color: #f5f5f5;
+.nav-item-border:hover {
+    background-color: #f8fafc;
 }
 
-.nav-row.active {
-    background-color: #E3DDF7;
+.nav-item-border.active {
+    border: 1px solid var(--accent);
+    background-color: #f0f4ff;
     font-weight: bold;
 }
 
-.nav-text {
-    font-size: 18px;
-    font-weight: bold;
+.status-circle {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
 }
 
-/* Kotak Soalan Utama */
+.status-circle.correct {
+    background-color: #10b981;
+    color: white;
+}
+
+/* Main Question Box */
 .question-box {
-    background: #fff;
-    padding: 40px 50px;
-    border-radius: 40px;
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 16px;
     min-height: 500px;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+    border: 1px solid #e2e8f0;
 }
 
-.question-box h2 {
-    font-size: 22px;
-    margin-bottom: 30px;
-}
-
-/* Placeholder Imej */
-.image-placeholder {
-    background-color: #CFCAFB;
-    width: 60%;
-    height: 200px;
-    margin: 0 auto 30px;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: black;
-    font-weight: bold;
-}
-
-.image-placeholder i {
-    font-size: 60px;
-    margin-bottom: 10px;
-}
-
-/* Pilihan Jawapan */
+/* Stacked Options Layout (Matches Edit Quiz) */
 .options-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    display: flex;
+    flex-direction: column; /* Forces vertical stacking */
+    gap: 16px;
     margin-bottom: 40px;
 }
 
@@ -123,19 +105,34 @@ body {
     display: flex;
     align-items: center;
     cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 15px;
+    color: #334155;
+    border: 1px solid #cbd5e1; /* Thin gray border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 16px 20px;
+    background: #ffffff;
+    transition: all 0.2s ease;
+}
+
+.option-item:hover {
+    background: #f8fafc;
+    border-color: #94a3b8;
+}
+
+.option-item.checked {
+    border-color: var(--accent);
+    background: #f0f4ff;
 }
 
 .option-item input[type="radio"] {
-    width: 18px;
-    height: 18px;
-    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+    margin-right: 16px;
     cursor: pointer;
-    accent-color: #5346ed;
+    accent-color: var(--accent);
 }
 
-/* Footer & Butang */
+/* Footer & Buttons */
 .action-footer {
     margin-top: auto;
     display: flex;
@@ -143,54 +140,46 @@ body {
 }
 
 .btn-clear, .btn-next {
-    padding: 12px 35px;
-    border-radius: 25px;
+    padding: 12px 32px;
+    border-radius: 50px;
     border: none;
     font-size: 14px;
     font-weight: bold;
     color: #fff;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
 }
 
 .btn-clear {
-    background: #5346ed;
+    background: #94a3b8;
+}
+
+.btn-clear:hover {
+    background: #64748b;
 }
 
 .btn-next {
-    background: #5346ed;
+    background: var(--accent);
+    box-shadow: 0 4px 10px rgba(91, 108, 238, 0.2);
 }
 
-.nav-item-border {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    margin-bottom: 10px;
-    background: #ffffff;
-    border-radius: 20px;
-    border: 4px solid #ffffff;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    cursor: pointer;
-    transition: all 0.3s ease;
+.btn-next:hover {
+    transform: translateY(-2px);
 }
 
-.status-circle {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    border: 4px solid #ffffff;
-    background: #f0f0f0;
+.back-btn {
     display: flex;
     justify-content: center;
     align-items: center;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: all 0.2s ease;
 }
 
-.status-circle.correct {
-    background-color: #44f22d;
-    color: white;
-    border: 2px solid #48ec6e;
+.back-btn:hover {
+    background: #e2e8f0;
+    transform: scale(1.05); /* Slight zoom effect when hovered */
 }

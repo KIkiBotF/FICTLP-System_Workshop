@@ -2,7 +2,7 @@
 session_start();
 
 // Security Check
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['userID'])) {
     die("Error: Unauthorized access. Please log in.");
 }
 
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $optA    = $_POST["optA_" . $qId] ?? '';
             $optB    = $_POST["optB_" . $qId] ?? '';
             $optC    = $_POST["optC_" . $qId] ?? '';
-            $optD    = $_POST["optD_" . $qId] ?? ''; 
+            $optD    = $_POST["optD_" . $qId] ?? '';
             $correct = $_POST["correctAnswer_" . $qId] ?? '';
 
             $updateStmt->bind_param("ssssssi", $qText, $optA, $optB, $optC, $optD, $correct, $qId);

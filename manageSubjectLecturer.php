@@ -2,23 +2,21 @@
 // 1. Start the session to track who is logged in
 session_start();
 
-// For this to work, you must set $_SESSION['user_id'] on your login page.
-// Example: $_SESSION['user_id'] = 'LY000001'; 
-// If no one is logged in, you should ideally redirect them back to login.
-$lecturer_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'LY000001'; // Defaulting to LY000001 for testing purposes
+// Use 'userID' to match the session variable set in index.php
+$lecturer_id = isset($_SESSION['userID']) ? $_SESSION['userID'] : 'LY000001'; 
 
-// 2. Establish database connection (remember to move this to db_connect.php later!)
+// 2. Establish database connection
 $conn = new mysqli("100.81.48.34", "bubustailo", "Student@123", "fictlp db", "3307");
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// 3. Query the database to find subjects linked ONLY to this specific lecturer
-// We join the 'subject' table with the 'lecture_subject' table
-$query = "SELECT s.Subject_Code, s.Title, s.Description 
-        FROM subject s
-        JOIN lecture_subject ls ON s.Subject_Code = ls.Subject_Code 
-        WHERE ls.userID = ?";
+// 3. Prepare the query (fixed the '1s' typos to 'ls')
+$query = "SELECT s.Subject_Code, s.Title, s.Description
+          FROM subject s
+          JOIN lecture_subject ls ON s.Subject_Code = ls.Subject_Code
+          WHERE ls.userID = ?";
 
 $stmt = $conn->prepare($query);
 $stmt->bind_param("s", $lecturer_id);

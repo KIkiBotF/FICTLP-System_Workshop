@@ -98,8 +98,9 @@ if ($resolvedQuizID) {
                   FROM score s
                   INNER JOIN quiz q ON s.Quiz_ID = q.Quiz_ID
                   WHERE s.userID = ? AND s.Quiz_ID = ?
-                  ORDER BY s.date_taken DESC
+                  ORDER BY s.attempt_no DESC, s.date_taken DESC 
                   LIMIT 1";
+    
     $stmtStatus = $conn->prepare($statusSql);
     if ($stmtStatus) {
         $stmtStatus->bind_param("si", $currentUserID, $resolvedQuizID);
@@ -132,111 +133,149 @@ while ($row = $contentResult->fetch_assoc()) {
 $contentStmt->close();
 ?>
 
-<?php include 'sidebarStudent.php'; ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chapter Module</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="ChapterStudent.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chapter Module</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=400;600;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="ChapterStudent.css" />
 </head>
+
 <body>
 
-  <main class="main">
+    <?php include 'sidebarStudent.php'; ?>
+    <main class="main">
 
-    <div class="chapter-header">
-      <h1 id="chapterTitleDisplay">Chapter <?php echo $chapterNum; ?>: <?php echo htmlspecialchars($chapterName); ?></h1>
-    </div>
+        <div style="max-width: 1100px; width: 100%; margin: 0 auto;">
 
-    <div class="content-grid">
-    <div class="section-col">
-        <div class="section-label">Slide</div>
-        <?php foreach($contents as $item): ?>
-            <?php if(strtolower($item['File_Type']) == 'slide'): ?>
-                <div class="media-card" onclick="window.open('<?php echo htmlspecialchars($item['file_path'], ENT_QUOTES); ?>', '_blank')">
-                    <p><?php echo htmlspecialchars($item['Name']); ?></p>
+            <div class="chapter-header-container" style="display: flex; justify-content: center; align-items: center; gap: 24px; width: 100%; margin-bottom: 40px;">
+
+                <!-- The original pill title remains perfectly centered -->
+                <div class="chapter-header-pill" style="margin: 0;">
+                    <h1 id="chapterTitleDisplay" style="margin: 0;">
+                        Chapter <?php echo $chapterNum; ?>: <?php echo htmlspecialchars($chapterName); ?>
+                    </h1>
                 </div>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    </div>
+            </div>
 
-    <div class="section-col video-col">
-        <div class="section-label">Video</div>
-        <?php foreach($contents as $item): ?>
-            <?php if(strtolower($item['File_Type']) == 'video'): ?>
-                <?php
-                    $ytUrl = $item['file_path'];
-                    $videoId = '';
+            <div class="content-grid">
 
-                    // Logic to extract the exact YouTube Video ID from the URL
-                    if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/ ]{11})%i', $ytUrl, $match)) {
-                        $videoId = $match[1];
-                    }
+                <div class="section-col">
+                    <div class="section-label">Slide</div>
+                    <?php foreach ($contents as $item): ?>
+                        <?php if (strtolower($item['File_Type']) == 'slide'): ?>
+                            <div style="margin-bottom: 24px; text-align: center;">
 
-                    // Ensure it is treated as a valid web URL
-                    if (strpos($ytUrl, 'http') !== 0 && $ytUrl != '') {
-                        $ytUrl = 'https://' . $ytUrl;
-                    }
-                ?>
+                                <!-- Title placed ABOVE the card -->
+                                <p style="font-weight: bold; font-size: 16px; margin-bottom: 8px; color: #1e293b;">
+                                    <?php echo htmlspecialchars($item['Name']); ?>
+                                </p>
 
-                <div class="media-card" style="padding: 10px; cursor: pointer; text-align: center; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); transition: transform 0.2s;" onclick="window.open('<?php echo htmlspecialchars($ytUrl, ENT_QUOTES); ?>', '_blank')" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                                <!-- Media Card Container (Clickable) -->
+                                <div class="media-card" onclick="window.open('<?php echo htmlspecialchars($item['file_path'], ENT_QUOTES); ?>', '_blank')">
 
-                    <?php if ($videoId): ?>
-                        <img src="https://img.youtube.com/vi/<?php echo htmlspecialchars($videoId, ENT_QUOTES); ?>/hqdefault.jpg" alt="Video Thumbnail" style="width: 100%; border-radius: 8px; margin-bottom: 10px;">
-                    <?php else: ?>
-                        <div style="width: 100%; height: 120px; background: #e0e0e0; border-radius: 8px; margin-bottom: 10px; display: flex; align-items: center; justify-content: center;">▶️ Video</div>
-                    <?php endif; ?>
+                                    <!-- Embed the PDF document directly -->
+                                    <!-- pointer-events: none; is the key to making the card clickable -->
+                                    <iframe
+                                        src="<?php echo htmlspecialchars($item['file_path'], ENT_QUOTES); ?>#toolbar=0&navpanes=0&scrollbar=0"
+                                        scrolling="no"
+                                        style="width: 100%; height: 100%; border: none; pointer-events: none; overflow: hidden;"
+                                        title="<?php echo htmlspecialchars($item['Name']); ?>">
+                                    </iframe>
 
-                    <p style="font-weight: bold; font-size: 14px; margin: 0; color: #333;"><?php echo htmlspecialchars($item['Name']); ?></p>
-
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 </div>
-            <?php endif; ?>
-        <?php endforeach; ?>
-    </div>
 
-    <div class="section-col quiz-col">
-        <div class="section-label">Quiz</div>
-        <div class="quiz-box">
-            <div class="quiz-questions">10 QUESTIONS</div>
+                <!-- VIDEO COLUMN -->
+                <div class="section-col video-col">
+                    <div class="section-label">Video</div>
+                    <?php foreach ($contents as $item): ?>
+                        <?php if (strtolower($item['File_Type']) == 'video'): ?>
+                            <?php
+                            $ytUrl = $item['file_path'];
+                            $videoId = '';
+                            // Logic to extract the exact YouTube Video ID from the URL
+                            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/\s]{11})%i', $ytUrl, $match)) {
+                                $videoId = $match[1];
+                            }
+                            // Ensure it is treated as a valid web URL
+                            if (strpos($ytUrl, 'http') !== 0 && $ytUrl != '') {
+                                $ytUrl = 'https://' . $ytUrl;
+                            }
+                            ?>
 
-            <?php if ($quizStatus['attempted']): ?>
-                <?php if ($quizStatus['passed']): ?>
-                    <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin:10px 0; padding:8px; border-radius:8px; background:#e6f7ec; color:#1e7a3d; font-weight:bold;">
-                        <span style="font-size:20px;">✓</span>
-                        <span>Pass &mdash; <?php echo $quizStatus['grade']; ?>% (Need <?php echo $quizStatus['passing']; ?>%)</span>
+                            <!-- NEW WRAPPER: Matches the Slide section perfectly -->
+                            <div style="margin-bottom: 24px; text-align: center;">
+
+                                <!-- Title placed ABOVE the card -->
+                                <p style="font-weight: bold; font-size: 16px; margin-bottom: 8px; color: #1e293b;">
+                                    <?php echo htmlspecialchars($item['Name']); ?>
+                                </p>
+
+                                <!-- Media Card Container -->
+                                <div class="media-card" onclick="window.open('<?php echo htmlspecialchars($ytUrl, ENT_QUOTES); ?>', '_blank')">
+                                    <?php if ($videoId): ?>
+                                        <img src="https://img.youtube.com/vi/<?php echo htmlspecialchars($videoId, ENT_QUOTES); ?>/hqdefault.jpg" alt="Video Thumbnail">
+                                    <?php else: ?>
+                                        <div style="font-weight: 700; color: #64748b; font-size: 14px;">Video</div>
+                                    <?php endif; ?>
+                                </div>
+
+                            </div>
+
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+
+                <div class="section-col quiz-col">
+                    <div class="section-label">Quiz</div>
+                    <div class="quiz-box">
+                        <div class="quiz-questions">10 QUESTIONS</div>
+
+                        <?php if ($quizStatus['attempted']): ?>
+                            <?php if ($quizStatus['passed']): ?>
+                                <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin:10px 0; padding:8px; border-radius:8px; background:#e6f7ec; color:#1e7a3d; font-weight:bold;">
+                                    <span style="font-size:20px;">✓</span>
+                                    <span>Pass &mdash; <?php echo $quizStatus['grade']; ?>% (Need <?php echo $quizStatus['passing']; ?>%)</span>
+                                </div>
+                            <?php else: ?>
+                                <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin:10px 0; padding:8px; border-radius:8px; background:#fdeaea; color:#c0392b; font-weight:bold;">
+                                    <span style="font-size:20px;">✗</span>
+                                    <span>Fail &mdash; <?php echo $quizStatus['grade']; ?>% (Need <?php echo $quizStatus['passing']; ?>%)</span>
+                                </div>
+                            <?php endif; ?>
+                        <?php else: ?>
+                            <div style="text-align:center; margin:10px 0; padding:8px; border-radius:8px; background:#f0f0f0; color:#666; font-weight:bold;">
+                                Does not attempt yet!
+                            </div>
+                        <?php endif; ?>
+
+                        <button class="btn-quiz" onclick="startQuiz()">
+                            <?php echo $quizStatus['attempted'] ? 'Retake Quiz' : 'Start Quiz'; ?>
+                        </button>
                     </div>
-                <?php else: ?>
-                    <div style="display:flex; align-items:center; justify-content:center; gap:8px; margin:10px 0; padding:8px; border-radius:8px; background:#fdeaea; color:#c0392b; font-weight:bold;">
-                        <span style="font-size:20px;">✗</span>
-                        <span>Fail &mdash; <?php echo $quizStatus['grade']; ?>% (Need <?php echo $quizStatus['passing']; ?>%)</span>
-                    </div>
-                <?php endif; ?>
-            <?php else: ?>
-                <div style="text-align:center; margin:10px 0; padding:8px; border-radius:8px; background:#f0f0f0; color:#666; font-weight:bold;">
-                    Does not attempt yet!
                 </div>
-            <?php endif; ?>
+            </div>
 
-            <button class="btn-quiz" onclick="startQuiz()">
-                <?php echo $quizStatus['attempted'] ? 'Retake Quiz' : 'Start Quiz'; ?>
-            </button>
         </div>
-    </div>
-</div>
+        </div>
+    </main>
 
-    </div>
-  </main>
+    <script>
+        const activeSubject = <?php echo json_encode($subjectParam); ?>;
+        const currentChapterNum = <?php echo json_encode($chapterNum); ?>;
 
-  <script>
-    const activeSubject = <?php echo json_encode($subjectParam); ?>;
-    const currentChapterNum = <?php echo json_encode($chapterNum); ?>;
-
-    function startQuiz() {
-        window.location.href = `quizStudent.php?subject=${activeSubject}&chapter=${currentChapterNum}`;
-    }
-  </script>
+        function startQuiz() {
+            window.location.href = `quizStudent.php?subject=${activeSubject}&chapter=${currentChapterNum}`;
+        }
+    </script>
 </body>
+
 </html>

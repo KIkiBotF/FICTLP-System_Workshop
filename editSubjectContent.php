@@ -49,6 +49,26 @@ if ($result->num_rows > 0) {
     }
 }
 $stmt->close();
+
+$total_questions = 0; // Default to 0 if no quiz or questions exist
+
+$quiz_count_stmt = $conn->prepare("
+    SELECT COUNT(qq.Question_ID) AS total 
+    FROM quiz_question qq
+    JOIN quiz q ON qq.Quiz_ID = q.Quiz_ID
+    WHERE q.Chapter_ID = ?
+");
+
+if ($quiz_count_stmt) {
+    $quiz_count_stmt->bind_param("s", $chapter_id);
+    $quiz_count_stmt->execute();
+    $quiz_count_result = $quiz_count_stmt->get_result();
+    
+    if ($quiz_count_row = $quiz_count_result->fetch_assoc()) {
+        $total_questions = $quiz_count_row['total'];
+    }
+    $quiz_count_stmt->close();
+}
 ?>
 
 
@@ -185,7 +205,7 @@ $stmt->close();
 
                 <div class="content-item">
                     <div class="media-box quiz-box">
-                        <span class="quiz-text">10 QUESTIONS</span>
+                        <span class="quiz-text"><?php echo htmlspecialchars($total_questions); ?> QUESTIONS</span>
                     </div>
                     <div class="item-actions center-actions">
                         <button class="action-btn edit-btn" onclick="window.location.href='editQuizLecturer.php'">Edit</button>

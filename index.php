@@ -34,19 +34,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['loginBtn'])) {
         // password_verify() di sini gantikan '==='.
         if ($enteredPassword === $row['Password']) {
 
-            // FIX PALING KRITIKAL: standardkan nama session variable supaya
-            // SAMA dengan semua fail lain (userID, name, email, role).
-            // Sebelum ni index.php simpan 'user_id'/'username' tapi
-            // mainPageStudent.php, ChapterStudent.php, SubmitQuiz.php,
-            // AchievementStudent.php, performanceStudent.php semua check
-            // 'userID'/'name'/'email' - jadi login "berjaya" tapi semua
-            // page lain anggap user TAK login.
             $_SESSION['userID'] = $row['userID'];
             $_SESSION['name']   = $row['Name'];
             $_SESSION['email']  = $row['Email'];
             $_SESSION['role']   = $row['Role'];
 
-            // Jika password masih default (belum tukar), paksa reset dulu
             if ($enteredPassword === '123456') {
                 $_SESSION['reset_email'] = $email;
                 header("Location: resetPassword.php");

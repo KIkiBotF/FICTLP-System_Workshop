@@ -2,7 +2,7 @@
 session_start();
 
 // Default to a test ID if the session isn't set
-$lecturer_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'L1006001';
+$lecturer_id = isset($_SESSION['userID']) ? $_SESSION['userID'] : 'L1006001';
 
 // Establish connection
 $conn = new mysqli("100.81.48.34", "bubustailo", "Student@123", "fictlp db", "3307");

@@ -1,14 +1,14 @@
 <?php
 session_start();
-
 $conn = new mysqli("100.81.48.34", "bubustailo", "Student@123", "fictlp db", "3307");
 
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-$lecturer_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 'L1006001';
+$lecturer_id = isset($_SESSION['userID']) ? $_SESSION['userID'] : 'L1006001';
 
+// 2. Corrected the table aliases to consistently use 'ls'
 $subject_stmt = $conn->prepare("SELECT s.Subject_Code, s.Title FROM subject s JOIN lecture_subject ls ON s.Subject_Code = ls.Subject_Code WHERE ls.userID = ?");
 
 if (!$subject_stmt) {
@@ -27,44 +27,55 @@ $selected_chapter = isset($_GET['chapter']) ? $_GET['chapter'] : '1';
 $selected_subject = isset($_GET['subject']) ? strtoupper($_GET['subject']) : '';
 
 if ($selected_chapter != '' && $selected_subject != '') {
-    $chapterFormatted = str_pad($selected_chapter, 2, '0', STR_PAD_LEFT);
-    $searchChapterType1 = "CH" . $chapterFormatted . "%";
-    $searchChapterType2 = "Chapter " . intval($selected_chapter) . "%";
+    $chapNum = intval($selected_chapter);
 
-// Use a JOIN to connect the quiz table to the chapter table to check the Subject_Code
-$stmt_quiz = $conn->prepare("
-    SELECT q.Quiz_ID 
-    FROM quiz q
-    JOIN chapter c ON q.Chapter_ID = c.Chapter_ID
-    WHERE c.Subject_Code = ? 
-    AND (q.Quiz_title LIKE ? OR q.Quiz_title LIKE ?)
-");
+    // 1. Find the exact Chapter_ID for this subject and chapter number
+    // We assume the chapter order matches the selected chapter number
+    $chapStmt = $conn->prepare("SELECT Chapter_ID FROM chapter WHERE Subject_Code = ? AND chapter_order = ? LIMIT 1");
+    $chapStmt->bind_param("si", $selected_subject, $chapNum);
+    $chapStmt->execute();
+    $chapResult = $chapStmt->get_result();
 
-// Keep the error check to be safe
-if (!$stmt_quiz) {
-    die("SQL Prepare Error on the quiz table: " . $conn->error);
-}
+    if ($chapRow = $chapResult->fetch_assoc()) {
+        $actual_chapter_id = $chapRow['Chapter_ID'];
 
-// Bind the variables and execute
-$stmt_quiz->bind_param("sss", $selected_subject, $searchChapterType1, $searchChapterType2);
-$stmt_quiz->execute();
-$result_quiz = $stmt_quiz->get_result();
+        // 2. Check if a quiz already exists for this Chapter_ID
+        $quizStmt = $conn->prepare("SELECT Quiz_ID FROM quiz WHERE Chapter_ID = ? LIMIT 1");
+        $quizStmt->bind_param("i", $actual_chapter_id);
+        $quizStmt->execute();
+        $quizResult = $quizStmt->get_result();
 
-$stmt_quiz->bind_param("sss", $selected_subject, $searchChapterType1, $searchChapterType2);
-$stmt_quiz->execute();
-$result_quiz = $stmt_quiz->get_result();
+        if ($quizRow = $quizResult->fetch_assoc()) {
+            // Quiz exists! Grab the ID
+            $quiz_id = $quizRow['Quiz_ID'];
+        } else {
+            // Quiz DOES NOT exist! Auto-create it so the lecturer can add questions.
+            $quizTitle = "Chapter " . $chapNum . " Quiz";
+            $passingMark = 70; // Default passing mark for new quizzes
 
-    if ($result_quiz->num_rows > 0) {
-        $quiz_row = $result_quiz->fetch_assoc();
-        $quiz_id = $quiz_row['Quiz_ID'];
+            $createQuizStmt = $conn->prepare("INSERT INTO quiz (Chapter_ID, Quiz_title, Passing_Mark) VALUES (?, ?, ?)");
+            $createQuizStmt->bind_param("isi", $actual_chapter_id, $quizTitle, $passingMark);
+            
+            if ($createQuizStmt->execute()) {
+                // Get the ID of the newly created quiz
+                $quiz_id = $conn->insert_id; 
+            }
+            $createQuizStmt->close();
+        }
+        $quizStmt->close();
 
-        // Fetch questions for this quiz
-        $stmt_qs = $conn->prepare("SELECT * FROM quiz_question WHERE Quiz_ID = ?");
-        $stmt_qs->bind_param("i", $quiz_id);
-        $stmt_qs->execute();
-        $questions = $stmt_qs->get_result();
+        // 3. If we successfully found or created a Quiz_ID, fetch its questions
+        if (!empty($quiz_id)) {
+            $stmt_qs = $conn->prepare("SELECT * FROM quiz_question WHERE Quiz_ID = ?");
+            $stmt_qs->bind_param("i", $quiz_id);
+            $stmt_qs->execute();
+            $questions = $stmt_qs->get_result();
+            $stmt_qs->close();
+        }
     }
+    $chapStmt->close();
 }
+?>
 ?>
 
 <!DOCTYPE html>
@@ -84,6 +95,7 @@ $result_quiz = $stmt_quiz->get_result();
     <h1>Edit Quiz</h1>
     
     <form action="saveQuizEdit.php" method="POST" class="quiz-wrapper">
+        
         <div class="settings-container">
             <div class="input-group">
                 <label for="quizChapter">Quiz Chapter: </label>
@@ -109,6 +121,7 @@ $result_quiz = $stmt_quiz->get_result();
         </div>
 
         <?php
+        echo "<h3>DEBUG QUIZ ID: " . $quiz_id . "</h3>";
         echo '<input type="hidden" name="quiz_id" value="' . htmlspecialchars($quiz_id) . '">';
 
         if ($questions !== null && $questions->num_rows > 0) {

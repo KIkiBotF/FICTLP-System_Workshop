@@ -136,24 +136,41 @@ $conn->close();
         </header>
 
         <section class="certificates-grid">
-            <?php foreach ($subjects as $code => $name): ?>
-                <?php $isUnlocked = $unlockStatus[$code]; ?>
-                <div class="cert-card-wrapper <?php echo !$isUnlocked ? 'locked' : ''; ?>">
-                    <?php if (!$isUnlocked): ?>
-                        <div class="lock-overlay">🔒 Locked</div>
-                        <div class="cert-frame">
-                        <?php else: ?>
-                            <div class="unlocked-badge">✅ Unlocked</div>
+            <?php
+            // Check if the student has unlocked AT LEAST ONE certificate
+            // (Meaning, is there a 'true' value anywhere inside $unlockStatus?)
+            $hasAnyAchievement = in_array(true, $unlockStatus, true);
+
+            // If they have NO achievements, show the message
+            if (!$hasAnyAchievement):
+            ?>
+                <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+                    <p style="color: #718096; font-size: 1.2rem; font-weight: 500;">No achievement is achieve yet.</p>
+                </div>
+
+                <?php
+            // Otherwise, loop through and display the unlocked certificates
+            else:
+                foreach ($subjects as $code => $name):
+                    $isUnlocked = $unlockStatus[$code];
+
+                    // ONLY render the certificate HTML if it is unlocked
+                    if ($isUnlocked):
+                ?>
+                        <div class="cert-card-wrapper">
+                            <div class="unlocked-badge"> Unlocked</div>
                             <a href="CertificateView.php?subject_code=<?php echo urlencode($code); ?>" class="cert-thumbnail-link">
                                 <div class="cert-frame">
-                                <?php endif; ?>
-                                <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'><rect width='280' height='200' fill='white'/><rect x='10' y='10' width='260' height='180' fill='none' stroke='%23d4af37' stroke-width='3'/><text x='140' y='50' font-family='serif' font-size='11' text-anchor='middle' font-weight='bold' fill='%23222'>CERTIFICATE OF COMPLETION COURSE</text><text x='140' y='95' font-family='sans-serif' font-size='14' text-anchor='middle' fill='%23444'><?php echo isset($_SESSION['name']) ? htmlspecialchars($_SESSION['name']) : 'Student'; ?></text><text x='140' y='130' font-family='sans-serif' font-size='10' text-anchor='middle' font-style='italic' fill='%23666'>has successfully completed 100% of</text><text x='140' y='145' font-family='sans-serif' font-size='11' text-anchor='middle' font-weight='bold' fill='%235c6bcb'><?php echo htmlspecialchars($name); ?></text><path d='M15,15 L45,15 L15,45 Z' fill='%230d47a1'/><path d='M265,15 L235,15 L265,45 Z' fill='%230d47a1'/></svg>" alt="<?php echo htmlspecialchars($name); ?> Certificate Mockup">
+                                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='280' height='200' viewBox='0 0 280 200'><rect width='280' height='200' fill='white'/><rect x='10' y='10' width='260' height='180' fill='none' stroke='%23d4af37' stroke-width='3'/><text x='140' y='50' font-family='serif' font-size='11' text-anchor='middle' font-weight='bold' fill='%23222'>CERTIFICATE OF COMPLETION COURSE</text><text x='140' y='95' font-family='sans-serif' font-size='14' text-anchor='middle' fill='%23444'><?php echo isset($_SESSION['name']) ? htmlspecialchars($_SESSION['name']) : 'Student'; ?></text><text x='140' y='130' font-family='sans-serif' font-size='10' text-anchor='middle' font-style='italic' fill='%23666'>has successfully completed 100% of</text><text x='140' y='145' font-family='sans-serif' font-size='11' text-anchor='middle' font-weight='bold' fill='%235c6bcb'><?php echo htmlspecialchars($name); ?></text><path d='M15 145,15 L15,45 z' fill='%230d47a1'/><path d='M265,15 L235,15 L265,45 z' fill='%230d47a1'/></svg>" alt="<?php echo htmlspecialchars($name); ?> Certificate Mockup">
                                 </div>
-                                <?php if ($isUnlocked): ?>
-                            </a><?php endif; ?>
-                        <p class="cert-title"><?php echo htmlspecialchars($name); ?> Certificate</p>
+                            </a>
+                            <p class="cert-title"><?php echo htmlspecialchars($name); ?> Certificate</p>
                         </div>
-                    <?php endforeach; ?>
+            <?php
+                    endif; // End of the $isUnlocked condition 
+                endforeach;
+            endif; // End of the $hasAnyAchievement condition
+            ?>
         </section>
     </main>
 </body>
