@@ -280,7 +280,6 @@ body {
 }
 @media (max-width: 576px) {
   .main { padding: 20px; margin-left: 0; padding-top: 100px; }
-  .sidebar { width: 100%; height: auto; position: fixed; bottom: 0; top: auto; border-right: none; border-top: 1px solid #e2e8f0; padding: 10px 0; }
   .nav-container { flex-direction: row; justify-content: space-around; }
   .nav-item { padding: 6px; width: auto; }
 }

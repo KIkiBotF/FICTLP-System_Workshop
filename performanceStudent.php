@@ -2,93 +2,106 @@
 // 1. Mulakan session
 session_start();
 
-// Semak jika user sudah login
+if (!isset($_SESSION['userID'])) {
+    header("Location: index.php");
+    exit();
+}
 
-    
+$current_user = $_SESSION['userID'];
 
-
-// 2. Sambungan ke Database (Mengikut tetapan index.php anda)
 $host = "100.81.48.34";
-$port = "3307";          
-$dbname = "fictlp db";  
-$username = "bubustailo"; 
+$port = "3307";
+$dbname = "fictlp db";
+$username = "bubustailo";
 $password = "Student@123";
 
 $conn = new mysqli($host, $username, $password, $dbname, $port);
-
-if ($conn->connect_error) { 
-    die("Connection failed: " . $conn->connect_error); 
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
 }
 
-// 3. Ambil data prestasi kuiz pelajar dari database (3 topic sahaja ikut jumlah chapter semasa)
-$performance_data = [
-    'cpp' => [
-        'topic1' => 0, 'topic2' => 0, 'topic3' => 0,
-        'details' => ['topic1' => '0%', 'topic2' => '0%', 'topic3' => '0%']
-    ],
-    'db' => [
-        'topic1' => 0, 'topic2' => 0, 'topic3' => 0,
-        'details' => ['topic1' => '0%', 'topic2' => '0%', 'topic3' => '0%']
-    ],
-    'coa' => [
-        'topic1' => 0, 'topic2' => 0, 'topic3' => 0,
-        'details' => ['topic1' => '0%', 'topic2' => '0%', 'topic3' => '0%']
-    ]
+// Mapping Subject_Code sebenar -> kod pendek untuk key array
+$subjectMap = [
+    'DITP1113' => 'cpp',
+    'DITP2913' => 'db',
+    'DITS1133' => 'coa',
+];
+$subjectTitles = [
+    'cpp' => 'C++ Programming',
+    'db'  => 'Database',
+    'coa' => 'Computer Organization and Architecture',
 ];
 
-// Query mencantumkan table score dan quiz berdasarkan Quiz_ID
-$sql = "SELECT q.Subject_Code, q.Quiz_title, q.Passing_Mark, s.Grade 
-        FROM score s 
-        INNER JOIN quiz q ON s.Quiz_ID = q.Quiz_ID 
-        WHERE s.userID = ?";
+$performance_data = [
+    'cpp' => ['chapters' => []],
+    'db'  => ['chapters' => []],
+    'coa' => ['chapters' => []],
+];
+
+
+$chapterStmt = $conn->prepare("SELECT Subject_Code, chapter_order, Chapter_Name FROM chapter ORDER BY Subject_Code, chapter_order");
+$chapterStmt->execute();
+$chapterResult = $chapterStmt->get_result();
+while ($row = $chapterResult->fetch_assoc()) {
+    $subject = $subjectMap[$row['Subject_Code']] ?? null;
+    if (!$subject) continue;
+
+    $order = intval($row['chapter_order']);
+    $performance_data[$subject]['chapters'][$order] = [
+        'name'       => $row['Chapter_Name'],
+        'percentage' => 0,
+        'detail'     => '0%',
+    ];
+}
+$chapterStmt->close();
+
+// guna `chapter.chapter_order` untuk overlay markah
+$sql = "SELECT c.Subject_Code, c.chapter_order, s.Grade
+        FROM score s
+        INNER JOIN quiz q ON s.Quiz_ID = q.Quiz_ID
+        INNER JOIN chapter c ON q.Chapter_ID = c.Chapter_ID
+        WHERE s.userID = ?
+        ORDER BY s.date_taken DESC";
 
 $stmt = $conn->prepare($sql);
 if ($stmt) {
     $stmt->bind_param("s", $current_user);
     $stmt->execute();
     $result = $stmt->get_result();
-    
-    while ($row = $result->fetch_assoc()) {
-        // FIX: Subject_Code dalam DB adalah kod PANJANG (DITP2913, DITP1113,
-        // DITS1133), bukan 'cpp'/'db'/'coa'. Perlu mapping dulu sebelum
-        // digunakan sebagai key array $performance_data.
-        $subjectCodeMap = [
-            'ditp2913' => 'db',
-            'ditp1113' => 'cpp',
-            'dits1133' => 'coa'
-        ];
-        $rawSubjectCode = strtolower($row['Subject_Code']);
-        $subject = $subjectCodeMap[$rawSubjectCode] ?? $rawSubjectCode;
 
-        $quiz_title = $row['Quiz_title'];           // Contoh: "CH01 DATABASE" / "Chapter 1: Introduction to C++"
-        $grade = intval($row['Grade']);
-        $passing_mark = intval($row['Passing_Mark']) > 0 ? intval($row['Passing_Mark']) : 100; // Elakkan pembahagian dengan 0
-        
-        // FIX: Pemetaan tajuk kuiz kepada ID Elemen (topic1 - topic5) guna
-        // regex supaya berfungsi untuk semua format tajuk sedia ada
-        // ("CH01 DATABASE", "Chapter 1: ...", "Topic 01: ...")
-        $topic_key = '';
-        if (preg_match('/(?:CH|Chapter|Topic)\s*0?(\d)/i', $quiz_title, $m)) {
-            $chapterDigit = intval($m[1]);
-            if ($chapterDigit >= 1 && $chapterDigit <= 3) {
-                $topic_key = 'topic' . $chapterDigit;
-            }
-        }
-        
-        // Masukkan peratusan ke dalam array prestasi jika subjek wujud
-        if ($topic_key && isset($performance_data[$subject])) {
-            // FIX: Grade dalam table `score` SUDAH dalam bentuk peratusan
-            // (0-100), jadi TIDAK perlu dibahagi dengan Passing_Mark lagi.
-            // Passing_Mark cuma ambang lulus (contoh 70 = perlu 70%), bukan
-            // markah penuh/max.
-            $percentage = $grade > 100 ? 100 : $grade; // Hadkan maksimum 100%
-            
-            $performance_data[$subject][$topic_key] = $percentage;
-            $performance_data[$subject]['details'][$topic_key] = "$grade%";
-        }
+    // ORDER BY date_taken DESC -> row PERTAMA untuk setiap chapter
+    // adalah attempt TERKINI, guna 'seen' untuk skip attempt lama.
+    $seen = [];
+
+    while ($row = $result->fetch_assoc()) {
+        $subject = $subjectMap[$row['Subject_Code']] ?? null;
+        $order = intval($row['chapter_order']);
+
+        // Skip kalau chapter ni tak wujud dalam senarai chapter aktif
+        // (contoh markah lama untuk quiz yang chapter dia dah dibuang)
+        if (!$subject || !isset($performance_data[$subject]['chapters'][$order])) continue;
+
+        $seenKey = $subject . '_' . $order;
+        if (isset($seen[$seenKey])) continue;
+        $seen[$seenKey] = true;
+
+        $grade = intval($row['Grade']); // Grade sudah dalam bentuk peratusan (0-100)
+        $percentage = $grade > 100 ? 100 : $grade;
+
+        $performance_data[$subject]['chapters'][$order]['percentage'] = $percentage;
+        $performance_data[$subject]['chapters'][$order]['detail'] = "$grade%";
     }
     $stmt->close();
 }
+
+// Susun ikut chapter_order dan reindex jadi array berturutan (0,1,2...)
+// supaya senang di-loop dalam JS tanpa 'gap' pada key.
+foreach ($performance_data as &$subj) {
+    ksort($subj['chapters']);
+    $subj['chapters'] = array_values($subj['chapters']);
+}
+unset($subj);
+
 $conn->close();
 ?>
 
@@ -113,87 +126,45 @@ $conn->close();
             <div class="selector-wrapper">
                 <label for="subject-select">Subject:</label>
                 <select id="subject-select" class="custom-select" onchange="updatePerformanceView()">
-                    <option value="cpp">C++ Programming</option>
-                    <option value="db">Database</option>
-                    <option value="coa">Computer Organization and Architecture</option>
+                    <?php foreach ($subjectTitles as $key => $title): ?>
+                        <option value="<?php echo htmlspecialchars($key); ?>"><?php echo htmlspecialchars($title); ?></option>
+                    <?php endforeach; ?>
                 </select>
             </div>
 
-            <div class="chart-container">
-                <div class="topic-row" id="row-topic1">
-                    <span class="topic-title" id="title-topic1">Topic 01</span>
-                    <div class="progress-bar-wrapper">
-                        <div class="bar-fill" id="fill-topic1" style="width: 0%;"></div>
-                    </div>
-                    <span class="percentage-value" id="text-topic1">0%</span>
-                </div>
-
-                <div class="topic-row" id="row-topic2">
-                    <span class="topic-title" id="title-topic2">Topic 02</span>
-                    <div class="progress-bar-wrapper">
-                        <div class="bar-fill" id="fill-topic2" style="width: 0%;"></div>
-                    </div>
-                    <span class="percentage-value" id="text-topic2">0%</span>
-                </div>
-
-                <div class="topic-row" id="row-topic3">
-                    <span class="topic-title" id="title-topic3">Topic 03</span>
-                    <div class="progress-bar-wrapper">
-                        <div class="bar-fill" id="fill-topic3" style="width: 0%;"></div>
-                    </div>
-                    <span class="percentage-value" id="text-topic3">0%</span>
-                </div>
-            </div>
+            <div class="chart-container" id="chartContainer"></div>
         </div>
     </main>
 
     <script>
-        // Menggunakan fungsi bawaan asal PHP (json_encode) secara terus
         const dbPerformanceData = <?php echo json_encode($performance_data); ?>;
-        
-        // Pemetaan nama topik mengikut subjek secara dinamik
-        const subjectTopics = {
-            'cpp': {
-                'topic1': "Topic 01: Basics & Data Types",
-                'topic2': "Topic 02: Control Structures",
-                'topic3': "Topic 03: Loops"
-            },
-            'db': {
-                'topic1': "Topic 01: Introduction to Database",
-                'topic2': "Topic 02: Entity-Relationship Diagram (ERD)",
-                'topic3': "Topic 03: Relational Model & Constraints"
-            },
-            'coa': {
-                'topic1': "Topic 01: Number Systems & Logic Gates",
-                'topic2': "Topic 02: Central Processing Unit (CPU)",
-                'topic3': "Topic 03: Memory Hierarchy & Cache"
-            }
-        };
 
         function updatePerformanceView() {
             const selectedSubject = document.getElementById('subject-select').value;
-            const currentData = dbPerformanceData[selectedSubject];
-            const currentSubjectTitles = subjectTopics[selectedSubject];
+            const chapters = (dbPerformanceData[selectedSubject] && dbPerformanceData[selectedSubject].chapters) || [];
+            const container = document.getElementById('chartContainer');
 
-            if (currentData && currentSubjectTitles) {
-                // Gelung pemetaan dialirkan dari topic1 sehingga topic3 (3 chapter sahaja)
-                const topics = ['topic1', 'topic2', 'topic3'];
-                
-                topics.forEach(topic => {
-                    const percentage = currentData[topic] || 0;
-                    const scoreDetail = currentData['details'][topic] || '0%';
-                    const baseTitle = currentSubjectTitles[topic];
-                    
-                    if (scoreDetail !== '0%') {
-                        document.getElementById(`title-${topic}`).innerText = `${baseTitle} (${scoreDetail})`;
-                    } else {
-                        document.getElementById(`title-${topic}`).innerText = baseTitle;
-                    }
-                    
-                    document.getElementById(`fill-${topic}`).style.width = `${percentage}%`;
-                    document.getElementById(`text-${topic}`).innerText = `${percentage}%`;
-                });
+            if (chapters.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#888; padding:20px 0;">Tiada chapter untuk subjek ini lagi.</p>';
+                return;
             }
+
+            container.innerHTML = chapters.map((ch, idx) => {
+                const num = String(idx + 1).padStart(2, '0');
+                const titleText = ch.detail !== '0%'
+                    ? `Topic ${num}: ${ch.name} (${ch.detail})`
+                    : `Topic ${num}: ${ch.name}`;
+
+                return `
+                    <div class="topic-row">
+                        <span class="topic-title">${titleText}</span>
+                        <div class="progress-bar-wrapper">
+                            <div class="bar-fill" style="width: ${ch.percentage}%;"></div>
+                        </div>
+                        <span class="percentage-value">${ch.percentage}%</span>
+                    </div>
+                `;
+            }).join('');
         }
 
         window.onload = function() {

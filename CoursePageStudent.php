@@ -1,6 +1,10 @@
 <?php
-//Pass the user's email to the reset page securely
 session_start();
+if (!isset($_SESSION['userID'])) {
+    header("Location: index.php");
+    exit();
+}
+$currentUserID = $_SESSION['userID'];
 
 $host = "100.81.48.34";
 $port = "3307";
@@ -8,9 +12,101 @@ $dbname = "fictlp db";
 $username = "bubustailo";
 $password = "Student@123";
 
-$conn = new mysqli($host, $username, $password, $dbname, $port); 
-?>
+$conn = new mysqli($host, $username, $password, $dbname, $port);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
+// Mapping kod pendek URL -> Subject_Code sebenar dalam DB
+$subjectMap = [
+    'cpp' => 'DITP1113',
+    'db'  => 'DITP2913',
+    'coa' => 'DITS1133',
+];
+$subjectNames = [
+    'DITP1113' => 'C++ Programming',
+    'DITP2913' => 'Database',
+    'DITS1133' => 'Computer Organization and Architecture',
+];
+
+$subjectShort = isset($_GET['subject']) ? strtolower(trim($_GET['subject'])) : '';
+$dbSubjectCode = $subjectMap[$subjectShort] ?? null;
+
+if (!$dbSubjectCode) {
+    die("Invalid subject. Please choose a subject from the <a href='SubjectStudent.php'>Subject</a> page.");
+}
+$courseName = $subjectNames[$dbSubjectCode];
+
+// 1. Semak status enrollment SEBENAR dari table `enrollment`
+//    (sebelum ni cuma localStorage - refresh browser lain / device lain
+//    akan hilang status enrolled, dan tak sync dengan DB langsung)
+$enrollStmt = $conn->prepare("SELECT 1 FROM enrollment WHERE userID = ? AND Subject_Code = ?");
+$enrollStmt->bind_param("ss", $currentUserID, $dbSubjectCode);
+$enrollStmt->execute();
+$isEnrolled = $enrollStmt->get_result()->num_rows > 0;
+$enrollStmt->close();
+
+// 2. Ambil semua chapter untuk subjek ini, ikut urutan chapter_order
+$chapters = [];
+$chapterStmt = $conn->prepare("SELECT Chapter_ID, Chapter_Name, chapter_order FROM chapter WHERE Subject_Code = ? ORDER BY chapter_order ASC");
+$chapterStmt->bind_param("s", $dbSubjectCode);
+$chapterStmt->execute();
+$chapterResult = $chapterStmt->get_result();
+while ($row = $chapterResult->fetch_assoc()) {
+    $chapters[] = $row;
+}
+$chapterStmt->close();
+
+// 3. Untuk setiap chapter, cari quiz & markah TERKINI pelajar (jika ada)
+//    (sebelum ni quiz score simpan dalam localStorage terus - senang hilang
+//    bila clear cache, dan tak sync antara device)
+$totalChapters = count($chapters);
+$completedCount = 0;
+$totalScoreSum = 0;
+$scoredCount = 0;
+
+foreach ($chapters as &$ch) {
+    $ch['quiz_id'] = null;
+    $ch['grade'] = null;
+    $ch['passing_mark'] = 70;
+    $ch['passed'] = false;
+
+    $quizStmt = $conn->prepare("SELECT Quiz_ID, Passing_Mark FROM quiz WHERE Chapter_ID = ? LIMIT 1");
+    $quizStmt->bind_param("i", $ch['Chapter_ID']);
+    $quizStmt->execute();
+    $quizRow = $quizStmt->get_result()->fetch_assoc();
+    $quizStmt->close();
+
+    if ($quizRow) {
+        $ch['quiz_id'] = intval($quizRow['Quiz_ID']);
+        $ch['passing_mark'] = intval($quizRow['Passing_Mark']) > 0 ? intval($quizRow['Passing_Mark']) : 70;
+
+        $scoreStmt = $conn->prepare(
+            "SELECT Grade FROM score WHERE userID = ? AND Quiz_ID = ? ORDER BY date_taken DESC LIMIT 1"
+        );
+        $scoreStmt->bind_param("si", $currentUserID, $ch['quiz_id']);
+        $scoreStmt->execute();
+        $scoreRow = $scoreStmt->get_result()->fetch_assoc();
+        $scoreStmt->close();
+
+        if ($scoreRow) {
+            $ch['grade'] = intval($scoreRow['Grade']); // Grade sudah peratusan (0-100)
+            $ch['passed'] = $ch['grade'] >= $ch['passing_mark'];
+            $totalScoreSum += $ch['grade'];
+            $scoredCount++;
+            if ($ch['passed']) {
+                $completedCount++;
+            }
+        }
+    }
+}
+unset($ch);
+
+$progressPct = $totalChapters > 0 ? round(($completedCount / $totalChapters) * 100) : 0;
+$avgScore = $scoredCount > 0 ? round($totalScoreSum / $scoredCount) : 0;
+
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,130 +123,114 @@ $conn = new mysqli($host, $username, $password, $dbname, $port);
   <main class="main">
     <div class="header-section">
       <div class="page-header">
-        <h1>Welcome Back to <span id="courseNameTitle">Loading Course...</span></h1>
-        <button class="btn-start" id="startModuleBtn" onclick="enrollCourse()">Start Module</button>
+        <h1>Welcome Back to <span id="courseNameTitle"><?php echo htmlspecialchars($courseName); ?></span></h1>
+        <button class="btn-start <?php echo $isEnrolled ? 'enrolled' : ''; ?>" id="startModuleBtn" <?php echo $isEnrolled ? 'disabled' : ''; ?> onclick="enrollCourse()">
+            <?php echo $isEnrolled ? 'Enrolled ✓' : 'Start Module'; ?>
+        </button>
       </div>
-      <p class="progress-label" id="progressLabel" style="margin-top:6px">📚 Current Progress: Module (0%)</p>
+      <p class="progress-label" id="progressLabel" style="margin-top:6px">
+        📚 Current Progress: <?php echo $progressPct; ?>% (<?php echo $completedCount; ?>/<?php echo $totalChapters; ?> chapters completed)
+      </p>
     </div>
 
     <div class="content-grid">
-      <div class="chapter-list" id="chapterListContainer"></div>
+      <div class="chapter-list" id="chapterListContainer">
+        <?php foreach ($chapters as $index => $ch): ?>
+            <?php
+                $displayNum = str_pad($index + 1, 2, '0', STR_PAD_LEFT);
+                $isDone = $ch['passed'];
+                $scoreBadge = $ch['grade'] !== null ? '<span class="score-badge">' . $ch['grade'] . '%</span>' : '';
+                if ($isDone) {
+                    $statusIcon = '<span class="chapter-status done">✓</span>';
+                } elseif ($isEnrolled) {
+                    $statusIcon = '<span class="chapter-status pending">○</span>';
+                } else {
+                    $statusIcon = '<span class="chapter-status locked">🔒</span>';
+                }
+            ?>
+            <?php if ($isEnrolled): ?>
+                <a class="chapter-card <?php echo $isDone ? 'completed' : ''; ?>"
+                   href="ChapterStudent.php?subject=<?php echo urlencode($subjectShort); ?>&chapter=<?php echo $index + 1; ?>">
+                    <span class="chapter-num"><?php echo $displayNum; ?></span>
+                    <span class="chapter-name"><?php echo htmlspecialchars($ch['Chapter_Name']); ?></span>
+                    <?php echo $scoreBadge; ?>
+                    <?php echo $statusIcon; ?>
+                </a>
+            <?php else: ?>
+                <a class="chapter-card locked" href="javascript:void(0)" onclick="alert('🔒 Access Denied! Please click the Start Module button above to unlock.')">
+                    <span class="chapter-num"><?php echo $displayNum; ?></span>
+                    <span class="chapter-name"><?php echo htmlspecialchars($ch['Chapter_Name']); ?></span>
+                    <?php echo $statusIcon; ?>
+                </a>
+            <?php endif; ?>
+        <?php endforeach; ?>
+      </div>
 
       <div class="poor-panel" id="poorPanel">
-        <div class="poor-panel-title">Poor Chapter Display</div>
+        <div class="poor-panel-title">Chapter Overview</div>
         <div class="poor-panel-content" id="poorPanelContent">
-          <div style="padding: 20px; text-align: center; color: #64748b;">📊 Chapter statistics will appear here</div>
+            <div class="stats-summary">
+                <div class="stat-card"><div class="stat-value"><?php echo $completedCount; ?>/<?php echo $totalChapters; ?></div><div class="stat-label">Done</div></div>
+                <div class="stat-card"><div class="stat-value"><?php echo $progressPct; ?>%</div><div class="stat-label">Progress</div></div>
+                <div class="stat-card"><div class="stat-value"><?php echo $avgScore; ?></div><div class="stat-label">Avg Score</div></div>
+            </div>
+            <?php
+                if ($progressPct === 100) {
+                    $performanceMsg = '🎉 Excellent! Mastered!';
+                    $msgColor = '#10b981';
+                } elseif ($progressPct >= 60) {
+                    $performanceMsg = '👍 Good progress!';
+                    $msgColor = '#f59e0b';
+                } elseif ($progressPct > 0) {
+                    $performanceMsg = '📖 Keep reading!';
+                    $msgColor = '#3b82f6';
+                } elseif ($isEnrolled) {
+                    $performanceMsg = '🚀 Click a chapter!';
+                    $msgColor = '#3b82f6';
+                } else {
+                    $performanceMsg = '🔒 Start Module first!';
+                    $msgColor = '#3b82f6';
+                }
+            ?>
+            <div class="performance-message" style="color:<?php echo $msgColor; ?>;"><?php echo $performanceMsg; ?></div>
+            <div class="chapters-header"><span>#</span><span>Chapter</span><span>Score</span><span>Sts</span></div>
+            <div class="poor-chapters-list">
+                <?php foreach ($chapters as $index => $ch): ?>
+                    <?php
+                        $shortName = strlen($ch['Chapter_Name']) > 18 ? substr($ch['Chapter_Name'], 0, 18) . '...' : $ch['Chapter_Name'];
+                        $scoreDisplay = $ch['grade'] !== null ? $ch['grade'] . '%' : '--';
+                    ?>
+                    <div class="poor-chapter-item <?php echo $ch['passed'] ? 'completed' : ''; ?>">
+                        <span class="poor-chapter-num"><?php echo str_pad($index + 1, 2, '0', STR_PAD_LEFT); ?></span>
+                        <span class="poor-chapter-name"><?php echo htmlspecialchars($shortName); ?></span>
+                        <span class="poor-chapter-score"><?php echo $scoreDisplay; ?></span>
+                        <span class="poor-chapter-status"><?php echo $ch['passed'] ? '✅' : '⭕'; ?></span>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
       </div>
     </div>
   </main>
 
   <script>
-    const courseData = {
-      cpp: { name: "C++ Programming", chapters: ["Basic Syntax & I/O", "Control Structures & Loops", "Functions & Scope"] },
-      db: { name: "Database Systems", chapters: ["Introduction to Databases & DBMS", "Entity-Relationship (ER) Modeling", "Structured Query Language (SQL)"] },
-      coa: { name: "Computer Organization and Architecture", chapters: ["Introduction & Von Neumann Architecture", "Computer Evolution & Performance Metrics", "Pipeline Architecture & Instruction Sets"] }
-    };
-    const currentSubjectKey = localStorage.getItem('selectedQuizSubject') || 'db';
-    const currentCourse = courseData[currentSubjectKey];
-    const ENROL_KEY = `enrolled_${currentSubjectKey}`;
-    const PROGRESS_KEY = `completed_chapters_${currentSubjectKey}`;
-    const QUIZ_SCORES_KEY = `quiz_scores_${currentSubjectKey}`;
-    let isEnrolled = localStorage.getItem(ENROL_KEY) === 'true';
-    let completedChapters = JSON.parse(localStorage.getItem(PROGRESS_KEY)) || [];
-    let quizScores = JSON.parse(localStorage.getItem(QUIZ_SCORES_KEY)) || {};
-
-    document.addEventListener("DOMContentLoaded", function() {
-      if (currentCourse) { document.getElementById("courseNameTitle").innerText = currentCourse.name; }
-      updateEnrollmentUI(); renderChapters(); calculateProgress(); updatePoorPanel();
-      window.addEventListener('storage', function(e) {
-        if (e.key === PROGRESS_KEY || e.key === QUIZ_SCORES_KEY) {
-          completedChapters = JSON.parse(localStorage.getItem(PROGRESS_KEY)) || [];
-          quizScores = JSON.parse(localStorage.getItem(QUIZ_SCORES_KEY)) || {};
-          renderChapters(); calculateProgress(); updatePoorPanel();
-        }
-      });
-    });
-
+    // Enrollment sekarang terus tulis ke table `enrollment` (AJAX ke
+    // saveEnrollment.php yang dah wujud), bukan localStorage semata-mata.
     function enrollCourse() {
-      if (!isEnrolled) {
-        isEnrolled = true; localStorage.setItem(ENROL_KEY, 'true');
-        updateEnrollmentUI(); renderChapters(); calculateProgress(); updatePoorPanel();
-        showNotification("✅ Successfully enrolled! All chapters are now unlocked.", "success");
-      }
-    }
-
-    function updateEnrollmentUI() {
-      const btn = document.getElementById("startModuleBtn");
-      if (isEnrolled) { btn.innerText = "Enrolled ✓"; btn.classList.add("enrolled"); btn.disabled = true; } 
-      else { btn.innerText = "Start Module"; btn.classList.remove("enrolled"); btn.disabled = false; }
-    }
-
-    function renderChapters() {
-      const container = document.getElementById("chapterListContainer");
-      container.innerHTML = ""; 
-      if (!currentCourse) return;
-
-      currentCourse.chapters.forEach((chapterName, index) => {
-        const displayNum = String(index + 1).padStart(2, '0');
-        const isDone = completedChapters.includes(index);
-        const quizScore = quizScores[index];
-        const card = document.createElement("a");
-        card.className = "chapter-card";
-        
-        if (isDone) card.classList.add("completed");
-
-        if (!isEnrolled) {
-          card.classList.add("locked"); 
-          card.removeAttribute("href");
-          card.onclick = function(e) { 
-            e.preventDefault(); 
-            alert("🔒 Access Denied! Please click the 'Start Module' button above to unlock."); 
-          };
-        } else {
-          // FIXED ROUTING URL
-          card.setAttribute("href", `ChapterStudent.php?subject=${currentSubjectKey}&chapter=${index + 1}`);
-          card.onclick = function() { 
-            localStorage.setItem("current_reading_chapter_idx", index); 
-            localStorage.setItem("current_reading_chapter_name", chapterName); 
-          };
-        }
-
-        let statusIcon = isDone ? '<span class="chapter-status done">✓</span>' : (isEnrolled ? '<span class="chapter-status pending">○</span>' : '<span class="chapter-status locked">🔒</span>');
-        let scoreBadge = (quizScore !== undefined && isDone) ? `<span class="score-badge">${quizScore}/10</span>` : '';
-        
-        card.innerHTML = `<span class="chapter-num">${displayNum}</span><span class="chapter-name">${chapterName}</span>${scoreBadge}${statusIcon}`;
-        container.appendChild(card);
-      });
-    }
-
-    function calculateProgress() {
-      if (!currentCourse) return;
-      const total = currentCourse.chapters.length; const done = completedChapters.length;
-      const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-      document.getElementById("progressLabel").innerHTML = `📚 Current Progress: ${pct}% (${done}/${total} chapters completed)`;
-    }
-
-    function updatePoorPanel() {
-      const panelContent = document.getElementById("poorPanelContent"); if (!panelContent || !currentCourse) return;
-      const total = currentCourse.chapters.length; const done = completedChapters.length; const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-      let totalScore = 0; let scoredChapters = 0;
-      for (let i = 0; i < total; i++) { if (quizScores[i] !== undefined) { totalScore += quizScores[i]; scoredChapters++; } }
-      const avgScore = scoredChapters > 0 ? Math.round(totalScore / scoredChapters) : 0;
-      let performanceMsg = pct === 100 ? '🎉 Excellent! Mastered!' : (pct >= 60 ? '👍 Good progress!' : (pct > 0 ? '📖 Keep reading!' : (isEnrolled ? '🚀 Click a chapter!' : '🔒 Start Module first!')));
-      let msgColor = pct === 100 ? '#10b981' : (pct >= 60 ? '#f59e0b' : '#3b82f6');
-      let chaptersHtml = '';
-      currentCourse.chapters.forEach((name, idx) => {
-        const isComp = completedChapters.includes(idx); const score = quizScores[idx];
-        chaptersHtml += `<div class="poor-chapter-item ${isComp?'completed':''}"><span class="poor-chapter-num">${String(idx+1).padStart(2,'0')}</span><span class="poor-chapter-name">${name.length>18?name.substring(0,18)+'...':name}</span><span class="poor-chapter-score">${score!==undefined?score+'/10':'--'}</span><span class="poor-chapter-status">${isComp?'✅':'⭕'}</span></div>`;
-      });
-      panelContent.innerHTML = `<div class="stats-summary"><div class="stat-card"><div class="stat-value">${done}/${total}</div><div class="stat-label">Done</div></div><div class="stat-card"><div class="stat-value">${pct}%</div><div class="stat-label">Progress</div></div><div class="stat-card"><div class="stat-value">${avgScore}</div><div class="stat-label">Avg Score</div></div></div><div class="performance-message" style="color:${msgColor};">${performanceMsg}</div><div class="chapters-header"><span>#</span><span>Chapter</span><span>Score</span><span>Sts</span></div><div class="poor-chapters-list">${chaptersHtml}</div>`;
-    }
-
-    function showNotification(m, t) {
-      const n = document.createElement('div'); n.innerHTML = m;
-      n.style.cssText = `position:fixed; bottom:20px; right:20px; background:${t==='success'?'#10b981':'#3b82f6'}; color:white; padding:12px 20px; border-radius:12px; font-weight:500; z-index:10000; box-shadow:0 4px 12px rgba(0,0,0,0.15);`;
-      document.body.appendChild(n); setTimeout(() => n.remove(), 3000);
+        fetch('saveEnrollment.php', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: 'subjectCode=<?php echo urlencode($dbSubjectCode); ?>'
+        })
+        .then(res => res.text())
+        .then(msg => {
+            if (msg.trim() === 'success') {
+                window.location.reload();
+            } else {
+                alert('Failed to enroll: ' + msg);
+            }
+        })
+        .catch(() => alert('Error occurred while enrolling.'));
     }
   </script>
 </body>

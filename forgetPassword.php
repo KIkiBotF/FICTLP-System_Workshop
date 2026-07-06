@@ -8,35 +8,38 @@ require 'PHPMailer/PHPMailer/src/PHPMailer.php';
 require 'PHPMailer/PHPMailer/src/SMTP.php';
 
 $host = "100.81.48.34";
-$port = "3307";          
+$port = "3307"; 
 $dbname = "fictlp db";  
 $username = "bubustailo"; 
 $password = "Student@123";
 $conn = new mysqli($host, $username, $password, $dbname, $port);
 
-if ($conn->connect_error) { die("Database connection failed."); }
+if ($conn->connect_error) { 
+    die("Database connection failed."); 
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $email = $_POST['email'];
 
-    // Semak sama ada email pelajar wujud dalam database
-    $sql = "SELECT * FROM user WHERE Email = '$email'";
-    $result = $conn->query($sql);
+    // 1. Guna Prepared Statement untuk semak email (Lebih Selamat)
+    $stmt = $conn->prepare("SELECT * FROM user WHERE Email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result && $result->num_rows > 0) {
         
-        // ==========================================
-        // TETAPKAN DI SINI (Sebelum jana masa luput)
-        // ==========================================
         date_default_timezone_set('Asia/Kuala_Lumpur');
 
-        // 1. Jana 6-Digit OTP rawak & Set masa luput (5 minit)
+        // Jana 6-Digit OTP rawak & Set masa luput (5 minit)
         $otp = rand(100000, 999999);
         $expiry = date("Y-m-d H:i:s", strtotime("+5 minutes"));
 
-        // 2. Kemaskini database jadual user dengan OTP baharu
-        $update_sql = "UPDATE user SET otp_code = '$otp', token_expiry = '$expiry' WHERE Email = '$email'";
-        $conn->query($update_sql);
+        // 2. Kemaskini database guna Prepared Statement
+        $update_stmt = $conn->prepare("UPDATE user SET otp_code = ?, token_expiry = ? WHERE Email = ?");
+        $update_stmt->bind_param("sss", $otp, $expiry, $email);
+        $update_stmt->execute();
+        $update_stmt->close();
 
         // Simpan email dalam session untuk digunakan pada halaman VerifyOTP.php nanti
         $_SESSION['reset_email'] = $email;
@@ -54,12 +57,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $mail->Username   = $system_email;     
             $mail->Password   = $system_password;   
             
-            // --- KEMASKINI PENYELESAIAN DI SINI ---
             // Tukar ke ENCRYPTION_SMTPS (SSL) dan Port 465 untuk kestabilan rangkaian local
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
             $mail->Port       = 465;
 
-            // Logik bypass pengesahan SSL tempatan (Mengatasi isu isu XAMPP/Localhost)
+            // Logik bypass pengesahan SSL tempatan (Mengatasi isu XAMPP/Localhost)
             $mail->SMTPOptions = array(
                 'ssl' => array(
                     'verify_peer' => false,
@@ -67,7 +69,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     'allow_self_signed' => true
                 )
             );
-            // --------------------------------------
 
             // Pengirim & Penerima
             $mail->setFrom($system_email, 'FICTLP Support System');
@@ -100,6 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "<script>alert('Email not found in the system!'); window.history.back();</script>";
     }
+    $stmt->close();
 }
 $conn->close();
 ?>
@@ -124,39 +126,25 @@ $conn->close();
             <h3>Forgot Password</h3>
         </div>
 
-        <div class="header">
-            <header>
-                <h1>Forgot Password?</h1>
-            </header>
-            <h2>Enter your registered email address to<br>receive password recovery instruction</h2>
-        </div>
-
-        <div class="email-container">
-            <form>
-                <label for="emailInput">Email</label>
-                <input type="email" id="emailInput" required>
-                <button type="submit" name="recovery">Send OTP</button>
-            </form>
-
         <div class="logInForm-container">
             <p style="text-align: center; margin-bottom: 25px; color: #333; font-size: 14px; line-height: 1.5;">
-                Enter your registered email to receive the OTP verification code.
+                Enter your registered email address to receive password recovery instructions.
             </p>
-            <form method="POST">
+            
+            <form method="POST" action="">
                 <div class="input-group">
                     <label for="email">Email Address</label>
                     <input type="email" id="email" name="email" placeholder="example@student.utem.edu.my" required autocomplete="off">
                 </div>
+                
                 <div class="button-container">
-
-                    <button type="submit">Request OTP</button>
-
-                    <button class="btn-primary" type="button" name="recovery">Send Recovery Instruction</button>
+                    <button type="submit" class="btn-primary">Send OTP</button>
                     <a class="btn-link" href="index.php">Back to Login Page</a>
                     
                 </div>
             </form>
         </div>
+
     </div>
 </body>
 </html>

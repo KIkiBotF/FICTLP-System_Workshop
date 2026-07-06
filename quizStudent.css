@@ -1,43 +1,165 @@
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-body { background-color: #EBE6EB; min-height: 100vh; padding: 20px; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #EBE6EB;
+    min-height: 100vh;
+    padding: 20px;
+}
 
 /* Header */
-.quiz-header { display: flex; align-items: center; padding: 20px 40px; margin-bottom: 20px; }
-.back-btn { font-size: 30px; color: black; text-decoration: none; margin-right: 20px; transform: scaleX(-1); /* Pusingkan ikon reply jadi back */ }
-.quiz-header h1 { font-size: 24px; text-transform: uppercase; letter-spacing: 1px; }
+.quiz-header {
+    display: flex;
+    align-items: center;
+    padding: 20px 40px;
+    margin-bottom: 20px;
+}
+
+.back-btn {
+    font-size: 30px;
+    color: black;
+    text-decoration: none;
+    margin-right: 20px;
+    transform: scaleX(-1);
+}
+
+.quiz-header h1 {
+    font-size: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
 /* Layout Utama */
-.quiz-container { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 30px; }
+.quiz-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 30px;
+}
 
 /* Sidebar */
-.sidebar { background: #fff; border-radius: 30px; padding: 20px 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-.nav-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 25px; margin-bottom: 5px; border-radius: 15px; cursor: pointer; transition: 0.2s; }
-.nav-row:hover { background-color: #f5f5f5; }
-.nav-row.active { background-color: #E3DDF7; font-weight: bold; }
-.nav-text { font-size: 18px; font-weight: bold; }
+.sidebar {
+    background: #fff;
+    border-radius: 30px;
+    padding: 20px 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
 
-/* Checkmark Circle */
-.status-circle { width: 24px; height: 24px; border: 2px solid #a0a0a0; border-radius: 50%; display: flex; justify-content: center; align-items: center; background: #eee; }
-.status-circle.answered { background-color: #2ed573; border-color: #2ed573; color: white; font-size: 12px; }
+.nav-item-border {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    margin-bottom: 5px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.nav-row:hover {
+    background-color: #f5f5f5;
+}
+
+.nav-row.active {
+    background-color: #E3DDF7;
+    font-weight: bold;
+}
+
+.nav-text {
+    font-size: 18px;
+    font-weight: bold;
+}
 
 /* Kotak Soalan Utama */
-.question-box { background: #fff; padding: 40px 50px; border-radius: 40px; min-height: 500px; display: flex; flex-direction: column; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-.question-box h2 { font-size: 22px; margin-bottom: 30px; }
+.question-box {
+    background: #fff;
+    padding: 40px 50px;
+    border-radius: 40px;
+    min-height: 500px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.question-box h2 {
+    font-size: 22px;
+    margin-bottom: 30px;
+}
 
 /* Placeholder Imej */
-.image-placeholder { background-color: #CFCAFB; width: 60%; height: 200px; margin: 0 auto 30px; border-radius: 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: black; font-weight: bold; }
-.image-placeholder i { font-size: 60px; margin-bottom: 10px; }
+.image-placeholder {
+    background-color: #CFCAFB;
+    width: 60%;
+    height: 200px;
+    margin: 0 auto 30px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-weight: bold;
+}
+
+.image-placeholder i {
+    font-size: 60px;
+    margin-bottom: 10px;
+}
 
 /* Pilihan Jawapan */
-.options-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 40px; }
-.option-item { display: flex; align-items: center; cursor: pointer; font-size: 16px; font-weight: bold; }
-.option-item input[type="radio"] { width: 18px; height: 18px; margin-right: 15px; cursor: pointer; accent-color: #5346ed; }
+.options-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+
+.option-item {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.option-item input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin-right: 15px;
+    cursor: pointer;
+    accent-color: #5346ed;
+}
 
 /* Footer & Butang */
-.action-footer { margin-top: auto; display: flex; justify-content: space-between; }
-.btn-clear, .btn-next { padding: 12px 35px; border-radius: 25px; border: none; font-size: 14px; font-weight: bold; color: #fff; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-.btn-clear { background: #5346ed; }
-.btn-next { background: #5346ed; }
+.action-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+}
+
+.btn-clear, .btn-next {
+    padding: 12px 35px;
+    border-radius: 25px;
+    border: none;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.btn-clear {
+    background: #5346ed;
+}
+
+.btn-next {
+    background: #5346ed;
+}
 
 .nav-item-border {
     display: flex;
@@ -45,28 +167,20 @@ body { background-color: #EBE6EB; min-height: 100vh; padding: 20px; }
     align-items: center;
     padding: 15px 20px;
     margin-bottom: 10px;
-    background: #ffffff;      /* Warna dalam kad */
-    border-radius: 20px;     /* Bucu bulat */
-    
-    /* Border putih tebal */
-    border: 4px solid #ffffff; 
-    
-    /* Shadow untuk kesan timbul */
+    background: #ffffff;
+    border-radius: 20px;
+    border: 4px solid #ffffff;
     box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
-
 .status-circle {
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    
-    /* Border putih tebal */
-    border: 4px solid #ffffff; 
-    
-    background: #f0f0f0; 
+    border: 4px solid #ffffff;
+    background: #f0f0f0;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -76,7 +190,7 @@ body { background-color: #EBE6EB; min-height: 100vh; padding: 20px; }
 }
 
 .status-circle.correct {
-    background-color: #44f22d; /* Warna latar belakang */
+    background-color: #44f22d;
     color: white;
     border: 2px solid #48ec6e;
 }

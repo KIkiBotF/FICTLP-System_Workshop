@@ -21,11 +21,11 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Senarai subjek yang dibenarkan (mengelak sebarang input sewenang-wenangnya)
+
 $subjectDisplayNames = [
     'DITP1113' => 'C++ Programming',
     'DITS1133' => 'Computer Organization and Architecture',
-    'DITP2913'  => 'Database',
+    'DITP2913' => 'Database',
 ];
 
 $subjectCode = isset($_GET['subject_code']) ? trim($_GET['subject_code']) : '';
@@ -35,15 +35,12 @@ if (!array_key_exists($subjectCode, $subjectDisplayNames)) {
 }
 
 // SAHKAN student ini MEMANG telah unlock achievement untuk subjek ini
-// (elak sesiapa buka terus guna URL certificate-view.php?subject_code=XXX
-// tanpa pernah lulus semua chapter subjek berkenaan)
 $stmt = $conn->prepare("SELECT * FROM achievement WHERE userID = ? AND Subject_Code = ?");
 $stmt->bind_param("ss", $current_user, $subjectCode);
 $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows === 0) {
-    // Belum unlock - halang akses, pulangkan ke halaman Achievement
     header("Location: AchievementStudent.php");
     exit();
 }
@@ -51,19 +48,9 @@ if ($result->num_rows === 0) {
 $achievementRow = $result->fetch_assoc();
 $stmt->close();
 
-// Cuba dapatkan tarikh completion jika column berkenaan wujud dalam table
-// (contoh: Date_Unlocked / Completed_At / created_at) - jika tiada, guna hari ini
-$completionDate = null;
-// Tambah 'Date_Issued' ke dalam senarai supaya ia dikesan
-foreach (['Date_Issued', 'Date_Unlocked', 'Completed_At', 'created_at', 'CompletedAt', 'Date'] as $possibleCol) {
-    if (isset($achievementRow[$possibleCol]) && !empty($achievementRow[$possibleCol])) {
-        $completionDate = date("d F Y", strtotime($achievementRow[$possibleCol]));
-        break;
-    }
-}
-if (!$completionDate) {
-    $completionDate = date("d F Y");
-}
+$completionDate = !empty($achievementRow['Date_Issued'])
+    ? date("d F Y", strtotime($achievementRow['Date_Issued']))
+    : date("d F Y");
 
 $subjectFullName = $subjectDisplayNames[$subjectCode];
 $conn->close();
@@ -135,12 +122,11 @@ $conn->close();
             box-shadow: 0 4px 14px rgba(13,71,161,0.3);
         }
 
-        /* ── Sijil ── */
         .certificate {
             background: #fff;
             width: 100%;
             max-width: 900px;
-            aspect-ratio: 1.414 / 1; /* nisbah A4 landscape */
+            aspect-ratio: 1.414 / 1;
             padding: 50px 60px;
             border-radius: 12px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
