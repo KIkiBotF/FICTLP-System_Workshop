@@ -29,8 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
-            // MATCHED TO DATABASE: Insert student with default Role='Student' and Active user_status=1
-            $stmt = $conn->prepare("INSERT INTO user (userID, Name, Phone, Email, Password, Role, user_status) VALUES (:student_id, :name, :phone, :email, :password, 'Student', 1)");
+            // MATCHED TO DATABASE: Insert student with default Role='Student' and Active user_status=0
+            $stmt = $conn->prepare("INSERT INTO user (userID, Name, Phone, Email, Password, Role, user_status) VALUES (:student_id, :name, :phone, :email, :password, 'Student', 0)");
             $stmt->bindParam(':student_id', $studentId, PDO::PARAM_STR);
             $stmt->bindParam(':name', $name, PDO::PARAM_STR);
             $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);

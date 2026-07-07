@@ -32,8 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             
             $conn->beginTransaction();
 
-            // MATCHED TO DATABASE: Insert lecturer with default Role='Lecturer' and Active user_status=1
-            $stmt = $conn->prepare("INSERT INTO user (userID, Name, Phone, Email, Password, Role, user_status) VALUES (:lecturer_id, :name, :phone, :email, :password, 'Lecturer', 1)");
+            // MATCHED TO DATABASE: Insert lecturer with default Role='Lecturer' and Active user_status=0
+            $stmt = $conn->prepare("INSERT INTO user (userID, Name, Phone, Email, Password, Role, user_status) VALUES (:lecturer_id, :name, :phone, :email, :password, 'Lecturer', 0)");
             $stmt->bindParam(':lecturer_id', $lecturerId, PDO::PARAM_STR);
             $stmt->bindParam(':name', $name, PDO::PARAM_STR);
             $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
@@ -171,7 +171,6 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoreKnowledge - Manage Lecturers(Admin)</title>
     <link rel="stylesheet" href="manageLecturersAdmin.css">
-   
 </head>
 <body>
 <?php include("sidebarAdmin.php"); ?>
