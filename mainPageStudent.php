@@ -1,10 +1,27 @@
 <?php
-
 session_start();
-if (!isset($_SESSION['username'])) {
+
+if (!isset($_SESSION['userID'])) {
     header("Location: index.php");
     exit();
 }
+
+// === UPDATE USER STATUS TO ACTIVE (1) ===
+$host = "100.81.48.34";
+$port = "3307";
+$dbname = "fictlp db";
+$username = "bubustailo";
+$db_password = "Student@123";
+
+$conn = new mysqli($host, $username, $db_password, $dbname, $port);
+if (!$conn->connect_error) {
+    $statusStmt = $conn->prepare("UPDATE user SET user_status = 1 WHERE userID = ?");
+    $statusStmt->bind_param("s", $_SESSION['userID']);
+    $statusStmt->execute();
+    $statusStmt->close();
+    $conn->close();
+}
+// ========================================
 
 if (file_exists('announcement_data.php')) {
     include('announcement_data.php');
@@ -39,10 +56,11 @@ if (file_exists('announcement_data.php')) {
 <?php 
     }
 } 
-?>
 
+$Name = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
+?>
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,20 +70,21 @@ if (file_exists('announcement_data.php')) {
 <body>
 
     <div class="logout-wrapper">
-        <a href="index.php" class="logout-action">
+        <a href="logout.php" class="logout-action" onclick="return confirm('Are you sure you want to log out?');">
             <img src="Aset/logOutBtn.svg" alt="Logout" class="icon-exit">
             <span class="logout-text">Log Out</span>
         </a>
     </div>
 
     <div class="center-content">
-        
+
         <div class="grey-banner">
             <h1>FICTLP-System</h1>
         </div>
 
         <h2 class="msg-welcome">Welcome Back!</h2>
-        <p class="msg-user"><?php echo htmlspecialchars($_SESSION['username']); ?></p>
+
+        <p class="msg-user"><?php echo htmlspecialchars($Name); ?></p>
 
         <a href="SubjectStudent.php" class="btn-subject">Subject</a>
 

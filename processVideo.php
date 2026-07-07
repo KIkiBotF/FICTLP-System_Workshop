@@ -14,8 +14,12 @@ if (isset($_POST['uploadBtn'])) {
     $video_url = $_POST['video_url'];
 
     // Insert directly into the content table
-    $stmt = $conn->prepare("INSERT INTO content (Name, Chapter_Name, File_Type, Subject_Code, File_Path) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $content_name, $chapter_name, $file_type, $subject_code, $video_url);
+   // Insert directly into the content table using the correct column names
+$stmt = $conn->prepare("INSERT INTO content (Name, Chapter_ID, File_Type, file_path) VALUES (?, ?, ?, ?)");
+
+// Bind only the 4 variables that match the columns above
+// (Note: $chapter_name here actually holds your chapter_id number from the form)
+$stmt->bind_param("ssss", $content_name, $chapter_name, $file_type, $video_url);
 
     if ($stmt->execute()) {
         // Success! Send them back to the chapter page.

@@ -1,10 +1,12 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_SESSION['userID'])) {
     header("Location: index.php");
     exit();
 }
+
+
 if (file_exists('announcement_data.php')) {
     include('announcement_data.php');
     if (!empty($currentAnnouncement)) {
@@ -51,7 +53,7 @@ if (file_exists('announcement_data.php')) {
 <body>
 
     <div class="logout-wrapper">
-        <a href="index.php" class="logout-action">
+        <a href="logout.php" class="logout-action">
             <img src="Aset/logOutBtn.svg" alt="Logout" class="icon-exit">
             <span class="logout-text">Log Out</span>
         </a>
@@ -64,7 +66,7 @@ if (file_exists('announcement_data.php')) {
         </div>
 
         <h2 class="msg-welcome">Welcome Back!</h2>
-        <p class="msg-user"><?php echo htmlspecialchars($_SESSION['username']); ?></p>
+        <p class="msg-user"><?php echo htmlspecialchars($_SESSION['name']); ?></p>
 
         <a href="dashboardAdmin.php" class="btn-subject">Dashboard</a>
 

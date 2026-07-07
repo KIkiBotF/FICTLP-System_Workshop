@@ -21,7 +21,7 @@ $subject_code = isset($_GET['subject']) ? htmlspecialchars($_GET['subject']) : '
 <body>
 
     <div class="upload-container">
-        <h2>Upload Slide for Chapter <?php echo $chapter_id; ?></h2>
+        <h2>Upload Slide</h2>
         
         <form action="processUpload.php" method="POST" enctype="multipart/form-data">
             

@@ -1,68 +1,75 @@
 <?php
-//Pass the user's email to the reset page securely
+// Pass the user's email to the reset page securely
 session_start();
 
 $host = "100.81.48.34";
 $port = "3307";
 $dbname = "fictlp db";
 $username = "bubustailo";
-$password = "Student@123";
+$db_password = "Student@123";
 
-$conn = new mysqli($host, $username, $password, $dbname, $port); 
+$conn = new mysqli($host, $username, $db_password, $dbname, $port);
 
 // Check connection
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error); 
+    die("Connection failed: " . $conn->connect_error);
 }
 
 $error_message = '';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['loginBtn'])) {
+    $email = trim($_POST['email']);
+    $enteredPassword = $_POST['password'];
 
-    if (isset($_POST['loginBtn'])) {
-        $stmt = $conn->prepare("SELECT Password, Name, Role, userID FROM user WHERE Email = ?");
-        $stmt->bind_param("s", $email);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    $stmt = $conn->prepare("SELECT userID, Name, Email, Password, Role FROM user WHERE Email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-        if ($result->num_rows > 0) { 
-            $row = $result->fetch_assoc();
-            
-            // Verify the password
-            if ($password === $row['Password']) {
-                $_SESSION['user_id'] = $row['userID'];
-                $_SESSION['username'] = $row['Name'];
-                
-                if ($password === '123456') {
-                    $_SESSION['reset_email'] = $email;
-                    header("Location: resetPassword.php");
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+
+        if ($enteredPassword === $row['Password']) {
+
+            $_SESSION['userID'] = $row['userID'];
+            $_SESSION['name']   = $row['Name'];
+            $_SESSION['email']  = $row['Email'];
+            $_SESSION['role']   = $row['Role'];
+
+            // === UPDATE STATUS TO ACTIVE (1) ===
+            $statusStmt = $conn->prepare("UPDATE user SET user_status = 1 WHERE userID = ?");
+            $statusStmt->bind_param("s", $row['userID']);
+            $statusStmt->execute();
+            $statusStmt->close();
+            // ===================================
+
+            if ($enteredPassword === '123456') {
+                $_SESSION['reset_email'] = $email;
+                header("Location: resetPassword.php");
+                exit();
+            }
+
+            switch ($row['Role']) {
+                case 'Lecturer':
+                    header("Location: mainPageLecturer.php");
                     exit();
-                }
-                
-                switch ($row['Role']) { 
-                    case 'Lecturer':
-                        header("Location: mainPageLecturer.php");
-                        exit();
-                    case 'Admin':
-                        header("Location: mainPageAdmin.php");
-                        exit();
-                    case 'Student':
-                        header("Location: mainPageStudent.php");
-                        exit();
-                    default:
-                        $error_message = "Invalid user role configuration.";
-                        break;
-                }
-            } else {
-                $error_message = "Invalid email or password!";
+                case 'Admin':
+                    header("Location: mainPageAdmin.php");
+                    exit();
+                case 'Student':
+                    header("Location: mainPageStudent.php");
+                    exit();
+                default:
+                    $error_message = "Invalid user role configuration.";
+                    break;
             }
         } else {
             $error_message = "Invalid email or password!";
         }
-        $stmt->close();
+    } else {
+        $error_message = "Invalid email or password!";
     }
+    $stmt->close();
 }
 $conn->close();
 ?>
@@ -80,7 +87,7 @@ $conn->close();
 <body>
     <div class="wrapper">
         <div class="title-container">
-            <div class="logo-container" style="padding-bottom: 10px;">    
+            <div class="logo-container" style="padding-bottom: 10px;">
                 <img src="Aset/LogoUtem.png" alt="Logo UTeM" class="login-logo-utem">
                 <img src="Aset/FTMK2.png" alt="Logo FTMK" class="login-logo-ftmk">
             </div>
@@ -91,7 +98,7 @@ $conn->close();
         <div class="logInForm-container">
             <?php if (!empty($error_message)): ?>
                 <div class="error-msg" style="color: red; margin-bottom: 15px; font-weight: bold;">
-                    <?php echo $error_message; ?>
+                    <?php echo htmlspecialchars($error_message); ?>
                 </div>
             <?php endif; ?>
 
@@ -109,7 +116,7 @@ $conn->close();
                     <input type="password" id="password" name="password" required>
                 </div>
 
-                <div class="button-container">
+                <div class="button-container2">
                     <button type="reset" class="btn-clear">Clear</button>
                     <button type="submit" class="btn-login" name="loginBtn">Log in</button>
                 </div>

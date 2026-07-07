@@ -43,6 +43,7 @@ try {
     <title>CoreKnowledge - Dashboard Summary(Admin)</title>
     <link rel="stylesheet" href="dashboardAdmin.css">
 </head>
+
 <body>
 
     <div class="window-frame">
@@ -55,11 +56,11 @@ try {
                 
                 <a href="manageStudentsAdmin.php" class="subject-style-card">
                     <div class="card-header header-students">
-                        <h2>Students List</h2>
+                        <h2>Student List</h2>
                     </div>
                     <div class="card-body">
                         <ul class="details-list">
-                            <li>Manage Students</li>
+                            <img src="Aset/StudentIcon.svg" alt="Student" class="icon-placeholder">
                         </ul>
                         <div class="metric-badge" id="student-count"><?php echo (int)$studentCount; ?></div>
                     </div>
@@ -71,7 +72,7 @@ try {
                     </div>
                     <div class="card-body">
                         <ul class="details-list">
-                            <li>Manage Lecturers</li>
+                            <img src="Aset/LecturerIcon.svg" alt="Lecturer" class="icon-placeholder">
                         </ul>
                         <div class="metric-badge" id="lecturer-count"><?php echo (int)$lecturerCount; ?></div>
                     </div>
@@ -79,11 +80,11 @@ try {
 
                 <a href="manageSubjectsAdmin.php" class="subject-style-card">
                     <div class="card-header header-subjects">
-                        <h2>Subjects List</h2>
+                        <h2>Subject List</h2>
                     </div>
                     <div class="card-body">
                         <ul class="details-list">
-                            <li>Manage Subjects</li>
+                            <img src="Aset/SubjectIcon.svg" alt="Subject" class="icon-placeholder">
                         </ul>
                         <div class="metric-badge" id="subject-count"><?php echo (int)$subjectCount; ?></div>
                     </div>

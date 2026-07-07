@@ -33,6 +33,8 @@ body::before {
     z-index: -1;                  
 }
 
+
+
 /* ==========================================
    2. MAIN WRAPPER 
    ========================================== */
@@ -161,7 +163,7 @@ input[type="password"]:focus {
 /* ==========================================
    6. BUTTONS
    ========================================== */
-.button-container {
+.button-container2 {
     display: flex;
     justify-content: center;
     gap: 15px;
@@ -190,4 +192,43 @@ button:hover {
 button:active {
     transform: translateY(0);
     box-shadow: 0 4px 10px rgba(88, 28, 255, 0.15);
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column; /* Susun ke bawah */
+    align-items: center;    /* Letak di tengah-tengah */
+    gap: 15px;              /* Jarak antara butang dan link */
+    margin-top: 25px;
+    width: 100%;
+}
+
+/* Rupa butang Send OTP */
+.button-container .btn-primary {
+    width: 100%;            /* Lebar penuh mengikut kad */
+    background-color: #3b00db; /* Warna ungu mengikut tema kau */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.button-container .btn-primary:hover {
+    background-color: #2a00a2; /* Warna gelap sedikit bila hover */
+}
+
+/* Rupa pautan Back to Login Page */
+.button-container .btn-link {
+    color: #3b00db;
+    text-decoration: none;  /* Buang garisan bawah asal */
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.button-container .btn-link:hover {
+    text-decoration: underline; /* Garisan bawah muncul bila hover sahaja */
 }

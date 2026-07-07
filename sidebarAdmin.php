@@ -66,26 +66,26 @@
 </head>
 <body>
     <aside class="sidebar">
-        <a href="index.php" class="nav-item">
-            <img src="Aset/logOutBtn.svg" alt="Log Out" class="icon-placeholder" id="logOutIcon">
-            <span>Log Out</span>
-        </a>
-
+     
         <a href="mainPageAdmin.php" class="nav-item">
             <img src="Aset/homeBtn.svg" alt="Home" class="icon-placeholder" id="homeIcon">
             <span>Home</span>
         </a>
                 <a href="dashboardAdmin.php" class="nav-item" id="performanceBox">
-    <!-- Removed inline style="width: 50px; height: 50px;" -->
     <img id="performanceIcon" src="Aset/summaryBtn.svg" alt="Performance" class="icon-placeholder">
-    <span>Summary</span>
+    <span>Information</span>
 </a>
-
 
         <a href="announcementAdmin.php" class="nav-item">
             <img src="Aset/annoucment.svg" alt="Report" class="icon-placeholder">
             <span>Announcement</span>
         </a>
+
+           <a href="logout.php" class="nav-item">
+            <img src="Aset/logOutBtn.svg" alt="Log Out" class="icon-placeholder" id="logOutIcon">
+            <span>Log Out</span>
+        </a>
+
     </aside>
 </body>
 </html>

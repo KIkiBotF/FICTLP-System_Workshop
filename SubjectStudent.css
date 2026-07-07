@@ -33,6 +33,7 @@ body {
     flex: 1;
     padding: 42px 48px 56px;
     max-width: 860px;
+    margin: 0 auto;
 }
 
 .page-title {
@@ -41,6 +42,12 @@ body {
     color: var(--text-dark);
     line-height: 1.1;
     margin-bottom: 4px;
+    text-align: center;
+
+    /* ── 🆕 ANIMASI TAJUK UTAMA (MUNCUL PALING AWAL) ── */
+    opacity: 0;
+    transform: translateY(40px);
+    animation: paparkanKotakNaik 0.5s ease-out 0.1s forwards;
 }
 
 .page-subtitle {
@@ -48,6 +55,12 @@ body {
     color: var(--text-light);
     font-weight: 500;
     margin-bottom: 32px;
+    text-align: center;
+
+    /* ── 🆕 ANIMASI TAJUK UTAMA (MUNCUL PALING AWAL) ── */
+    opacity: 0;
+    transform: translateY(40px);
+    animation: paparkanKotakNaik 0.5s ease-out 0.1s forwards;
 }
 
 /* ── Cards ── */
@@ -141,4 +154,16 @@ body {
 @keyframes fadeUp {
     from { opacity: 0; transform: translateY(18px); }
     to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── 🆕 LOGIK ANIMASI JALURAN DARI BAWAH KE ATAS (Jika belum ada di bawah fail) ── */
+@keyframes paparkanKotakNaik {
+    0% {
+        opacity: 0;
+        transform: translateY(40px); /* Bermula dari bawah */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0); /* Naik tepat ke posisi asal */
+    }
 }

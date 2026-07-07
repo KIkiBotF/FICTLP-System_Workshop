@@ -1,294 +1,571 @@
-        /* Reset and Full Screen Layout Base */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+/* ==========================================================================
+   1. RESET AND FULL SCREEN LAYOUT BASE
+   ========================================================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
 
-        }
+body {
+    background-color: #ffffff;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+}
 
-        body {
-            background-color: #ffffff;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-        }
+.window-frame {
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    display: flex;
+    overflow: hidden;
+}
 
-        .window-frame {
-            width: 100%;
-            height: 100%;
-            background-color: #ffffff;
-            display: flex;
-            overflow: hidden;
-        }
-    /* --- MAIN DASHBOARD CONTENT --- */
-        .main-content {
-            flex: 1;
-            background-color: #fdf8f5; 
-            padding: 40px 60px;
-            margin-left: 105px; /* Offsets the fixed sidebar */
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Centers the search bar and table */
-            overflow: hidden; 
-            height: 100vh;
-        }
+/* ==========================================================================
+   2. MAIN DASHBOARD CONTENT
+   ========================================================================== */
+.main-content {
+    flex: 1;
+    background-color: #e0e7e9; 
+    padding: 40px 60px;
+    margin-left: 105px; /* Offsets the fixed sidebar */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers content layout */
+    overflow: hidden; 
+    height: 100vh;
+}
 
-    .main-content h1 {
-            font-size: 42px;
-            font-weight: bold; /* Removed Georgia, serif font family */
-            color: #1a253c;
-            margin-bottom: 4px;
-            text-align: center; /* Centers the title */
-        }
+.main-content h1 {
+    font-size: 42px;
+    font-weight: bold;
+    color: #1a253c;
+    margin-bottom: 4px;
+    text-align: center;
+}
 
-        .main-content .subtitle {
-            font-size: 14px;
-            color: #d88267;
-            margin-bottom: 25px;
-            text-align: center; /* Centers the subtitle */
-        }
-        /* --- STRETCHED CONTROLS AND CONTAINERS --- */
-        .search-wrapper {
-            width: 92%; 
-            margin-bottom: 20px;
-            position: relative;
-        }
+.main-content .subtitle {
+    font-size: 14px;
+    color: #d88267;
+    margin-bottom: 25px;
+    text-align: center;
+}
 
-        .search-input {
-            width: 100%;
-            padding: 14px 20px 14px 50px;
-            font-family: inherit;
-            font-size: 15px;
-            color: #1a253c;
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            outline: none;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.015);
-            transition: all 0.2s ease;
-        }
+/* ==========================================================================
+   3. CONTROLS ROW & SEARCH COMPONENT
+   ========================================================================== */
+.controls-row {
+    width: 92%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 15px;
+}
 
-        .search-input:focus {
-            border-color: #cbe3cc;
-            box-shadow: 0 4px 16px rgba(203, 227, 204, 0.25);
-        }
+.controls-row .search-wrapper {
+    flex: 1;
+    margin-bottom: 0;
+    position: relative;
+}
 
-        .search-icon {
-            position: absolute;
-            left: 18px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 16px;
-            height: 16px;
-            border: 2px solid #a0a0a0;
-            border-radius: 50%;
-            pointer-events: none;
-        }
+.search-input {
+    width: 100%;
+    padding: 14px 20px 14px 50px;
+    font-family: inherit;
+    font-size: 15px;
+    color: #1a253c;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    outline: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.015);
+    transition: all 0.2s ease;
+}
 
-        .search-icon::after {
-            content: '';
-            position: absolute;
-            right: -5px;
-            bottom: -5px;
-            width: 2px;
-            height: 7px;
-            background-color: #a0a0a0;
-            transform: rotate(-45deg);
-        }
+.search-input:focus {
+    border-color: #cbe3cc;
+    box-shadow: 0 4px 16px rgba(203, 227, 204, 0.25);
+}
 
-        /* --- FULL SCREEN ADAPTIVE LAYOUT CONTAINER --- */
-        .table-container {
-            width: 92%; 
-            background-color: #ffffff;
-            border-radius: 18px; 
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.02);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 20px;
-        }
+.search-icon {
+    position: absolute;
+    left: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    border: 2px solid #a0a0a0;
+    border-radius: 50%;
+    pointer-events: none;
+}
 
-        .table-card-wrapper {
-            width: 100%;
-            max-height: calc(100vh - 250px); 
-            overflow-y: auto;                
-            overflow-x: auto;                
-        }
+.search-icon::after {
+    content: '';
+    position: absolute;
+    right: -5px;
+    bottom: -5px;
+    width: 2px;
+    height: 7px;
+    background-color: #a0a0a0;
+    transform: rotate(-45deg);
+}
 
-        .lecturer-table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-            font-size: 15px;
-        }
+/* ==========================================================================
+   4. ACTION BUTTONS & SELECTION TOGGLES
+   ========================================================================== */
+.btn-add-trigger {
+    background-color: #4a7c59;
+    color: white;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    white-space: nowrap;
+}
 
-        .lecturer-table th {
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            background-color: #cbe3cc; 
-            color: #1a253c;
-            font-family: inherit;
-            font-weight: bold;
-            font-size: 16px;
-            padding: 18px 30px; 
-            border-bottom: none;
-        }
+.btn-add-trigger:hover {
+    background-color: #3b6347;
+}
 
-        .lecturer-table td {
-            padding: 18px 30px;
-            color: #333333;
-            border-bottom: 1px solid #f3f3f3;
-            vertical-align: middle;
-            height: 76px; 
-        }
+.btn-select-toggle {
+    background-color: #132f53;
+    color: white;
+    border: 1px solid #cbd5e1;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
 
-        .lecturer-table tbody tr:last-child td {
-            border-bottom: none;
-        }
+.btn-select-toggle.active-mode {
+    background-color: #1a253c;
+    color: white;
+    border-color: #1a253c;
+}
 
-        .col-id { width: 22%; }
-        .col-name { width: 48%; }
-        .col-status { width: 12%; }
-        .col-actions { width: 18%; }
+/* ==========================================================================
+   5. BULK ACTION BAR
+   ========================================================================== */
+.bulk-action-bar {
+    display: none;
+    background-color: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    padding: 14px 20px;
+    border-radius: 12px;
+    width: 92%;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    justify-content: space-between;
+    align-items: center;
+}
 
-        .status-badge {
-            display: inline-block;
-            padding: 5px 16px;
-            font-size: 13px;
-            font-weight: 600;
-            border-radius: 20px;
-            text-align: center;
-        }
+.bulk-btn-group {
+    display: flex;
+    gap: 10px;
+}
 
-        .active-status {
-            background-color: #e2f0e3;
-            color: #4a7c59;
-        }
+.btn-bulk-action {
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 14px;
+    transition: opacity 0.15s ease;
+}
 
-        .inactive-status {
-            background-color: #fcf0e3;
-            color: #b07d4c;
-        }
+.btn-bulk-action:hover {
+    opacity: 0.9;
+}
 
-        .action-group {
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            gap: 20px;
-        }
+.btn-bulk-edit {
+    background-color: #3b82f6;
+    color: white;
+}
 
-        .btn-action {
-            font-family: inherit;
-            font-size: 14px;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: opacity 0.15s ease;
-            outline: none;
-        }
+.btn-bulk-suspend {
+    background-color: #ef4444;
+    color: white;
+}
 
-        .btn-action:hover {
-            opacity: 0.8;
-        }
+/* ==========================================================================
+   6. LECTURER DATA TABLE & CHECKBOXES
+   ========================================================================== */
+.table-container {
+    width: 92%; 
+    background-color: #ffffff;
+    border-radius: 18px; 
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.02);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
 
-        .btn-edit {
-            background: none;
-            color: #1a253c;
-            padding: 6px 12px;
-        }
+.table-card-wrapper {
+    width: 100%;
+    max-height: calc(100vh - 250px); 
+    overflow-y: auto;                
+    overflow-x: auto;                
+}
 
-        .btn-save {
-            background-color: #e2f0e3;
-            color: #4a7c59;
-            padding: 6px 16px;
-            border-radius: 20px;
-        }
+.lecturer-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 15px;
+}
 
-        .btn-cancel {
-            background: none;
-            color: #6c757d;
-            padding: 6px 12px;
-        }
+.lecturer-table th {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #cbe3cc; 
+    color: #1a253c;
+    font-family: inherit;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 18px 30px; 
+    border-bottom: none;
+}
 
-        .btn-suspend {
-            background-color: #eed6c5;
-            color: #6e3716;
-            padding: 6px 20px;
-            border-radius: 20px;
-        }
+.lecturer-table td {
+    padding: 18px 30px;
+    color: #333333;
+    border-bottom: 1px solid #f3f3f3;
+    vertical-align: middle;
+    height: 76px; 
+}
 
-        .edit-input {
-            width: 90%;
-            padding: 8px 12px;
-            border: 2px solid #cbe3cc;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 14px;
-            color: #1a253c;
-            outline: none;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
-            transition: border-color 0.15s ease;
-        }
+.lecturer-table tbody tr:last-child td {
+    border-bottom: none;
+}
 
-        .edit-input:focus {
-            border-color: #4a7c59;
-        }
+/* Neat & Tidy Checkbox Column Structuring */
+.col-checkbox-header, .cell-checkbox-container {
+    display: none;
+    width: 50px;
+    text-align: center;
+    padding: 18px 10px !important;
+}
 
-        .edit-select {
-            padding: 6px 10px;
-            border: 2px solid #cbe3cc;
-            border-radius: 8px;
-            font-family: inherit;
-            font-size: 14px;
-            background-color: #fff;
-            outline: none;
-        }
+.lecturer-checkbox {
+    transform: scale(1.25);
+    cursor: pointer;
+    accent-color: #4a7c59;
+    vertical-align: middle;
+}
 
-        .edit-select:focus {
-            border-color: #4a7c59;
-        }
+.col-id { width: 15%; }
+.col-name { width: 25%; }
+.col-email { width: 28%; }
+.col-phone { width: 12%; }
+.col-status { width: 10%; }
+.col-actions { width: 10%; }
 
-        .empty-message {
-            padding: 40px;
-            text-align: center;
-            color: #6c757d;
-            font-style: italic;
-        }
+/* ==========================================================================
+   7. ROW INLINE STATUS BADGES & ACTIONS
+   ========================================================================== */
+.status-badge {
+    display: inline-block;
+    background: transparent !important;
+    padding: 0 !important;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+}
 
-        .table-card-wrapper::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        .table-card-wrapper::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .table-card-wrapper::-webkit-scrollbar-thumb {
-            background: #e0e0e0;
-            border-radius: 10px;
-        }
-        .table-card-wrapper::-webkit-scrollbar-thumb:hover {
-            background: #cbd3cb;
-        }
+.active-status {
+    color: #4a7c59;
+}
 
-        @media (max-width: 768px) {
-            body { overflow-y: auto; }
-            .window-frame { flex-direction: column; height: auto; min-height: 100vh; }
-            .sidebar {
-                width: 100%; max-width: 100%; height: auto; flex-direction: row;
-                justify-content: space-around; padding-top: 0; border-right: none;
-                border-bottom: 1px solid #dcdcdc; position: sticky; top: 0; z-index: 100;
-            }
-            .sidebar nav { flex-direction: row; width: 100%; justify-content: space-around; }
-            .nav-item { width: auto; height: 70px; padding: 5px 10px; flex: 1; }
-            .main-content { padding: 30px 20px; overflow: visible; }
-            .search-wrapper, .table-container { width: 100%; }
-            .table-card-wrapper { max-height: none; overflow-y: visible; }
-            .main-content h1 { font-size: 32px; text-align: center; width: 100%; }
-            .main-content .subtitle { text-align: center; width: 100%; margin-bottom: 25px; }
-            .lecturer-table th, .lecturer-table td { padding: 12px 15px; font-size: 14px; }
-            .lecturer-table th { position: static; }
-            .action-group { gap: 10px; }
-        }
+.inactive-status {
+    color: #b07d4c;
+}
+
+.action-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 20px;
+}
+
+.btn-action {
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.btn-action:hover {
+    opacity: 0.8;
+}
+
+.btn-action:disabled {
+    background-color: #f1f5f9 !important;
+    color: #94a3b8 !important;
+    border-color: #e2e8f0 !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+}
+
+/* Transformed Edit Action button to match unified template specification */
+.btn-action.btn-edit {
+    background-color: #3b82f6;
+    color: white;
+    border: 1px solid #cbd5e1;
+    padding: 6px 16px;
+    border-radius: 20px;
+}
+
+.btn-action.btn-edit:hover {
+    background-color: #cbd5e1;
+    color: #000;
+}
+
+.btn-save {
+    background-color: #e2f0e3;
+    color: #4a7c59;
+    padding: 6px 16px;
+    border-radius: 20px;
+}
+
+.btn-cancel {
+    background: none;
+    color: #6c757d;
+    padding: 6px 12px;
+}
+
+.btn-suspend {
+    background-color: #ef4444;
+    color: white;
+    padding: 6px 20px;
+    border-radius: 20px;
+}
+
+/* Inline Dynamic Row Editors */
+.edit-input {
+    width: 90%;
+    padding: 8px 12px;
+    border: 2px solid #cbe3cc;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    color: #1a253c;
+    outline: none;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+    transition: border-color 0.15s ease;
+}
+
+.edit-input:focus {
+    border-color: #4a7c59;
+}
+
+.edit-select {
+    padding: 6px 10px;
+    border: 2px solid #cbe3cc;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    background-color: #fff;
+    outline: none;
+}
+
+.edit-select:focus {
+    border-color: #4a7c59;
+}
+
+/* ==========================================================================
+   8. MODAL WINDOW POPUPS
+   ========================================================================== */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.4);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-card {
+    background: white;
+    width: 540px;
+    max-height: 85vh;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-card h2 {
+    margin-bottom: 20px;
+    color: #1a253c;
+    font-size: 22px;
+}
+
+.modal-scroll-content {
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 5px;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    color: #1a253c;
+    margin-bottom: 6px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    border-color: #4a7c59;
+    outline: none;
+}
+
+.form-group input.readonly-field {
+    background-color: #edf2f7;
+    color: #4a5568;
+    border-color: #cbd5e0;
+    cursor: not-allowed;
+}
+
+/* Clean Tidy Checkbox Container Components inside Modals */
+.checkbox-container {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    max-height: 140px;
+    overflow-y: auto;
+    background: #fdfdfd;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    font-size: 13.5px;
+    color: #2d3748;
+    cursor: pointer;
+}
+
+.checkbox-item:last-child {
+    margin-bottom: 0;
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #4a7c59;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+/* Multi-Selection Structural Data Blocks */
+.bulk-lecturer-block {
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.bulk-lecturer-block h3 {
+    margin: 0 0 14px 0;
+    font-size: 15px;
+    color: #1e3a8a;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 6px;
+}
+
+/* ==========================================================================
+   9. INTERACTION UTILITIES & SCROLLBARS
+   ========================================================================== */
+.empty-message {
+    padding: 40px;
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.table-card-wrapper::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.table-card-wrapper::-webkit-scrollbar-track {
+    background: transparent;
+}
+.table-card-wrapper::-webkit-scrollbar-thumb {
+    background: #e0e0e0;
+    border-radius: 10px;
+}
+.table-card-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #cbd3cb;
+}
+
+/* ==========================================================================
+   10. RESPONSIVE MEDIA BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 768px) {
+    body { overflow-y: auto; }
+    .window-frame { flex-direction: column; height: auto; min-height: 100vh; }
+    
+    .sidebar {
+        width: 100%; max-width: 100%; height: auto; flex-direction: row;
+        justify-content: space-around; padding-top: 0; border-right: none;
+        border-bottom: 1px solid #dcdcdc; position: sticky; top: 0; z-index: 100;
+    }
+    .sidebar nav { flex-direction: row; width: 100%; justify-content: space-around; }
+    .nav-item { width: auto; height: 70px; padding: 5px 10px; flex: 1; }
+    
+    .main-content { padding: 30px 20px; overflow: visible; }
+    .controls-row, .search-wrapper, .table-container, .bulk-action-bar { width: 100%; }
+    .table-card-wrapper { max-height: none; overflow-y: visible; }
+    
+    .main-content h1 { font-size: 32px; text-align: center; width: 100%; }
+    .main-content .subtitle { text-align: center; width: 100%; margin-bottom: 25px; }
+    
+    .lecturer-table th, .lecturer-table td { padding: 12px 15px; font-size: 14px; }
+    .lecturer-table th { position: static; }
+    .action-group { gap: 10px; }
+}

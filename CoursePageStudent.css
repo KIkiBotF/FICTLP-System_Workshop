@@ -25,75 +25,6 @@ body {
   display: flex;
 }
 
-/* ── LAYOUT FIX: ASIDE SIDEBAR FIXED AT LEFT ── */
-.sidebar {
-  width: var(--sidebar-w);
-  background: var(--sidebar-bg);
-  border-right: 1px solid #e2e8f0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 30px 0;
-  position: fixed;
-  top: 0; 
-  left: 0; 
-  bottom: 0;
-  z-index: 100; /* Memastikan sidebar sentiasa di lapisan atas */
-}
-
-.nav-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
-  width: 100%;
-}
-
-.nav-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: 76px;
-  padding: 12px 4px;
-  border-radius: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-decoration: none;
-  color: var(--text-muted);
-}
-
-.nav-item:hover { 
-  background: #f1f5f9; 
-  color: var(--text-dark);
-}
-
-.nav-item.active { 
-  background: #eff6ff; 
-  color: var(--accent); 
-}
-
-.nav-item .icon {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.nav-item .icon img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
-.nav-item .label {
-  font-size: 11px;
-  font-weight: 600;
-  text-align: center;
-}
-
 /* ── LAYOUT FIX: MAIN CONTENT PUSHED RIGHT TO PREVENT OVERLAP ── */
 .main {
   flex: 1;
@@ -280,7 +211,6 @@ body {
 }
 @media (max-width: 576px) {
   .main { padding: 20px; margin-left: 0; padding-top: 100px; }
-  .sidebar { width: 100%; height: auto; position: fixed; bottom: 0; top: auto; border-right: none; border-top: 1px solid #e2e8f0; padding: 10px 0; }
   .nav-container { flex-direction: row; justify-content: space-around; }
   .nav-item { padding: 6px; width: auto; }
 }

@@ -1,3 +1,53 @@
+<?php
+session_start();
+if (!isset($_SESSION['userID'])) {
+    header("Location: index.php");
+    exit();
+}
+
+$host = "100.81.48.34";
+$port = "3307";
+$dbname = "fictlp db";
+$username = "bubustailo";
+$password = "Student@123";
+
+$conn = new mysqli($host, $username, $password, $dbname, $port);
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+$subjects = [
+    'cpp' => ['code' => 'DITP1113', 'title' => 'C++ Programming', 'color' => 'teal'],
+    'db'  => ['code' => 'DITP2913', 'title' => 'Database', 'color' => 'blue'],
+    'coa' => ['code' => 'DITS1133', 'title' => 'Computer Organization and Architecture', 'color' => 'green'],
+];
+
+foreach ($subjects as $key => &$subj) {
+    $chapterStmt = $conn->prepare("SELECT Chapter_Name FROM chapter WHERE Subject_Code = ? ORDER BY chapter_order ASC");
+    $chapterStmt->bind_param("s", $subj['code']);
+    $chapterStmt->execute();
+    $chapterResult = $chapterStmt->get_result();
+    $subj['chapters'] = [];
+    while ($row = $chapterResult->fetch_assoc()) {
+        $subj['chapters'][] = $row['Chapter_Name'];
+    }
+    $chapterStmt->close();
+
+    $lecturerStmt = $conn->prepare(
+        "SELECT u.Name FROM lecture_subject ls
+         INNER JOIN user u ON ls.userID = u.userID
+         WHERE ls.Subject_Code = ? LIMIT 1"
+    );
+    $lecturerStmt->bind_param("s", $subj['code']);
+    $lecturerStmt->execute();
+    $lecturerRow = $lecturerStmt->get_result()->fetch_assoc();
+    $lecturerStmt->close();
+    $subj['lecturer'] = $lecturerRow ? $lecturerRow['Name'] : 'Not yet determined';
+}
+unset($subj);
+
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,82 +58,35 @@
 </head>
 <body>
 <?php include 'sidebarStudent.php'; ?>
-  
-<script>
-    // Fungsi navigasi
-    function navigateTo(page) {
-        window.location.href = page;
-    }
-
-    // Fungsi logout
-    function logout() {
-        // Hapus session/localStorage jika ada
-        // localStorage.removeItem('user');
-        window.location.href = 'logIn.html';
-    }
-</script>
 
   <main class="main">
     <h1 class="page-title">Subject</h1>
     <p class="page-subtitle">Choose subject:</p>
 
-    <a href="CoursePageStudent.php" class="card teal" onclick="selectSubject('cpp')">
+    <?php foreach ($subjects as $key => $subj): ?>
+    <a href="CoursePageStudent.php?subject=<?php echo urlencode($key); ?>"
+       class="card <?php echo htmlspecialchars($subj['color']); ?>"
+       onclick="localStorage.setItem('selectedQuizSubject','<?php echo htmlspecialchars($key); ?>')">
       <div class="card-header">
-        <h2>C++ Programming</h2>
-        <span class="lecturer">(Madam Rosleen)</span>
+        <h2><?php echo htmlspecialchars($subj['title']); ?></h2>
+        <span class="lecturer">(<?php echo htmlspecialchars($subj['lecturer']); ?>)</span>
       </div>
       <div class="card-body">
-        <div class="topics">
-          <div class="topic-item">Basic Syntax & I/O</div>
-          <div class="topic-item">Control Structures & Loops</div>
-          <div class="topic-item">Functions & Scope</div>
-          <div class="topic-item">Arrays & Strings</div>
-          <div class="topic-item">Pointers & References</div>
-        </div>
-      </div>
-    </a>   
-
-    <a href="CoursePageStudent.php" class="card blue" onclick="selectSubject('db')">
-      <div class="card-header">
-        <h2>Database</h2>
-        <span class="lecturer">(Madam Mas Aina)</span>
-      </div>
-      <div class="card-body">
-        <div class="topics single-col">
-          <div class="topic-item">Introduction to Databases & DBMS,</div>
-          <div class="topic-item">Entity-Relationship (ER) Modeling</div>
-          <div class="topic-item">Relational Model & Constraints</div>
-          <div class="topic-item">Relational Database Normalization</div>
-          <div class="topic-item">Structured Query Language (SQL)</div>
-        </div>
+        <?php if (count($subj['chapters']) > 0): ?>
+          <div class="topics <?php echo count($subj['chapters']) <= 1 ? 'single-col' : ''; ?>">
+            <?php foreach ($subj['chapters'] as $chapterName): ?>
+                <div class="topic-item"><?php echo htmlspecialchars($chapterName); ?></div>
+            <?php endforeach; ?>
+          </div>
+        <?php else: ?>
+          <div class="topics single-col">
+            <div class="topic-item" style="color:#888; font-style:italic;"> Does not have any chapters yet.</div>
+          </div>
+        <?php endif; ?>
       </div>
     </a>
-
-    <a href="CoursePageStudent.php" class="card green" onclick="selectSubject('coa')">
-      <div class="card-header">
-        <h2>Computer Organization and Architecture</h2>
-        <span class="lecturer">(Sir Arif)</span>
-      </div>
-      <div class="card-body">
-        <div class="topics single-col">
-          <div class="topic-item">Introduction & Von Neumann Architecture</div>
-          <div class="topic-item">Computer Evolution & Performance Metrics</div>
-          <div class="topic-item">Memory Hierarchy & Cache Memory</div>
-          <div class="topic-item">Input/Output Organization & Interfacing</div>
-          <div class="topic-item">Pipeline Architecture & Instruction Sets</div>
-        </div>
-      </div>
-    </a>
+    <?php endforeach; ?>
   </main>
 
-  <script>
-    // Fungsi untuk menetapkan subjek aktif pilihan pelajar sebelum berpindah ke halaman pengajian
-    // Contoh fungsi pilihan subjek di fail subjects.html
-    function selectSubject(subjectCode) {
-    // subjectCode mestilah bernilai 'cpp', 'db', atau 'coa'
-    localStorage.setItem('selectedQuizSubject', subjectCode);
-    window.location.href = 'CoursePageStudent.html';
-}
-  </script>
 </body>
 </html>
