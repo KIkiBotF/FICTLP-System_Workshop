@@ -283,6 +283,8 @@ body {
     font-weight: bold;
     text-align: center;
 }
+.status-badge.Online-status { color: #2e7d32 !important; }
+.status-badge.Offline-status { color: #757575 !important; }
 
 .active-status {
     color: #4a7c59;
