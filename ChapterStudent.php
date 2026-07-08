@@ -42,7 +42,6 @@ if (!$dbSubjectCode) {
     die("Subjek tidak dijumpai.");
 }
 
-// 1b. Semak student memang enrolled dalam subjek ni sebelum bagi akses content
 $enrollStmt = $conn->prepare("SELECT 1 FROM enrollment WHERE userID = ? AND Subject_Code = ?");
 $enrollStmt->bind_param("ss", $currentUserID, $dbSubjectCode);
 $enrollStmt->execute();
@@ -53,7 +52,6 @@ if (!$isEnrolled) {
     die("Anda belum enrol subjek ini.");
 }
 
-// 2. Cari Chapter_ID sebenar berdasarkan Subject_Code + chapter_order (bukan offset/tekaan)
 $resolvedChapterID = null;
 $chapterName = '';
 
@@ -73,7 +71,6 @@ if (!$resolvedChapterID) {
     die("No chapter found for this subject.");
 }
 
-// 3. Cari Quiz_ID sebenar untuk chapter ni (terus melalui Chapter_ID, bukan offset)
 $resolvedQuizID = null;
 $quizStmt = $conn->prepare("SELECT Quiz_ID FROM quiz WHERE Chapter_ID = ? LIMIT 1");
 $quizStmt->bind_param("i", $resolvedChapterID);
@@ -84,7 +81,6 @@ if ($quizRow = $quizResult->fetch_assoc()) {
 }
 $quizStmt->close();
 
-// 4. Semak status quiz pelajar untuk chapter ini (skor + lulus/gagal)
 $quizStatus = [
     'attempted'  => false,
     'passed'     => false,
@@ -100,7 +96,7 @@ if ($resolvedQuizID) {
                   WHERE s.userID = ? AND s.Quiz_ID = ?
                   ORDER BY s.attempt_no DESC, s.date_taken DESC 
                   LIMIT 1";
-    
+
     $stmtStatus = $conn->prepare($statusSql);
     if ($stmtStatus) {
         $stmtStatus->bind_param("si", $currentUserID, $resolvedQuizID);
@@ -154,7 +150,6 @@ $contentStmt->close();
 
             <div class="chapter-header-container" style="display: flex; justify-content: center; align-items: center; gap: 24px; width: 100%; margin-bottom: 40px;">
 
-                <!-- The original pill title remains perfectly centered -->
                 <div class="chapter-header-pill" style="margin: 0;">
                     <h1 id="chapterTitleDisplay" style="margin: 0;">
                         Chapter <?php echo $chapterNum; ?>: <?php echo htmlspecialchars($chapterName); ?>
@@ -166,60 +161,59 @@ $contentStmt->close();
 
                 <div class="section-col">
                     <div class="section-label">Slide</div>
-                    <?php foreach ($contents as $item): ?>
-                        <?php if (strtolower($item['File_Type']) == 'slide'): ?>
-                            <div style="margin-bottom: 24px; text-align: center;">
 
-                                <!-- Title placed ABOVE the card -->
+                    <?php
+                    $hasSlide = false; // Add our tracking flag
+                    foreach ($contents as $item):
+                    ?>
+                        <?php if (strtolower($item['File_Type']) === 'slide'):
+                            $hasSlide = true; // Switch flag to true since we found a slide
+                        ?>
+                            <div style="margin-bottom: 24px; text-align: center;">
                                 <p style="font-weight: bold; font-size: 16px; margin-bottom: 8px; color: #1e293b;">
                                     <?php echo htmlspecialchars($item['Name']); ?>
                                 </p>
-
-                                <!-- Media Card Container (Clickable) -->
                                 <div class="media-card" onclick="window.open('<?php echo htmlspecialchars($item['file_path'], ENT_QUOTES); ?>', '_blank')">
-
-                                    <!-- Embed the PDF document directly -->
-                                    <!-- pointer-events: none; is the key to making the card clickable -->
-                                    <iframe
-                                        src="<?php echo htmlspecialchars($item['file_path'], ENT_QUOTES); ?>#toolbar=0&navpanes=0&scrollbar=0"
-                                        scrolling="no"
-                                        style="width: 100%; height: 100%; border: none; pointer-events: none; overflow: hidden;"
-                                        title="<?php echo htmlspecialchars($item['Name']); ?>">
-                                    </iframe>
-
+                                    <iframe src="<?php echo htmlspecialchars($item['file_path'], ENT_QUOTES); ?>#toolbar=0&navpanes=0&scrollbar=0" scrolling="no" style="width: 100%; height: 100%; border: none; pointer-events: none; overflow: hidden;" title="<?php echo htmlspecialchars($item['Name']); ?>"></iframe>
                                 </div>
                             </div>
                         <?php endif; ?>
                     <?php endforeach; ?>
+
+                    <?php if (!$hasSlide): ?>
+                        <div style="text-align:center; margin-top:10px; padding:15px; border-radius:8px; background:#f1f5f9; color:#64748b; font-weight:bold;">
+                            No slide added yet.
+                        </div>
+                    <?php endif; ?>
+
                 </div>
 
                 <!-- VIDEO COLUMN -->
                 <div class="section-col video-col">
                     <div class="section-label">Video</div>
-                    <?php foreach ($contents as $item): ?>
-                        <?php if (strtolower($item['File_Type']) == 'video'): ?>
-                            <?php
+
+                    <?php
+                    $hasVideo = false; // Add our tracking flag
+                    foreach ($contents as $item):
+                    ?>
+                        <?php if (strtolower($item['File_Type']) === 'video'):
+                            $hasVideo = true; // Switch flag to true since we found a video
+
                             $ytUrl = $item['file_path'];
                             $videoId = '';
-                            // Logic to extract the exact YouTube Video ID from the URL
-                            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/|(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/\s]{11})%i', $ytUrl, $match)) {
+                            // Logic to extract the exact YouTube Video ID
+                            if (preg_match('%(?:youtube(?:-nocookie)?\.com/(?:[^/]+/.+/(?:v|e(?:mbed)?)/|.*[?&]v=)|youtu\.be/)([^"&?/\s]{11})%i', $ytUrl, $match)) {
                                 $videoId = $match[1];
                             }
                             // Ensure it is treated as a valid web URL
                             if (strpos($ytUrl, 'http') !== 0 && $ytUrl != '') {
                                 $ytUrl = 'https://' . $ytUrl;
                             }
-                            ?>
-
-                            <!-- NEW WRAPPER: Matches the Slide section perfectly -->
+                        ?>
                             <div style="margin-bottom: 24px; text-align: center;">
-
-                                <!-- Title placed ABOVE the card -->
                                 <p style="font-weight: bold; font-size: 16px; margin-bottom: 8px; color: #1e293b;">
                                     <?php echo htmlspecialchars($item['Name']); ?>
                                 </p>
-
-                                <!-- Media Card Container -->
                                 <div class="media-card" onclick="window.open('<?php echo htmlspecialchars($ytUrl, ENT_QUOTES); ?>', '_blank')">
                                     <?php if ($videoId): ?>
                                         <img src="https://img.youtube.com/vi/<?php echo htmlspecialchars($videoId, ENT_QUOTES); ?>/hqdefault.jpg" alt="Video Thumbnail">
@@ -227,11 +221,16 @@ $contentStmt->close();
                                         <div style="font-weight: 700; color: #64748b; font-size: 14px;">Video</div>
                                     <?php endif; ?>
                                 </div>
-
                             </div>
-
                         <?php endif; ?>
                     <?php endforeach; ?>
+
+                    <?php if (!$hasVideo): ?>
+                        <div style="text-align:center; margin-top:10px; padding:15px; border-radius:8px; background:#f1f5f9; color:#64748b; font-weight:bold;">
+                            No video added yet.
+                        </div>
+                    <?php endif; ?>
+
                 </div>
 
                 <div class="section-col quiz-col">

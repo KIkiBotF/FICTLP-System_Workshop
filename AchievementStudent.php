@@ -1,8 +1,6 @@
 <?php
-// 1. Mulakan session di baris paling pertama
 session_start();
 
-// Semak jika user sudah login, jika belum tendang ke login
 if (!isset($_SESSION['userID'])) {
     header("Location: index.php");
     exit();
@@ -22,9 +20,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// 3. SEMAK STATUS LOCK/UNLOCK SECARA TERUS (Tanpa Function)
 
-// Semak untuk C++ (CPP101)
 $is_cpp_unlocked = false;
 $stmt1 = $conn->prepare("SELECT Achievement_ID FROM achievement WHERE userID = ? AND Subject_Code = 'CPP101'");
 if ($stmt1) {
@@ -34,7 +30,6 @@ if ($stmt1) {
     $stmt1->close();
 }
 
-// Semak untuk COA (COA202)
 $is_coa_unlocked = false;
 $stmt2 = $conn->prepare("SELECT Achievement_ID FROM achievement WHERE userID = ? AND Subject_Code = 'COA202'");
 if ($stmt2) {
@@ -44,7 +39,6 @@ if ($stmt2) {
     $stmt2->close();
 }
 
-// Semak untuk Database (DB303)
 $is_db_unlocked = false;
 $stmt3 = $conn->prepare("SELECT Achievement_ID FROM achievement WHERE userID = ? AND Subject_Code = 'DB303'");
 if ($stmt3) {
@@ -87,7 +81,6 @@ $conn->close();
     <title>Achievements - Student LMS</title>
     <link rel="stylesheet" href="AchievementStudent.css">
     <style>
-        /* CSS Tambahan untuk kesan "Locked" */
         .cert-card-wrapper.locked {
             opacity: 0.5;
             cursor: not-allowed;
@@ -137,11 +130,8 @@ $conn->close();
 
         <section class="certificates-grid">
             <?php
-            // Check if the student has unlocked AT LEAST ONE certificate
-            // (Meaning, is there a 'true' value anywhere inside $unlockStatus?)
             $hasAnyAchievement = in_array(true, $unlockStatus, true);
 
-            // If they have NO achievements, show the message
             if (!$hasAnyAchievement):
             ?>
                 <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
@@ -149,12 +139,10 @@ $conn->close();
                 </div>
 
                 <?php
-            // Otherwise, loop through and display the unlocked certificates
             else:
                 foreach ($subjects as $code => $name):
                     $isUnlocked = $unlockStatus[$code];
 
-                    // ONLY render the certificate HTML if it is unlocked
                     if ($isUnlocked):
                 ?>
                         <div class="cert-card-wrapper">
@@ -167,7 +155,7 @@ $conn->close();
                             <p class="cert-title"><?php echo htmlspecialchars($name); ?> Certificate</p>
                         </div>
             <?php
-                    endif; // End of the $isUnlocked condition 
+                    endif; // End of the $isUnlocked condition
                 endforeach;
             endif; // End of the $hasAnyAchievement condition
             ?>

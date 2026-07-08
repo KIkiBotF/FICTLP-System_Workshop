@@ -3,15 +3,12 @@
 $host = "100.81.48.34";
 $port = "3307";          // Explicitly targets your port 3307 setup
 $dbname = "fictlp db";  // Matches your exact database layout container
-$username = "bubustailo"; 
+$username = "bubustailo";
 $password = "Student@123";
 
-// ==========================================
-// HANDLES INLINE POST ACTIONS (DELETE / UPDATE / INSERT)
-// ==========================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
     header('Content-Type: application/json');
-    
+
     // --- ACTION: INSERT (ADD NEW STUDENT) ---
     if ($_POST['action'] === 'insert') {
         $studentId = $_POST['student_id'] ?? '';
@@ -19,16 +16,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         $phone = $_POST['phone'] ?? '';
         $email = $_POST['email'] ?? '';
         $passwordInput = $_POST['password'] ?? '';
-        
+
         if (empty($studentId) || empty($name) || empty($email) || empty($passwordInput)) {
             echo json_encode(['success' => false, 'error' => 'Missing required fields.']);
             exit;
         }
-        
+
         try {
             $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
+
             // MATCHED TO DATABASE: Insert student with default Role='Student' and Active user_status=0
             $stmt = $conn->prepare("INSERT INTO user (userID, Name, Phone, Email, Password, Role, user_status) VALUES (:student_id, :name, :phone, :email, :password, 'Student', 0)");
             $stmt->bindParam(':student_id', $studentId, PDO::PARAM_STR);
@@ -37,10 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             $stmt->bindParam(':email', $email, PDO::PARAM_STR);
             $stmt->bindParam(':password', $passwordInput, PDO::PARAM_STR);
             $stmt->execute();
-            
+
             echo json_encode(['success' => true]);
             exit;
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             echo json_encode(['success' => false, 'error' => $e->getMessage()]);
             exit;
         }
@@ -52,39 +49,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         try {
             $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
+
             $stmt = $conn->prepare("DELETE FROM user WHERE userID = :student_id AND Role = 'Student'");
             $stmt->bindParam(':student_id', $studentId, PDO::PARAM_STR);
             $stmt->execute();
-            
+
             echo json_encode(['success' => true]);
             exit;
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             echo json_encode(['success' => false, 'error' => $e->getMessage()]);
             exit;
         }
     }
-    
+
     // --- ACTION: UPDATE (Restricted to Phone & Password) ---
     if ($_POST['action'] === 'update') {
         $studentId = $_POST['student_id'] ?? '';
         $newPhone = $_POST['new_phone'] ?? '';
         $newPassword = $_POST['new_password'] ?? '';
-        
+
         try {
             $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
             $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            
+
             // Administrative rules: Updates only Phone and Password credentials
             $stmt = $conn->prepare("UPDATE user SET Phone = :new_phone, Password = :new_password WHERE userID = :student_id AND Role = 'Student'");
             $stmt->bindParam(':new_phone', $newPhone, PDO::PARAM_STR);
             $stmt->bindParam(':new_password', $newPassword, PDO::PARAM_STR);
             $stmt->bindParam(':student_id', $studentId, PDO::PARAM_STR);
             $stmt->execute();
-            
+
             echo json_encode(['success' => true]);
             exit;
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             echo json_encode(['success' => false, 'error' => $e->getMessage()]);
             exit;
         }
@@ -95,25 +92,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
 try {
     $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8", $username, $password);
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
+
     $stmt = $conn->prepare("SELECT userID AS student_id, Name AS name, user_status AS status, Phone AS phone, Email AS email, Password AS password FROM user WHERE Role = 'Student'");
     $stmt->execute();
     $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch(PDOException $e) {
+} catch (PDOException $e) {
     die("Database Connection Failed: " . $e->getMessage());
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CoreKnowledge - Manage Students(Admin)</title>
     <link rel="stylesheet" href="manageStudentsAdmin.css">
-  
+
 </head>
+
 <body>
-<?php include("sidebarAdmin.php"); ?>
+    <?php include("sidebarAdmin.php"); ?>
 
     <div class="window-frame">
 
@@ -126,7 +125,7 @@ try {
                     <div class="search-icon"></div>
                     <input type="text" id="studentSearch" class="search-input" placeholder="Search by Student ID, Name, Phone, or Email..." onkeyup="filterStudents()">
                 </div>
-                
+
                 <button type="button" id="selectModeBtn" class="btn-select-toggle" onclick="toggleSelectMode()">Select</button>
                 <button class="btn-add-trigger" id="addStudentTriggerBtn" onclick="openAddModal()">+ Add Student</button>
             </div>
@@ -142,52 +141,52 @@ try {
             <div class="table-container" id="tableContainer">
                 <div class="table-card-wrapper">
                     <?php if (count($students) > 0): ?>
-                    <table class="student-table" id="studentTable">
-                        <thead>
-                            <tr id="tableHeaderRow">
-                                <th class="col-checkbox-header"><input type="checkbox" id="selectAllBox" onchange="toggleSelectAllRows(this)"></th>
-                                <th class="col-id">Student ID</th>
-                                <th class="col-name">Name</th>
-                                <th class="col-email">Email</th>
-                                <th class="col-phone">Phone</th>
-                                <th class="col-status">Status</th>
-                                <th class="col-actions" style="text-align: right; padding-right: 45px;">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="studentTableBody">
-                            <?php foreach ($students as $row): ?>
-                                <?php 
+                        <table class="student-table" id="studentTable">
+                            <thead>
+                                <tr id="tableHeaderRow">
+                                    <th class="col-checkbox-header"><input type="checkbox" id="selectAllBox" onchange="toggleSelectAllRows(this)"></th>
+                                    <th class="col-id">Student ID</th>
+                                    <th class="col-name">Name</th>
+                                    <th class="col-email">Email</th>
+                                    <th class="col-phone">Phone</th>
+                                    <th class="col-status">Status</th>
+                                    <th class="col-actions" style="text-align: right; padding-right: 45px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentTableBody">
+                                <?php foreach ($students as $row): ?>
+                                    <?php
                                     $isOnline = (int)$row['status'] === 1;
                                     $statusText = $isOnline ? 'Online' : 'Offline';
                                     $badgeClass = $isOnline ? 'Online-status' : 'Offline-status';
-                                ?>
-                                <tr data-original-id="<?php echo htmlspecialchars($row['student_id']); ?>" 
-                                    data-original-name="<?php echo htmlspecialchars($row['name']); ?>"
-                                    data-original-email="<?php echo htmlspecialchars($row['email'] ?? ''); ?>"
-                                    data-original-phone="<?php echo htmlspecialchars($row['phone'] ?? ''); ?>"
-                                    data-original-password="<?php echo htmlspecialchars($row['password'] ?? ''); ?>">
-                                    
-                                    <td class="cell-checkbox-container">
-                                        <input type="checkbox" class="student-checkbox" value="<?php echo htmlspecialchars($row['student_id']); ?>" onchange="updateSelectedCount()">
-                                    </td>
-                                    <td class="student-id"><?php echo htmlspecialchars($row['student_id']); ?></td>
-                                    <td class="student-name"><?php echo htmlspecialchars($row['name']); ?></td>
-                                    <td class="student-email"><?php echo htmlspecialchars($row['email'] ?? ''); ?></td>
-                                    <td class="student-phone"><?php echo htmlspecialchars($row['phone'] ?? ''); ?></td>
-                                    <td class="student-status">
-                                        <span class="status-badge <?php echo $badgeClass; ?>"><strong><?php echo $statusText; ?></strong></span>
-                                    </td>
-                                    <td>
-                                        <div class="action-group" style="padding-right: 15px;">
-                                            <button class="btn-action btn-edit inline-action-btn" onclick="openEditModal(this)">Edit</button>
-                                            <button class="btn-action btn-suspend inline-action-btn" onclick="suspendStudent(this)">Suspend</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                    <div id="searchEmptyState" class="empty-message" style="display: none;"></div>
+                                    ?>
+                                    <tr data-original-id="<?php echo htmlspecialchars($row['student_id']); ?>"
+                                        data-original-name="<?php echo htmlspecialchars($row['name']); ?>"
+                                        data-original-email="<?php echo htmlspecialchars($row['email'] ?? ''); ?>"
+                                        data-original-phone="<?php echo htmlspecialchars($row['phone'] ?? ''); ?>"
+                                        data-original-password="<?php echo htmlspecialchars($row['password'] ?? ''); ?>">
+
+                                        <td class="cell-checkbox-container">
+                                            <input type="checkbox" class="student-checkbox" value="<?php echo htmlspecialchars($row['student_id']); ?>" onchange="updateSelectedCount()">
+                                        </td>
+                                        <td class="student-id"><?php echo htmlspecialchars($row['student_id']); ?></td>
+                                        <td class="student-name"><?php echo htmlspecialchars($row['name']); ?></td>
+                                        <td class="student-email"><?php echo htmlspecialchars($row['email'] ?? ''); ?></td>
+                                        <td class="student-phone"><?php echo htmlspecialchars($row['phone'] ?? ''); ?></td>
+                                        <td class="student-status">
+                                            <span class="status-badge <?php echo $badgeClass; ?>"><strong><?php echo $statusText; ?></strong></span>
+                                        </td>
+                                        <td>
+                                            <div class="action-group" style="padding-right: 15px;">
+                                                <button class="btn-action btn-edit inline-action-btn" onclick="openEditModal(this)">Edit</button>
+                                                <button class="btn-action btn-suspend inline-action-btn" onclick="suspendStudent(this)">Suspend</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                        <div id="searchEmptyState" class="empty-message" style="display: none;"></div>
                     <?php else: ?>
                         <div class="empty-message">No active student profiles remain in this section.</div>
                     <?php endif; ?>
@@ -203,7 +202,7 @@ try {
                 <form id="addStudentForm" onsubmit="saveNewStudent(event)">
                     <div class="form-group">
                         <label>Student ID</label>
-                        <input type="text" id="add_id" required placeholder="e.g. D032410021">
+                        <input type="text" id="add_id" required placeholder="e.g. D032410021" maxlength="10" pattern="D[0-9]{9}" title="Student ID must start with 'D' followed by exactly 9 digits" oninput="this.value = this.value.toUpperCase().replace(/[^D0-9]/g, '')">
                     </div>
                     <div class="form-group">
                         <label>Name</label>
@@ -219,7 +218,7 @@ try {
                     </div>
                     <div class="form-group">
                         <label>Phone</label>
-                        <input type="text" id="add_phone" placeholder="e.g. 012-3456789">
+                        <input type="text" id="add_phone" required placeholder="e.g. 0123456789" maxlength="10" pattern="01[0-9]{8}" title="Phone number must start with '01' followed by exactly 8 digits" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                     </div>
                 </form>
             </div>
@@ -254,7 +253,7 @@ try {
             const toggleBtn = document.getElementById('selectModeBtn');
             const actionBar = document.getElementById('bulkActionBar');
             const addBtn = document.getElementById('addStudentTriggerBtn');
-            
+
             const headerCheckbox = document.querySelector('.col-checkbox-header');
             const cellContainers = document.querySelectorAll('.cell-checkbox-container');
             const inlineActionButtons = document.querySelectorAll('.inline-action-btn');
@@ -265,7 +264,7 @@ try {
                 actionBar.style.display = 'flex';
                 headerCheckbox.style.display = 'table-cell';
                 cellContainers.forEach(el => el.style.display = 'table-cell');
-                
+
                 // Temporarily disable row action controls and the "+ Add Student" trigger
                 addBtn.disabled = true;
                 addBtn.style.opacity = '0.5';
@@ -277,13 +276,13 @@ try {
                 actionBar.style.display = 'none';
                 headerCheckbox.style.display = 'none';
                 cellContainers.forEach(el => el.style.display = 'none');
-                
+
                 // Re-enable row action controls and the "+ Add Student" trigger
                 addBtn.disabled = false;
                 addBtn.style.opacity = '1';
                 addBtn.style.pointerEvents = 'auto';
                 inlineActionButtons.forEach(btn => btn.disabled = false);
-                
+
                 document.getElementById('selectAllBox').checked = false;
                 document.querySelectorAll('.student-checkbox').forEach(cb => cb.checked = false);
                 updateSelectedCount();
@@ -313,7 +312,7 @@ try {
             }
 
             const container = document.getElementById('editModalDynamicContainer');
-            container.innerHTML = ""; 
+            container.innerHTML = "";
 
             document.getElementById('editModalHeader').textContent = "Bulk Edit Student Records";
 
@@ -389,7 +388,7 @@ try {
                 </div>
                 <div class="form-group">
                     <label>Phone</label>
-                    <input type="text" id="single_edit_phone" value="${phone}">
+                    <input type="text" id="single_edit_phone" value="${phone}" maxlength="10" pattern="\\d{10}" title="Phone number must be exactly 10 digits" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                 </div>
             `;
 
@@ -420,7 +419,10 @@ try {
                     formData.append('new_password', newPassword);
                     formData.append('new_phone', newPhone);
 
-                    return fetch('manageStudentsAdmin.php', { method: 'POST', body: formData }).then(res => res.json());
+                    return fetch('manageStudentsAdmin.php', {
+                        method: 'POST',
+                        body: formData
+                    }).then(res => res.json());
                 });
 
                 Promise.all(promises).then(() => {
@@ -438,16 +440,19 @@ try {
                 formData.append('new_password', newPassword);
                 formData.append('new_phone', newPhone);
 
-                fetch('manageStudentsAdmin.php', { method: 'POST', body: formData })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Student updated successfully!");
-                        window.location.reload();
-                    } else {
-                        alert("Error updating record: " + data.error);
-                    }
-                });
+                fetch('manageStudentsAdmin.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert("Student updated successfully!");
+                            window.location.reload();
+                        } else {
+                            alert("Error updating record: " + data.error);
+                        }
+                    });
             }
         }
 
@@ -468,9 +473,15 @@ try {
                 formData.append('action', 'delete');
                 formData.append('student_id', studentId);
 
-                return fetch('manageStudentsAdmin.php', { method: 'POST', body: formData })
+                return fetch('manageStudentsAdmin.php', {
+                        method: 'POST',
+                        body: formData
+                    })
                     .then(res => res.json())
-                    .then(data => ({ id: studentId, success: data.success }));
+                    .then(data => ({
+                        id: studentId,
+                        success: data.success
+                    }));
             });
 
             Promise.all(promises).then(results => {
@@ -503,19 +514,26 @@ try {
             formData.append('password', document.getElementById('add_password').value.trim());
             formData.append('phone', document.getElementById('add_phone').value.trim());
 
-            fetch('manageStudentsAdmin.php', { method: 'POST', body: formData })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) { alert("Student successfully added!"); window.location.reload(); }
-                else { alert("Database Save Error: " + data.error); }
-            });
+            fetch('manageStudentsAdmin.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert("Student successfully added!");
+                        window.location.reload();
+                    } else {
+                        alert("Database Save Error: " + data.error);
+                    }
+                });
         }
 
         function filterStudents() {
             const query = document.getElementById('studentSearch').value.toLowerCase().trim();
             const table = document.getElementById('studentTable');
-            if (!table) return; 
-            
+            if (!table) return;
+
             const rows = table.querySelectorAll('tbody tr');
             const headerRow = document.getElementById('tableHeaderRow');
             const emptyState = document.getElementById('searchEmptyState');
@@ -533,7 +551,7 @@ try {
                 } else {
                     row.style.display = 'none';
                     const cb = row.querySelector('.student-checkbox');
-                    if(cb) cb.checked = false;
+                    if (cb) cb.checked = false;
                 }
             });
             updateSelectedCount();
@@ -549,7 +567,7 @@ try {
         }
 
         function suspendStudent(button) {
-            if(button.disabled) return;
+            if (button.disabled) return;
             const row = button.closest('tr');
             const studentId = row.querySelector('.student-id').textContent.trim();
 
@@ -558,19 +576,22 @@ try {
                 formData.append('action', 'delete');
                 formData.append('student_id', studentId);
 
-                fetch('manageStudentsAdmin.php', { method: 'POST', body: formData })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        row.remove();
-                        alert("Student successfully removed from the database.");
-                    } else {
-                        alert("Database Error: " + data.error);
-                    }
-                });
+                fetch('manageStudentsAdmin.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            row.remove();
+                            alert("Student successfully removed from the database.");
+                        } else {
+                            alert("Database Error: " + data.error);
+                        }
+                    });
             }
         }
-        
     </script>
 </body>
+
 </html>

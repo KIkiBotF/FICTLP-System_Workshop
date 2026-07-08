@@ -1,8 +1,8 @@
 <?php
-$host = "100.81.48.34"; 
+$host = "100.81.48.34";
 $port = "3307";
-$dbname = "fictlp db";  
-$username = "bubustailo"; 
+$dbname = "fictlp db";
+$username = "bubustailo";
 $password = "Student@123";
 
 // Initializing counts

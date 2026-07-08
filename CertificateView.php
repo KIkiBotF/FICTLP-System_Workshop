@@ -255,7 +255,7 @@ $conn->close();
 <body>
 
     <div class="toolbar">
-        <a href="AchievementStudent.php" class="btn btn-back">← Kembali</a>
+        <a href="AchievementStudent.php" class="btn btn-back">← Back</a>
         <button class="btn btn-print" onclick="window.print()">🖨️ Print / Save as PDF</button>
     </div>
 
