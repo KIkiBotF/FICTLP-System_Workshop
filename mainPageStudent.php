@@ -1,16 +1,62 @@
 <?php
-// 1. MUST start the session at the very top to read session variables
 session_start();
 
-// FIX: tambah login check - sebelum ni page ni boleh diakses tanpa login
-// langsung (cuma tunjuk 'Guest' je, tak redirect).
 if (!isset($_SESSION['userID'])) {
     header("Location: index.php");
     exit();
 }
 
-// FIX: guna 'name' (bukan 'username') - konsisten dengan session key
-// yang di-set dalam index.php.
+// === UPDATE USER STATUS TO ACTIVE (1) ===
+$host = "100.81.48.34";
+$port = "3307";
+$dbname = "fictlp db";
+$username = "bubustailo";
+$db_password = "Student@123";
+
+$conn = new mysqli($host, $username, $db_password, $dbname, $port);
+if (!$conn->connect_error) {
+    $statusStmt = $conn->prepare("UPDATE user SET user_status = 1 WHERE userID = ?");
+    $statusStmt->bind_param("s", $_SESSION['userID']);
+    $statusStmt->execute();
+    $statusStmt->close();
+    $conn->close();
+}
+// ========================================
+
+if (file_exists('announcement_data.php')) {
+    include('announcement_data.php');
+    if (!empty($currentAnnouncement)) {
+?>
+    <div class="global-announcement-banner" style="
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        background-color: #fff3cd; 
+        color: #856404; 
+        border: 1px solid #ffeeba; 
+        padding: 12px 24px; 
+        border-radius: 30px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        font-weight: 500; 
+        font-family: sans-serif;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        white-space: nowrap;
+        max-width: 90%;
+    ">
+        <span style="font-size: 18px; margin-right: 10px; display: inline-block; vertical-align: middle;">📢</span>
+        <div style="display: inline-block; vertical-align: middle;">
+            <strong style="color: #533f03;">System Announcement:</strong> 
+            <?php echo htmlspecialchars(stripslashes($currentAnnouncement)); ?>
+        </div>
+    </div>
+<?php 
+    }
+} 
+
 $Name = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
 ?>
 <!DOCTYPE html>
@@ -24,8 +70,7 @@ $Name = isset($_SESSION['name']) ? $_SESSION['name'] : 'Guest';
 <body>
 
     <div class="logout-wrapper">
-        <!-- FIXED LOGOUT ROUTING -->
-        <a href="index.php" class="logout-action" onclick="return confirm('Are you sure you want to log out?');">
+        <a href="logout.php" class="logout-action" onclick="return confirm('Are you sure you want to log out?');">
             <img src="Aset/logOutBtn.svg" alt="Logout" class="icon-exit">
             <span class="logout-text">Log Out</span>
         </a>

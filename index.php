@@ -29,15 +29,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['loginBtn'])) {
     if ($result->num_rows > 0) {
         $row = $result->fetch_assoc();
 
-        // NOTA: Password disimpan plaintext sekarang. Untuk production yang
-        // lebih selamat, guna password_hash() semasa register dan
-        // password_verify() di sini gantikan '==='.
         if ($enteredPassword === $row['Password']) {
 
             $_SESSION['userID'] = $row['userID'];
             $_SESSION['name']   = $row['Name'];
             $_SESSION['email']  = $row['Email'];
             $_SESSION['role']   = $row['Role'];
+
+            // === UPDATE STATUS TO ACTIVE (1) ===
+            $statusStmt = $conn->prepare("UPDATE user SET user_status = 1 WHERE userID = ?");
+            $statusStmt->bind_param("s", $row['userID']);
+            $statusStmt->execute();
+            $statusStmt->close();
+            // ===================================
 
             if ($enteredPassword === '123456') {
                 $_SESSION['reset_email'] = $email;

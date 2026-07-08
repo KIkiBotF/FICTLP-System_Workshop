@@ -110,7 +110,7 @@
             <span>Archivement</span>
         </a>
 
-        <a href="index.php" class="nav-item">
+        <a href="logout.php" class="nav-item">
             <img src="Aset/logOutBtn.svg" alt="Log Out" class="icon-placeholder" id="logOutIcon">
             <span>Log Out</span>
         </a>

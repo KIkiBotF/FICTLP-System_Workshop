@@ -27,7 +27,7 @@ body {
 /* --- MAIN DASHBOARD CONTENT --- */
 .main-content {
     flex: 1;
-    background-color: #fdf8f5;
+    background-color: #e0e7e9;
     padding: 40px 60px;
     margin-left: 105px;
     /* Offsets the fixed sidebar */
@@ -200,4 +200,22 @@ body {
     .announcement-input {
         font-size: 14px;
     }
+}
+
+/* Animation definition */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Apply animation to the announcement box */
+.announcement-box {
+    /* ... keep all your existing properties ... */
+    animation: fadeIn 0.8s ease-out forwards;
 }

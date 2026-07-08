@@ -25,7 +25,7 @@
 /* --- MAIN DASHBOARD CONTENT --- */
         .main-content {
             flex: 1;
-            background-color: #fdf8f5; 
+            background-color: #e0e7e9;
             padding: 40px 60px;
             margin-left: 105px;
             display: flex;
@@ -61,77 +61,74 @@
         }
 
         .subject-style-card {
-            background-color: #ffffff;
-            border-radius: 14px;
+            background: #ffffff;
+            border-radius: 20px;
             overflow: hidden;
             text-decoration: none;
             display: flex;
             flex-direction: column;
             width: 100%;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.03);
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
         }
 
         .subject-style-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1), 0 6px 16px rgba(0, 0, 0, 0.04);
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            border-color: rgba(0, 0, 0, 0.15);
         }
 
         .card-header {
-            padding: 18px 24px;
+            padding: 20px 28px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             color: #1a253c;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .card-header h2 {
-            font-size: 22px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-weight: bold;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
         }
 
-        .header-students { background-color: #eed6c5; }
-        .header-lecturers { background-color: #c9e6f2; }
-        .header-subjects { background-color: #cbe3cc; }
-
         .card-body {
-            padding: 24px;
-            background-color: #ffffff;
+            padding: 24px 28px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background: #ffffff;
         }
 
-        .details-list {
-            display: flex;
-            gap: 40px;
-            list-style: none;
+        .icon-placeholder {
+            width: 42px;
+            height: 42px;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.1));
+            transition: transform 0.3s ease;
         }
 
-        .details-list li {
-            font-size: 15px;
-            color: #555555;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .details-list li::before {
-            content: "●";
-            color: #9cbca4;
-            font-size: 12px;
+        .subject-style-card:hover .icon-placeholder {
+            transform: rotate(-5deg) scale(1.1);
         }
 
         .metric-badge {
             font-size: 32px;
-            font-weight: bold;
+            font-weight: 800;
             color: #1a253c;
-            background-color: #f7f7f7;
-            padding: 6px 20px;
-            border-radius: 20px;
-            min-width: 65px;
-            text-align: center;
+            background: #f8f9fa;
+            padding: 8px 22px;
+            border-radius: 14px;
+            border: 1px solid #edf2f7;
+            transition: all 0.3s ease;
+        }
+
+        .subject-style-card:hover .metric-badge {
+            background: #edf2f7;
+            transform: scale(1.05);
         }
 
         @media (max-width: 768px) {
@@ -155,3 +152,32 @@
             .details-list li { justify-content: center; font-size: 14px; }
             .metric-badge { font-size: 28px; width: 100%; max-width: 120px; text-align: center; }
         }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subject-style-card {
+            /* Existing styles... */
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0; /* Starts invisible for fade-in */
+        }
+
+        /* Staggered animation delays for a premium feel */
+        .cards-stack a:nth-child(1) { animation-delay: 0.1s; }
+        .cards-stack a:nth-child(2) { animation-delay: 0.2s; }
+        .cards-stack a:nth-child(3) { animation-delay: 0.3s; }
+
+        /* Keep existing hover effects */
+        .subject-style-card:hover {
+            transform: translateY(-8px) scale(1.01);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.15), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
