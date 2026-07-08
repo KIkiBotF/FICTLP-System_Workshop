@@ -25,6 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
             echo json_encode(['success' => false, 'error' => 'Missing required fields. At least one subject must be assigned.']);
             exit;
         }
+        if (!preg_match('/^L1006[0-9]{3}$/', $lecturerId)) {
+            echo json_encode(['success' => false, 'error' => 'Lecturer ID must start with L1006 followed by exactly 3 digits.']);
+            exit;
+        }
         if (!empty($phone) && !preg_match('/^01[0-9]{8}$/', $phone)) {
             echo json_encode(['success' => false, 'error' => 'Phone number must start with 01 and be exactly 10 digits long.']);
             exit;
@@ -286,7 +290,7 @@ try {
                 <form id="addLecturerForm" onsubmit="saveNewLecturer(event)">
                     <div class="form-group">
                         <label>Lecturer ID</label>
-                        <input type="text" id="add_id" required placeholder="e.g. L1006001">
+                        <input type="text" id="add_id" required placeholder="e.g. L1006001" maxlength="8" pattern="L1006[0-9]{3}" title="Lecturer ID must start with 'L1006' followed by exactly 3 digits" oninput="this.value = this.value.toUpperCase().replace(/[^L0-9]/g, '')">
                     </div>
                     <div class="form-group">
                         <label>Name</label>
@@ -440,7 +444,7 @@ try {
                         
                         <div class="form-group">
                             <label>Lecturer ID</label>
-                            <input type="text" value="${id}" class="readonly-field" readonly>
+                            <input type="text" value="${id}" class="readonly-field" readonly maxlength="8" pattern="L1006[0-9]{3}" title="Please key in Lecture ID format">
                         </div>
                         <div class="form-group">
                             <label>Name</label>
